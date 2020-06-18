@@ -1,0 +1,11 @@
+__pycache__/*
+.vscode/*
+venv/*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+*.code-workspace
+*.eslintrc.yml
