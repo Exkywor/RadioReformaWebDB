@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, jsonify, render_template, request, redirect
 from cs50 import SQL
 
 from utils.prepareDB import prepareDB
@@ -26,9 +26,12 @@ processed = prepareDB(programsList, airingList)
 programs = processed["programs"]
 schedule = processed["schedule"]
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-  return render_template("index.html", programs=programs)
+  if request.method == "POST":
+    return jsonify(programs)
+
+  return render_template("index.html")
 
 @app.route("/programs")
 def programsSomething():

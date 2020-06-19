@@ -17,6 +17,8 @@ def preparePrograms(programsList, airsList):
     # Put each presenter in a list
     if programsList[i]["presenters"] is not None:
       programsList[i]["presenters"] = programsList[i]["presenters"].split(", ")
+    else:
+      programsList[i]["presenters"] = ["Desconocido"]
     # Sets the route for the image thumbnail
     programsList[i]["image"] = {"cover": programsList[i]["image"].replace("library/", "") + "-cover.jpg"}
     # Adds the schedule
