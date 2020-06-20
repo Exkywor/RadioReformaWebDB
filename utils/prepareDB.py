@@ -80,10 +80,9 @@ def createSchedule(schedule, programs):
 
   # Sort the timesList
   timesList.sort()
+  times = [{"index": index, "readable": makeReadable(index)} for index in timesList]
 
-  # NEED TO PROCESS TO GET READABLE TIME
-
-  return {"schedule": sortedSchedule, "times": timesList, "programsInfo": programsInfo}
+  return {"schedule": sortedSchedule, "times": times, "programsInfo": programsInfo}
 
 
 # Works with the database elements and returns what will be used by the site

@@ -23,16 +23,16 @@
 </table>
 
 <script>
-  $.post("/", {data: "schedule"}, function(data) {
+  $.post("/", {toGet: "schedule"}, function(data) {
     let { schedule, times, programsInfo } = data;
     console.log(schedule)
     console.log(times)
     console.log(programsInfo);
     
-    for (const time of Object.keys(times)) {
+    for (const time of Object.keys(times)) {    
       document.querySelector("tbody").innerHTML +=
         "<tr>" +
-          "<th scope='row'>" + time.readable + "</th>" +
+          "<th scope='row'>" + times[time].readable + "</th>" +
         "</tr>"
     }
     

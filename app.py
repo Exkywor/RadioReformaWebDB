@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect
-from cs50 import SQL
+import sqlite3
 
 from utils.prepareDB import prepareDB
 
@@ -16,10 +16,21 @@ def after_request(response):
   return response
 
 # Open the db
-db = SQL("sqlite:///programs.db")
-programsList = db.execute("SELECT * from Programs")
-# We could join programs and airs but it would make it harder to filter an iterate through empty days
-airingList = db.execute("SELECT * from Airs")
+db = sqlite3.connect("programs.db", check_same_thread=False)
+db.row_factory = sqlite3.Row # We'll use this to convert the tuples into rows
+cursor = db.cursor()
+# This would give us tuples, so we changed it to get Rows, to convert thme into a dict later
+cursor.execute("SELECT * from Programs")
+programsToDict = cursor.fetchall()
+cursor.execute("SELECT * from Airs") # We could join programs and airs but it would make it harder to filter an iterate through empty days
+airingToDict = cursor.fetchall()
+# We are gonna get a list of dicts from the Rows
+programsList = []
+for program in programsToDict:
+  programsList.append({key:program[key] for key in program.keys()})
+airingList = []
+for airing in airingToDict:
+  airingList.append({key:airing[key] for key in airing.keys()})
 
 # Prepares the programs and schedule
 processed = prepareDB(programsList, airingList)
@@ -29,9 +40,10 @@ schedule = processed["schedule"]
 @app.route("/", methods=["GET", "POST"])
 def index():
   if request.method == "POST":
-    if request.form.get("data") == "programs":
+    if request.form.get("toGet") == "programs":
       return jsonify(programs)
-    elif request.form.get("data") == "schedule":
+    elif request.form.get("toGet") == "schedule":
       return jsonify(schedule)
+    
 
   return render_template("index.html")
