@@ -29,7 +29,10 @@ schedule = processed["schedule"]
 @app.route("/", methods=["GET", "POST"])
 def index():
   if request.method == "POST":
-    return jsonify(programs)
+    if request.form.get("data") == "programs":
+      return jsonify(programs)
+    elif request.form.get("data") == "schedule":
+      return jsonify(schedule)
 
   return render_template("index.html")
 
