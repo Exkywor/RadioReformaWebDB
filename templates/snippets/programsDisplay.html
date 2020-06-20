@@ -22,7 +22,7 @@
 </table>
 
 <script>
-  $.post("/", {data: "programs"}, function(data) {
+  $.post("/", null, function(data) {
     for (const program of Object.keys(data)) {
       // We create the row with the non-iterable information of the program
       document.querySelector("tbody").innerHTML +=

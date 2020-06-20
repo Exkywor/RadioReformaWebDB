@@ -33,15 +33,9 @@ def preparePrograms(programsList, airsList):
 
 
 # Creates a schedule based on the programs list
-def createSchedule(schedule, programs):
+def createSchedule(schedule):
   tempSchedule = {}
-  # We store the programs that are in the schedule and only the information related to the schedule
-  # This way we avoid passing the whole programs dictionary, which has unncessary information
-  # We do it like this instead of assigning a dict to each time to avoid storing repeated information
-  programsInfo = {}
-  # A global list of all the times that have programs so we can render a side column with the times
-  timesList = []
-  
+
   for program in schedule:
     for day in schedule[program]:
       # Add a day if it doesn't exist in the temp schedule
@@ -53,28 +47,19 @@ def createSchedule(schedule, programs):
       for time in schedule[program][day]:
         split = time.split(":") # We split the time so we can manipulate the hours and minutes separately
         timeIndex = (int(split[0]) * 60) + int(split[1]) # The time index is stored in minutes
-        
-        # We add the timeIndex to the times list in case it doesn't exist
-        if timesList.count(timeIndex) == 0:
-          timesList.append(timeIndex)
-
         tempSchedule[day][timeIndex] = program
-        programsInfo[program] = {"name": programs[program]["name"], "length": programs[program]["length"]}
 
   # We sort the days and times in the tempSchedule so they are in order
   days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] # Used to get the days in order
   sortedSchedule = {day:sorted(tempSchedule[day].items()) for day in days if day in tempSchedule.keys()}
 
-  # Sort the timesList
-  timesList.sort()
-
-  return {"schedule": sortedSchedule, "times": timesList, "programsInfo": programsInfo}
+  return sortedSchedule
 
 
 # Works with the database elements and returns what will be used by the site
 def prepareDB(programsList, airsList):
   # This comes from a separate function in case we need to add more functions and processes before returning
   processed = preparePrograms(programsList, airsList)
-  schedule = createSchedule(processed["schedule"], processed["programs"])
+  schedule = createSchedule(processed["schedule"])
 
   return {"programs": processed["programs"], "schedule": schedule}
