@@ -33,9 +33,23 @@ def preparePrograms(programsList, airsList):
 
 
 # Creates a schedule based on the programs list
-def createSchedule(schedule):
+def createSchedule(schedule, programs):
   tempSchedule = {}
+  # We store the programs that are in the schedule and only the information related to the schedule
+  # This way we avoid passing the whole programs dictionary, which has unncessary information
+  # We do it like this instead of assigning a dict to each time to avoid storing repeated information
+  programsInfo = {}
+  # A global list of all the times that have programs so we can render a side column with the times
+  timesList = []
 
+  # Used to convert a timeIndex (time in minutes) into a readable string
+  def makeReadable(time):
+    hour = str(round(time / 60))
+    minutes = str(time % 60)
+    if len(hour) == 1: hour = "0" + hour
+    if len(minutes) == 1: minutes = "0" + minutes
+    return hour + ":" + minutes
+  
   for program in schedule:
     for day in schedule[program]:
       # Add a day if it doesn't exist in the temp schedule
@@ -47,19 +61,35 @@ def createSchedule(schedule):
       for time in schedule[program][day]:
         split = time.split(":") # We split the time so we can manipulate the hours and minutes separately
         timeIndex = (int(split[0]) * 60) + int(split[1]) # The time index is stored in minutes
+        
+        # We add the timeIndex to the times list in case it doesn't exist
+        if timesList.count(timeIndex) == 0:
+          timesList.append(timeIndex)
+
         tempSchedule[day][timeIndex] = program
+        programsInfo[program] = {"name": programs[program]["name"], "length": programs[program]["length"]}
 
   # We sort the days and times in the tempSchedule so they are in order
   days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] # Used to get the days in order
-  sortedSchedule = {day:sorted(tempSchedule[day].items()) for day in days if day in tempSchedule.keys()}
+  tupledSchedule = {day:sorted(tempSchedule[day].items()) for day in days if day in tempSchedule.keys()}
 
-  return sortedSchedule
+  # The sorting gives a tuple in return, we remake the dict here
+  sortedSchedule = {}
+  for day in tupledSchedule.keys():
+    sortedSchedule[day] = {time[0]:time[1] for time in tupledSchedule[day]}
+
+  # Sort the timesList
+  timesList.sort()
+
+  # NEED TO PROCESS TO GET READABLE TIME
+
+  return {"schedule": sortedSchedule, "times": timesList, "programsInfo": programsInfo}
 
 
 # Works with the database elements and returns what will be used by the site
 def prepareDB(programsList, airsList):
   # This comes from a separate function in case we need to add more functions and processes before returning
   processed = preparePrograms(programsList, airsList)
-  schedule = createSchedule(processed["schedule"])
+  schedule = createSchedule(processed["schedule"], processed["programs"])
 
   return {"programs": processed["programs"], "schedule": schedule}

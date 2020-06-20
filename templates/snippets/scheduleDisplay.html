@@ -1,20 +1,21 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Abbr</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Duración</th>
-      <th scope="col">Temas</th>
-      <th scope="col">Presentador/es</th>
-      <th scope="col">Producido por</th>
+      <th scope="col"></th>
       <th scope="col">Lunes</th>
+      <th scope="col"></th>
       <th scope="col">Martes</th>
+      <th scope="col"></th>
       <th scope="col">Miércoles</th>
+      <th scope="col"></th>
       <th scope="col">Jueves</th>
+      <th scope="col"></th>
       <th scope="col">Viernes</th>
+      <th scope="col"></th>
       <th scope="col">Sábado</th>
+      <th scope="col"></th>
       <th scope="col">Domingo</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -23,7 +24,17 @@
 
 <script>
   $.post("/", {data: "schedule"}, function(data) {
-    console.log(data);
+    let { schedule, times, programsInfo } = data;
+    console.log(schedule)
+    console.log(times)
+    console.log(programsInfo);
+    
+    for (const time of Object.keys(times)) {
+      document.querySelector("tbody").innerHTML +=
+        "<tr>" +
+          "<th scope='row'>" + time.readable + "</th>" +
+        "</tr>"
+    }
     
     // for (const program of Object.keys(data)) {
     //   // We create the row with the non-iterable information of the program
