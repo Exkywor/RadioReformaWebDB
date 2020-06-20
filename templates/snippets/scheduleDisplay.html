@@ -23,8 +23,7 @@
 
 <script>
   $.post("/", {data: "schedule"}, function(data) {
-    console.log(data.schedule);
-    console.log(data.times);
+    console.log(data);
     
     // for (const program of Object.keys(data)) {
     //   // We create the row with the non-iterable information of the program
