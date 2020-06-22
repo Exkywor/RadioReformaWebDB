@@ -27,7 +27,7 @@
   let programs;
 
   function getPrograms() {
-    $.post("/", {toGet: "programs"}, function(data) {   
+    $.post("/", null, function(data) {   
       programs = data; 
       for (const program of Object.keys(data)) {
         // Check if the producer a link or not
@@ -100,9 +100,9 @@
     if (button === "Ver") {
       document.getElementById(id).innerHTML =
         type === "synopsis"
-          ? programs[programID].descriptionShort +
+          ? "<p>" + programs[programID].descriptionShort + "</p>" +
             `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
-          : programs[programID].descriptionLong +
+          : "<p>" + programs[programID].descriptionLong + "</p>" +
             `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
     } else if (button === "Ocultar") {
       document.getElementById(id).innerHTML =

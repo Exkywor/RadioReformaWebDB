@@ -25,7 +25,7 @@
 
 <script>
   function getSchedule() {
-    $.post("/", {toGet: "schedule"}, function(data) {
+    $.post("/schedule", null, function(data) {
       let { schedule, times, programsInfo } = data;
 
       // We precreate the HTML for each row with the id which we're gonna use to access the right one and fill

@@ -40,13 +40,23 @@ schedule = processed["schedule"]
 @app.route("/", methods=["GET", "POST"])
 def index():
   if request.method == "POST":
-    if request.form.get("toGet") == "programs":
-      return jsonify(programs)
-    elif request.form.get("toGet") == "schedule":
-      return jsonify(schedule)
-    
+    return jsonify(programs)
 
-  return render_template("index.html")
+  return render_template("index.html", title="Programas")
+
+@app.route("/schedule", methods=["GET", "POST"])
+def schedulePage():
+  if request.method == "POST":
+    return jsonify(schedule)
+
+  return render_template("schedule.html", title="Horarios")
+
+# @app.route("/schedule", methods=["GET", "POST"])
+# def schedule():
+#   if request.method == "POST":
+#     return jsonify(schedule)
+
+#   return render_template("schedule.html")
 
 # ROUTE TO HANDLE TIMECHANGE
   # Change the timezone
