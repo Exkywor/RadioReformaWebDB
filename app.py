@@ -47,3 +47,9 @@ def index():
     
 
   return render_template("index.html")
+
+# ROUTE TO HANDLE TIMECHANGE
+  # Change the timezone
+  # Call preparedDB again (add the timezone as a parameter)
+  # Change programs and schedule variables
+  # Return true
