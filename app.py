@@ -37,6 +37,8 @@ processed = prepareDB(programsList, airingList)
 programs = processed["programs"]
 schedule = processed["schedule"]
 
+timeoffset = "GMT-6"
+
 @app.route("/", methods=["GET", "POST"])
 def index():
   if request.method == "POST":
@@ -51,12 +53,10 @@ def schedulePage():
 
   return render_template("schedule.html", title="Horarios")
 
-# @app.route("/schedule", methods=["GET", "POST"])
-# def schedule():
-#   if request.method == "POST":
-#     return jsonify(schedule)
-
-#   return render_template("schedule.html")
+@app.route("/getTimezone", methods=["POST"])
+def getTimezone():
+  if request.method == "POST":
+    return jsonify(timeoffset)
 
 # ROUTE TO HANDLE TIMECHANGE
   # Change the timezone
