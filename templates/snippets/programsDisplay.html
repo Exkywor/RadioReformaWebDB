@@ -30,6 +30,12 @@
     $.post("/", {toGet: "programs"}, function(data) {   
       programs = data; 
       for (const program of Object.keys(data)) {
+        // Check if the producer a link or not
+        let producer = "";
+        if (data[program].author.includes("www."))
+          producer = `<a href="http://${data[program].author}" target="_blank">${data[program].author}</a>`
+        else producer = data[program].author;
+
         // We create the row with the non-iterable information of the program
         document.querySelector("tbody").innerHTML +=
           "<tr>" + 
@@ -39,7 +45,7 @@
             "<td>" + data[program].length + "</td>" +
             "<td>" + data[program].topics + "</td>" +
             "<td id=presenters" + program + "></td>" +
-            "<td>" + data[program].author + "</td>" +
+            "<td>" + producer + "</td>" +
             "<td id=synopsis" + program + ">" +
               `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
             "</td>" +
