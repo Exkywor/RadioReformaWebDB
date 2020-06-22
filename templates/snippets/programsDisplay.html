@@ -1,5 +1,5 @@
-<table class="table">
-  <thead>
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Abbr</th>
@@ -8,6 +8,8 @@
       <th scope="col">Temas</th>
       <th scope="col">Presentador/es</th>
       <th scope="col">Producido por</th>
+      <th scope="col">Sinopsis</th>
+      <th scope="col">Descripción</th>
       <th scope="col">Lunes</th>
       <th scope="col">Martes</th>
       <th scope="col">Miércoles</th>
@@ -22,42 +24,84 @@
 </table>
 
 <script>
-  $.post("/", {toGet: "programs"}, function(data) {    
-    for (const program of Object.keys(data)) {
-      // We create the row with the non-iterable information of the program
-      document.querySelector("tbody").innerHTML +=
-        "<tr>" + 
-          "<th scope='row'>" + data[program].programID + "</th>" +
-          "<td>" + data[program].streamID + "</td>" +
-          "<td>" + data[program].name + "</td>" +
-          "<td>" + data[program].length + "</td>" +
-          "<td>" + data[program].topics + "</td>" +
-          "<td id=presenters" + program + "></td>" +
-          "<td>" + data[program].author + "</td>" +
-          "<td id=monday" + program + "></td>" +
-          "<td id=tuesday" + program + "></td>" +
-          "<td id=wednesday" + program + "></td>" +
-          "<td id=thursday" + program + "></td>" +
-          "<td id=friday" + program + "></td>" +
-          "<td id=saturday" + program + "></td>" +
-          "<td id=sunday" + program + "></td>"
-        + "</tr>"
+  let programs;
 
-      // We are gonna add the elements that are iterable or dependant on certain conditions
-      // We add the presenters iterating over the list of them
-      let presenters = "";
-      for (const presenter of data[program].presenters) presenters += "<li>" + presenter + "</li>"
-      document.getElementById(`presenters${program}`).innerHTML =
-          "<ul style='padding: 0'>" + presenters + "</ul>"
-      
-      // We add days on their corresponding columns
-      for (const day of Object.keys(data[program].schedule)) {
-        let times = "";
-        for (const time of data[program].schedule[day]) times += "<li>" + time + "</li>"
-        document.getElementById(`${day}${program}`).innerHTML =
-          "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
+  function getPrograms() {
+    $.post("/", {toGet: "programs"}, function(data) {   
+      programs = data; 
+      for (const program of Object.keys(data)) {
+        // We create the row with the non-iterable information of the program
+        document.querySelector("tbody").innerHTML +=
+          "<tr>" + 
+            "<th scope='row'>" + data[program].programID + "</th>" +
+            "<td>" + data[program].streamID + "</td>" +
+            "<td>" + data[program].name + "</td>" +
+            "<td>" + data[program].length + "</td>" +
+            "<td>" + data[program].topics + "</td>" +
+            "<td id=presenters" + program + "></td>" +
+            "<td>" + data[program].author + "</td>" +
+            "<td id=synopsis" + program + ">" +
+              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
+            "</td>" +
+            "<td id=description" + program + ">" +
+              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
+            "</td>" +
+            "<td id=monday" + program + "></td>" +
+            "<td id=tuesday" + program + "></td>" +
+            "<td id=wednesday" + program + "></td>" +
+            "<td id=thursday" + program + "></td>" +
+            "<td id=friday" + program + "></td>" +
+            "<td id=saturday" + program + "></td>" +
+            "<td id=sunday" + program + "></td>"
+          + "</tr>"
+
+        // We are gonna add the elements that are iterable or dependant on certain conditions
+        // We add the presenters iterating over the list of them
+        let presenters = "";
+        for (const presenter of data[program].presenters) presenters += "<li>" + presenter + "</li>"
+        document.getElementById(`presenters${program}`).innerHTML =
+            "<ul style='padding: 0'>" + presenters + "</ul>"
+        
+        // We add days on their corresponding columns
+        for (const day of Object.keys(data[program].schedule)) {
+          let times = "";
+          for (const time of data[program].schedule[day]) times += "<li>" + time + "</li>"
+          document.getElementById(`${day}${program}`).innerHTML =
+            "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
+        }
       }
-    }
+    });
+  };
+  getPrograms();
 
-  });
+  // We use this function to show or hide the description of specific programs
+  function toggleDescriptions(id) {
+    // Extract the programID and the type (synopsis or description)
+    let programID;
+    let type;
+    if (id.includes("synopsis")) {
+      programID = id.replace("synopsis", "");
+      type = "synopsis";
+    } else if (id.includes("description")) {
+      programID = id.replace("description", "");
+      type = "description";
+    };
+
+    // We get the text of the button to see whether to show or hide the information
+    let button = document.querySelector(`#${id} > button`).innerHTML
+
+    // Depending on the button we show or hide
+    if (button === "Ver") {
+      document.getElementById(id).innerHTML =
+        type === "synopsis"
+          ? programs[programID].descriptionShort +
+            `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+          : programs[programID].descriptionLong +
+            `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+    } else if (button === "Ocultar") {
+      document.getElementById(id).innerHTML =
+      `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
+    };
+  };
+  
 </script>
