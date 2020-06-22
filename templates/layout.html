@@ -45,11 +45,9 @@
         </div>
 
         <!-- Timezone Picker -->
-        <li class="dropdown ml-auto" style="list-style-type: none; padding: 0">
-          <a id="timezoneDropdown" class="nav-link dropdown-toggle" style="color: 'black'" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="javascript:changeTimezone('GMT 0')">Un texto bien largo para probar.</a>
-            <a class="dropdown-item" href="javascript:changeTimezone('GMT-6')">GMT -6</a>
+        <li id="timezoneDropdown" class="dropdown ml-auto" style="list-style-type: none; padding: 0">
+          <a  class="nav-link dropdown-toggle" style="color: 'black'" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+          <div class="dropdown-menu dropdown-menu-right scrollable-dropdown" aria-labelledby="navbarDropdownMenuLink">
           </div>
         </li>
       </div>
@@ -65,8 +63,16 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    $.post("/getTimezone", null, function(timezone) {
-      document.getElementById("timezoneDropdown").innerHTML = timezone;
+    $.post("/getTimezone", null, function(data) {
+      document.querySelector("#timezoneDropdown > a").innerHTML = data.offset;
+
+      let timezones = "";
+
+      for (const zone of data.timezones) {
+        timezones += `<a class="dropdown-item" href="javascript:changeTimezone('${zone}')">${zone}</a>`
+      };
+
+      document.querySelector("#timezoneDropdown > div").innerHTML = timezones;
     });
   });
   

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, request, redirect
 import sqlite3
+import pytz
 
 from utils.prepareDB import prepareDB
 
@@ -56,7 +57,7 @@ def schedulePage():
 @app.route("/getTimezone", methods=["POST"])
 def getTimezone():
   if request.method == "POST":
-    return jsonify(timeoffset)
+    return jsonify(offset=timeoffset, timezones=pytz.common_timezones)
 
 # ROUTE TO HANDLE TIMECHANGE
   # Change the timezone
