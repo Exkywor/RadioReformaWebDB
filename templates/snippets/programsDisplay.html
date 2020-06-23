@@ -27,7 +27,7 @@
   let programs;
 
   function getPrograms() {
-    $.post("/", null, function(data) {   
+    $.post("/programs", null, function(data) {   
       programs = data;
       
       for (const program of Object.keys(programs)) {

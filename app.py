@@ -40,19 +40,25 @@ schedule = processed["schedule"]
 
 timeoffset = "GMT-6"
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+  return render_template("index.html", title="Programas")
+
+
+@app.route("/programs", methods=["GET", "POST"])
+def getPrograms():
   if request.method == "POST":
     return jsonify(programs)
 
-  return render_template("index.html", title="Programas")
 
 @app.route("/schedule", methods=["GET", "POST"])
-def schedulePage():
+def getSchedule():
   if request.method == "POST":
     return jsonify(schedule)
 
   return render_template("schedule.html", title="Horarios")
+
 
 @app.route("/getTimezone", methods=["POST"])
 def getTimezone():
