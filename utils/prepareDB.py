@@ -1,6 +1,7 @@
 import copy
 
 from utils.handleTimezone import changeTimezone
+from utils.misc import makeReadable
 
 # Modifies, cleans, and adds the information of each program for our needs
 def preparePrograms(programsList, airsList, timeoffset):
@@ -27,12 +28,12 @@ def preparePrograms(programsList, airsList, timeoffset):
     programsList[i]["image"] = {"cover": programsList[i]["image"].replace("library/", "") + "-cover.jpg"}
     
     # Adds the schedule
-    changeTimezone(filteredSchedule, timeoffset)
-    programsList[i]["schedule"] = filteredSchedule
+    timezonedSchedule = changeTimezone(filteredSchedule, timeoffset)
+    programsList[i]["schedule"] = timezonedSchedule
 
     # Add elements to their corresponding dictionaries
     # We use i+1 to make sure the key correlates with the programID
-    schedule[i+1] = filteredSchedule
+    schedule[i+1] = timezonedSchedule
     programs[i+1] = programsList[i]
 
   return {"programs": programs, "schedule": schedule}
@@ -47,14 +48,6 @@ def createSchedule(schedule, programs):
   programsInfo = {}
   # A global list of all the times that have programs so we can render a side column with the times
   timesList = []
-
-  # Used to convert a timeIndex (time in minutes) into a readable string
-  def makeReadable(time):
-    hour = str(round(time / 60))
-    minutes = str(time % 60)
-    if len(hour) == 1: hour = "0" + hour
-    if len(minutes) == 1: minutes = "0" + minutes
-    return hour + ":" + minutes
   
   for program in schedule:
     for day in schedule[program]:

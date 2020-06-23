@@ -35,7 +35,7 @@ for airing in airingToDict:
 
 # Timezone variables
 timezone = "America/El_Salvador"
-timeoffset = "-0600"
+timeoffset = -360
 
 # Prepares the programs and schedule
 processed = prepareDB(programsList, airingList, timeoffset)
@@ -72,9 +72,10 @@ def getTimezone():
 def changeTimezone():
   if request.method == "POST":
     timezone = request.form.get("timezone")
-    timeoffset = datetime.datetime.now(pytz.timezone(timezone)).strftime('%z')
+    # We get the utcoffset in seconds, then convert it to minutes, then use int() to remove the decimal point
+    timeoffset = int(datetime.datetime.now(pytz.timezone(timezone)).utcoffset().total_seconds()/60)
 
-    # -0600, +0000, -0700, +1200
+    # -360, 0, -420, 720
     prepareDB(programsList, airingList, timeoffset)
 
     return jsonify(timezone=timezone)

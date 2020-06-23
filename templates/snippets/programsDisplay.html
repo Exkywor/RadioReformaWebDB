@@ -65,9 +65,13 @@
         // We are gonna add the elements that are iterable or dependant on certain conditions
         // We add the presenters iterating over the list of them
         let presenters = "";
-        for (const presenter of programs[program].presenters) presenters += "<li>" + presenter + "</li>"
+        for (const presenter of programs[program].presenters) {
+          if (presenter === "Desconocido") presenters = ""
+          else presenters += "<li>" + presenter + "</li>"
+        };
+        
         document.getElementById(`presenters${program}`).innerHTML =
-            "<ul style='padding: 0'>" + presenters + "</ul>"
+          "<ul style='padding: 0'>" + presenters + "</ul>"
         
         // We add days on their corresponding columns
         for (const day of Object.keys(programs[program].schedule)) {
