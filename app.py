@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, render_template, request, redirect
-import sqlite3
-import pytz
+import datetime, pytz, sqlite3
 
 from utils.prepareDB import prepareDB
 
@@ -20,12 +19,13 @@ def after_request(response):
 db = sqlite3.connect("programs.db", check_same_thread=False)
 db.row_factory = sqlite3.Row # We'll use this to convert the tuples into rows
 cursor = db.cursor()
-# This would give us tuples, so we changed it to get Rows, to convert thme into a dict later
+# This would give us tuples, so we changed it to get Rows. We'll convert them into a dict later
 cursor.execute("SELECT * from Programs")
 programsToDict = cursor.fetchall()
 cursor.execute("SELECT * from Airs") # We could join programs and airs but it would make it harder to filter an iterate through empty days
 airingToDict = cursor.fetchall()
-# We are gonna get a list of dicts from the Rows
+
+# We extract the information from the Rows and convert them to dicts
 programsList = []
 for program in programsToDict:
   programsList.append({key:program[key] for key in program.keys()})
@@ -38,7 +38,9 @@ processed = prepareDB(programsList, airingList)
 programs = processed["programs"]
 schedule = processed["schedule"]
 
-timeoffset = "GMT-6"
+# Timezone variables
+timezone = "America/El_Salvador"
+timeoffset = "-0600"
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -63,8 +65,20 @@ def getSchedule():
 @app.route("/getTimezone", methods=["POST"])
 def getTimezone():
   if request.method == "POST":
-    return jsonify(offset=timeoffset, timezones=pytz.common_timezones)
+    return jsonify(timezone=timezone, timezones=pytz.common_timezones)
 
+
+@app.route("/changeTimezone", methods=["POST"])
+def changeTimezone():
+  if request.method == "POST":
+    timezone = request.form.get("timezone")
+    timeoffset = datetime.datetime.now(pytz.timezone(timezone)).strftime('%z')
+
+
+    # -0600, +0000, -0700, +1200
+
+    return jsonify(timezone=timezone)
+    
 # ROUTE TO HANDLE TIMECHANGE
   # Change the timezone
   # Call preparedDB again (add the timezone as a parameter)

@@ -64,7 +64,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     $.post("/getTimezone", null, function(data) {
-      document.querySelector("#timezoneDropdown > a").innerHTML = data.offset;
+      document.querySelector("#timezoneDropdown > a").innerHTML = data.timezone;
 
       let timezones = "";
 
@@ -77,6 +77,8 @@
   });
   
   function changeTimezone(newTimezone) {
-    console.log(newTimezone);
+    $.post("/changeTimezone", {timezone: newTimezone}, function(data) {
+      document.querySelector("#timezoneDropdown > a").innerHTML = data.timezone;
+    });
   };
 </script>
