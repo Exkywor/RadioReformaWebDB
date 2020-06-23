@@ -79,6 +79,7 @@
   function changeTimezone(newTimezone) {
     $.post("/changeTimezone", {timezone: newTimezone}, function(data) {
       document.querySelector("#timezoneDropdown > a").innerHTML = data.timezone;
+      location.reload()
     });
   };
 </script>
