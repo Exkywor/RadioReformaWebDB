@@ -1,5 +1,9 @@
+import copy
+
+from utils.handleTimezone import changeTimezone
+
 # Modifies, cleans, and adds the information of each program for our needs
-def preparePrograms(programsList, airsList):
+def preparePrograms(programsList, airsList, timeoffset):
   # We use a dictionary instead of a list to store the programs to avoid confusion since the program's index in the list will be programID-1,
   # while on the DB and in the program info it is just progamID, which is prone to causing bugs.
   programs = {}
@@ -21,7 +25,9 @@ def preparePrograms(programsList, airsList):
       programsList[i]["presenters"] = ["Desconocido"]
     # Sets the route for the image thumbnail
     programsList[i]["image"] = {"cover": programsList[i]["image"].replace("library/", "") + "-cover.jpg"}
+    
     # Adds the schedule
+    changeTimezone(filteredSchedule, timeoffset)
     programsList[i]["schedule"] = filteredSchedule
 
     # Add elements to their corresponding dictionaries
@@ -86,9 +92,14 @@ def createSchedule(schedule, programs):
 
 
 # Works with the database elements and returns what will be used by the site
-def prepareDB(programsList, airsList):
+def prepareDB(programsList, airsList, timeoffset):
+  # Make deep copy of the list so we don't overwrite the original one.
+  # We need to do this since this function will be called again when the timezone is changed
+  programs = copy.deepcopy(programsList)
+  airs = copy.deepcopy(airsList)
+
   # This comes from a separate function in case we need to add more functions and processes before returning
-  processed = preparePrograms(programsList, airsList)
+  processed = preparePrograms(programs, airs, timeoffset)
   schedule = createSchedule(processed["schedule"], processed["programs"])
 
   return {"programs": processed["programs"], "schedule": schedule}

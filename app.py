@@ -33,14 +33,14 @@ airingList = []
 for airing in airingToDict:
   airingList.append({key:airing[key] for key in airing.keys()})
 
-# Prepares the programs and schedule
-processed = prepareDB(programsList, airingList)
-programs = processed["programs"]
-schedule = processed["schedule"]
-
 # Timezone variables
 timezone = "America/El_Salvador"
 timeoffset = "-0600"
+
+# Prepares the programs and schedule
+processed = prepareDB(programsList, airingList, timeoffset)
+programs = processed["programs"]
+schedule = processed["schedule"]
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -74,8 +74,8 @@ def changeTimezone():
     timezone = request.form.get("timezone")
     timeoffset = datetime.datetime.now(pytz.timezone(timezone)).strftime('%z')
 
-
     # -0600, +0000, -0700, +1200
+    prepareDB(programsList, airingList, timeoffset)
 
     return jsonify(timezone=timezone)
     
