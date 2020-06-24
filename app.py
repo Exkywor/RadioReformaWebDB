@@ -33,6 +33,9 @@ def getData():
   processed = prepareDB(session["programsList"], session["airingList"], session["timeoffset"])
   session["programs"] = processed["programs"]
   session["schedule"] = processed["schedule"]
+  
+  if session.get("loaded") is None:
+    session["loaded"] = True
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -60,7 +63,8 @@ def index():
   if session.get("timeoffset") is None:
     session["timeoffset"] = -360
 
-  getData()
+  if session.get("loaded") is None:
+    getData()
 
   return render_template("index.html", title="Programas")
 

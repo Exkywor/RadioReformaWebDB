@@ -1,7 +1,125 @@
 {% extends "layout.html" %}
 
-{% block body %}
+{% block main %}
   <div>
-    {% include "snippets/programsDisplay.html" %}
+    <table class="table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Abbr</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Duración</th>
+          <th scope="col">Temas</th>
+          <th scope="col">Presentador/es</th>
+          <th scope="col">Producido por</th>
+          <th scope="col">Sinopsis</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Lunes</th>
+          <th scope="col">Martes</th>
+          <th scope="col">Miércoles</th>
+          <th scope="col">Jueves</th>
+          <th scope="col">Viernes</th>
+          <th scope="col">Sábado</th>
+          <th scope="col">Domingo</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
   </div>
+
+  <script>
+    let programs;
+  
+    function getPrograms() {
+      $.post("/programs", null, function(data) {   
+        programs = data;
+        
+        for (const program of Object.keys(programs)) {
+          // Check if the producer a link or not
+          let producer = "";
+          if (programs[program].author.includes("www."))
+            producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`
+          else producer = programs[program].author;
+  
+          // We create the row with the non-iterable information of the program
+          document.querySelector("tbody").innerHTML +=
+            "<tr>" + 
+              "<th scope='row'>" + programs[program].programID + "</th>" +
+              "<td>" + programs[program].streamID + "</td>" +
+              "<td>" + programs[program].name + "</td>" +
+              "<td>" + programs[program].length + "</td>" +
+              "<td>" + programs[program].topics + "</td>" +
+              "<td id=presenters" + program + "></td>" +
+              "<td>" + producer + "</td>" +
+              "<td id=synopsis" + program + ">" +
+                `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
+              "</td>" +
+              "<td id=description" + program + ">" +
+                `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
+              "</td>" +
+              "<td id=monday" + program + "></td>" +
+              "<td id=tuesday" + program + "></td>" +
+              "<td id=wednesday" + program + "></td>" +
+              "<td id=thursday" + program + "></td>" +
+              "<td id=friday" + program + "></td>" +
+              "<td id=saturday" + program + "></td>" +
+              "<td id=sunday" + program + "></td>"
+            + "</tr>"
+  
+          // We are gonna add the elements that are iterable or dependant on certain conditions
+          // We add the presenters iterating over the list of them
+          let presenters = "";
+          for (const presenter of programs[program].presenters) {
+            if (presenter === "Desconocido") presenters = ""
+            else presenters += "<li>" + presenter + "</li>"
+          };
+          
+          document.getElementById(`presenters${program}`).innerHTML =
+            "<ul style='padding: 0'>" + presenters + "</ul>"
+          
+          // We add days on their corresponding columns
+          for (const day of Object.keys(programs[program].schedule)) {
+            let times = "";
+            for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>"
+            document.getElementById(`${day}${program}`).innerHTML =
+              "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
+          }
+        }
+      });
+    };
+    getPrograms();
+  
+    // We use this function to show or hide the description of specific programs
+    function toggleDescriptions(id) {
+      // Extract the programID and the type (synopsis or description)
+      let programID;
+      let type;
+      if (id.includes("synopsis")) {
+        programID = id.replace("synopsis", "");
+        type = "synopsis";
+      } else if (id.includes("description")) {
+        programID = id.replace("description", "");
+        type = "description";
+      };
+  
+      // We get the text of the button to see whether to show or hide the information
+      let button = document.querySelector(`#${id} > button`).innerHTML
+  
+      // Depending on the button we show or hide
+      if (button === "Ver") {
+        document.getElementById(id).innerHTML =
+          type === "synopsis"
+            ? "<p>" + programs[programID].descriptionShort + "</p>" +
+              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+            : "<p>" + programs[programID].descriptionLong + "</p>" +
+              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+      } else if (button === "Ocultar") {
+        document.getElementById(id).innerHTML =
+        `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
+      };
+    };
+    
+  </script>
 {% endblock %}
+
