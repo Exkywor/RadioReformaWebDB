@@ -1,9 +1,13 @@
+/* Containers */
 .scrollable-dropdown {
   max-height: 50vh;
   overflow-x: hidden;
 }
-
 .table-cont {
   max-height: 80vh;
+  overflow: auto;
+}
+.form-cont {
+  max-height: 75vh;
   overflow: auto;
 }

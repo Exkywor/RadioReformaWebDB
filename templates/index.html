@@ -46,30 +46,87 @@
           <p class="text-left">Has click en un programa para editar su información</p>
         </div>
         <!-- Edit program form -->
-        <form class="py-3">
-          <fieldset >
-            <!-- name -->
-            <div class="form-group">
-              <label for="name">Nombre</label>
-              <input type="text" class="form-control-plaintext" id="name" placeholder="Nombre del Programa" value="">
-            </div>
-            <!-- ids -->
-            <div class="form-row">
-              <div class="form-group col">
-                <label for="length">Duración</label>
-                <input type="text" class="form-control-plaintext" id="length" placeholder="X" value="">
-                <small id="lengthHelp" class="form-text text-muted">Duración en minutos</small>
+        <form class="py-3 px-2 form-cont">
+          <fieldset id="editingFieldset" disabled>
+            <div class="border-bottom">
+              <!-- name -->
+              <div class="form-group">
+                <label for="formName">Nombre</label>
+                <input type="text" class="form-control px-2" id="formName" placeholder="Nombre del Programa" value="">
               </div>
-              <div class="form-group col">
-                <label for="topics">Temas</label>
-                <input type="text" class="form-control-plaintext" id="topics" placeholder="Tema 1, Tema 2" value="">
-                <small id="topicsHelp" class="form-text text-muted">Separados por comas</small>
+              <!-- ids -->
+              <div class="form-row">
+                <div class="form-group col">
+                  <label for="formLength">Duración</label>
+                  <input type="text" class="form-control px-2" id="formLength" placeholder="X" value="">
+                  <small id="lengthHelp" class="form-text text-muted">Duración en minutos</small>
+                </div>
+                <div class="form-group col">
+                  <label for="formTopics">Temas</label>
+                  <input type="text" class="form-control px-2" id="formTopics" placeholder="Tema 1, Tema 2" value="">
+                  <small id="topicsHelp" class="form-text text-muted">Separados por comas</small>
+                </div>
+              </div>
+              <!-- presenters -->
+              <div class="form-group">
+                <label for="formPresenters">Presentadores</label>
+                <input type="text" class="form-control px-2" id="formPresenters" placeholder="Presentador 1, Presentador 2" value="">
+                <small id="presentersHelp" class="form-text text-muted">Separados por comas</small>
+              </div>
+              <!-- producer -->
+              <div class="form-group">
+                <label for="formAuthor">Producido por</label>
+                <input type="text" class="form-control px-2" id="formAuthor" placeholder="Radio Reforma" value="">
+              </div>
+              <!-- descriptions -->
+              <div class="form-group">
+                <label for="formDescriptionShort">Sinópsis</label>
+                <input type="text" class="form-control px-2" id="formDescriptionShort" placeholder="Sinópsis del programa" value="">
+                <small id="presentersHelp" class="form-text text-muted">250 caracteres máximo</small>
+              </div>
+              <div class="form-group">
+                <label for="formDescriptionLong">Descripción</label>
+                <input type="text" class="form-control px-2" id="formDescriptionLong" placeholder="Descripción del programa" value="">
+              </div>
+            </div>
+            <!-- schedule -->
+            <div class="pt-2">
+              <div class="form-group">
+                <p class="form-text font-weight-bold">HORARIOS</p>
+                <p class="form-text">Separados por comas, en formato de 24 horas</p>
+              </div>
+              <div class="form-group">
+                <label for="formmonday">Lunes</label>
+                <input type="text" class="form-control px-2" id="formmonday" placeholder="1:00, 15:00" value="">
+              </div>
+              <div class="form-group">
+                <label for="formtuesday">Martes</label>
+                <input type="text" class="form-control px-2" id="formtuesday" placeholder="1:00, 15:00" value="">
+              </div>
+              <div class="form-group">
+                <label for="formwednesday">Miércoles</label>
+                <input type="text" class="form-control px-2" id="formwednesday" placeholder="1:00, 15:00" value="">
+              </div>
+              <div class="form-group">
+                <label for="formthursday">Jueves</label>
+                <input type="text" class="form-control px-2" id="formthursday" placeholder="1:00, 15:00" value="">
+              </div>
+              <div class="form-group">
+                <label for="formfriday">Viernes</label>
+                <input type="text" class="form-control px-2" id="formfriday" placeholder="1:00, 15:00" value="">
+              </div>
+              <div class="form-group">
+                <label for="formsaturday">Sábado</label>
+                <input type="text" class="form-control px-2" id="formsaturday" placeholder="1:00, 15:00" value="">
+              </div>
+              <div class="form-group">
+                <label for="formsunday">Domingo</label>
+                <input type="text" class="form-control px-2" id="formsunday" placeholder="1:00, 15:00" value="">
               </div>
             </div>
           </fieldset>
         </form>
       </div>
-
     </div>
   </div>
 
@@ -173,28 +230,63 @@
     // PROGRAM EDITING
     // Hide or display the editing form
     function toggleEditing() {
+      console.log(programs);
+      
       if (!editing) {
         // Make space for the form
         document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8")
         // Show the editing form
         document.getElementById("editingForm").removeAttribute("hidden")
-        
         editing = true
-
-        console.log(document.getElementById("editingForm").innerHTML);
       } else {
         // Make the table occupy the whole container
         document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12")
         // Hide the editing form
         document.getElementById("editingForm").setAttribute("hidden", "true")
         editing = false
-
-        console.log(document.getElementById("editingForm").innerHTML);
-      }
-    }
+      };
+    };
 
     function editProgram(id) {
-      console.log(id);
+      if (editing) {
+        // Makes the days in the schedule a ", " separated string. Otherwise you only get "," as separation
+        let schedule = {}
+        for (let day of Object.keys(programs[id].schedule)) {
+          let stringified = ""
+          let length = programs[id].schedule[day].length
+
+          if (length === 0)
+            stringified = undefined
+          else if (length === 1)
+            stringified = programs[id].schedule[day][0]
+          else
+            stringified = programs[id].schedule[day].reduce((string, time, i) => {
+              if (i === 0) return time
+              else return string += `, ${time}`
+            }, "")
+          
+          schedule[day] = stringified
+        };
+
+
+        document.getElementById("editingFieldset").removeAttribute("disabled")
+
+        document.getElementById("formName").setAttribute("value", programs[id].name)
+        document.getElementById("formLength").setAttribute("value", programs[id].length)
+        document.getElementById("formTopics").setAttribute("value", programs[id].topics)
+        document.getElementById("formPresenters").setAttribute("value", programs[id].presenters)
+        document.getElementById("formAuthor").setAttribute("value", programs[id].author)
+        document.getElementById("formDescriptionShort").setAttribute("value", programs[id].descriptionShort)
+        document.getElementById("formDescriptionLong").setAttribute("value", programs[id].descriptionLong)
+
+        let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+        for (let day of days) {
+          if (programs[id].schedule[day] == undefined)
+            document.getElementById(`form${day}`).setAttribute("value", " ")
+          else
+            document.getElementById(`form${day}`).setAttribute("value", schedule[day])
+        }
+      }
       
     };
     
