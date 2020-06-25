@@ -5,128 +5,16 @@
   <header>
     <div class="text-center" role="alert">
       <button class='btn btn-outline-dark btn-sm' onclick=toggleEditing()>Editar</button>
+      <button class='btn btn-outline-dark btn-sm' onclick=showChanges()>Changes</button>
     </div>
   </header>
 
   <div>
     <div class="row mx-2 justify-content-center">
       <!-- Programs table -->
-      <div class="col-sm-12 table-responsive table-cont" id="tableContainer">
-        <table class="table table-striped table-hover">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Abbr</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Duración</th>
-              <th scope="col">Temas</th>
-              <th scope="col">Presentador/es</th>
-              <th scope="col">Producido por</th>
-              <th scope="col">Sinopsis</th>
-              <th scope="col">Descripción</th>
-              <th scope="col">Lunes</th>
-              <th scope="col">Martes</th>
-              <th scope="col">Miércoles</th>
-              <th scope="col">Jueves</th>
-              <th scope="col">Viernes</th>
-              <th scope="col">Sábado</th>
-              <th scope="col">Domingo</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-
+      {% include 'snippets/programsDisplay.html' %}
       <!-- Edit program container -->
-      <div class="col-sm-4" id="editingForm" hidden>
-        <!-- Instructions -->
-        <div class="border-bottom">
-          <p class="text-left font-weight-bold">EDITAR PROGRAMA</p>
-          <p class="text-left">Has click en un programa para editar su información</p>
-        </div>
-        <!-- Edit program form -->
-        <form class="py-3 px-2 form-cont">
-          <fieldset id="editingFieldset" disabled>
-            <div class="border-bottom">
-              <!-- name -->
-              <div class="form-group">
-                <label for="formName">Nombre</label>
-                <input type="text" class="form-control px-2" id="formName" placeholder="Nombre del Programa" value="">
-              </div>
-              <!-- ids -->
-              <div class="form-row">
-                <div class="form-group col">
-                  <label for="formLength">Duración</label>
-                  <input type="text" class="form-control px-2" id="formLength" placeholder="X" value="">
-                  <small id="lengthHelp" class="form-text text-muted">Duración en minutos</small>
-                </div>
-                <div class="form-group col">
-                  <label for="formTopics">Temas</label>
-                  <input type="text" class="form-control px-2" id="formTopics" placeholder="Tema 1, Tema 2" value="">
-                  <small id="topicsHelp" class="form-text text-muted">Separados por comas</small>
-                </div>
-              </div>
-              <!-- presenters -->
-              <div class="form-group">
-                <label for="formPresenters">Presentadores</label>
-                <input type="text" class="form-control px-2" id="formPresenters" placeholder="Presentador 1, Presentador 2" value="">
-                <small id="presentersHelp" class="form-text text-muted">Separados por comas</small>
-              </div>
-              <!-- producer -->
-              <div class="form-group">
-                <label for="formAuthor">Producido por</label>
-                <input type="text" class="form-control px-2" id="formAuthor" placeholder="Radio Reforma" value="">
-              </div>
-              <!-- descriptions -->
-              <div class="form-group">
-                <label for="formDescriptionShort">Sinópsis</label>
-                <input type="text" class="form-control px-2" id="formDescriptionShort" placeholder="Sinópsis del programa" value="">
-                <small id="presentersHelp" class="form-text text-muted">250 caracteres máximo</small>
-              </div>
-              <div class="form-group">
-                <label for="formDescriptionLong">Descripción</label>
-                <input type="text" class="form-control px-2" id="formDescriptionLong" placeholder="Descripción del programa" value="">
-              </div>
-            </div>
-            <!-- schedule -->
-            <div class="pt-2">
-              <div class="form-group">
-                <p class="form-text font-weight-bold">HORARIOS</p>
-                <p class="form-text">Separados por comas, en formato de 24 horas</p>
-              </div>
-              <div class="form-group">
-                <label for="formmonday">Lunes</label>
-                <input type="text" class="form-control px-2" id="formmonday" placeholder="1:00, 15:00" value="">
-              </div>
-              <div class="form-group">
-                <label for="formtuesday">Martes</label>
-                <input type="text" class="form-control px-2" id="formtuesday" placeholder="1:00, 15:00" value="">
-              </div>
-              <div class="form-group">
-                <label for="formwednesday">Miércoles</label>
-                <input type="text" class="form-control px-2" id="formwednesday" placeholder="1:00, 15:00" value="">
-              </div>
-              <div class="form-group">
-                <label for="formthursday">Jueves</label>
-                <input type="text" class="form-control px-2" id="formthursday" placeholder="1:00, 15:00" value="">
-              </div>
-              <div class="form-group">
-                <label for="formfriday">Viernes</label>
-                <input type="text" class="form-control px-2" id="formfriday" placeholder="1:00, 15:00" value="">
-              </div>
-              <div class="form-group">
-                <label for="formsaturday">Sábado</label>
-                <input type="text" class="form-control px-2" id="formsaturday" placeholder="1:00, 15:00" value="">
-              </div>
-              <div class="form-group">
-                <label for="formsunday">Domingo</label>
-                <input type="text" class="form-control px-2" id="formsunday" placeholder="1:00, 15:00" value="">
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      </div>
+      {% include 'snippets/editProgram.html' %}
     </div>
   </div>
 
@@ -134,6 +22,10 @@
   <script>
     let programs;
     let editing = false;
+
+    // We're gonna store any changed values here so we know what to send
+    // We declare it here so we can use it before the main function that cares for it
+    let changes = {id: null, info: {}, schedule: {}}
   
     // TABLE CREATION
     // Get the programs and fill the table
@@ -230,19 +122,17 @@
     // PROGRAM EDITING
     // Hide or display the editing form
     function toggleEditing() {
-      console.log(programs);
-      
       if (!editing) {
         // Make space for the form
         document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8")
         // Show the editing form
-        document.getElementById("editingForm").removeAttribute("hidden")
+        document.getElementById("editingContainer").removeAttribute("hidden")
         editing = true
       } else {
         // Make the table occupy the whole container
         document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12")
         // Hide the editing form
-        document.getElementById("editingForm").setAttribute("hidden", "true")
+        document.getElementById("editingContainer").setAttribute("hidden", "true")
         editing = false
       };
     };
@@ -251,6 +141,10 @@
     function editProgram(id) {
       // Proceed if editing is enable
       if (editing) {
+        // Resets the variables that store any changes so we don't send previous changes by mistake
+        changes = {id: null, info: {}, schedule: {}}
+        $("#editingForm").trigger("reset")
+
         // Makes the days in the schedule a ", " separated string. Otherwise you only get "," as separation
         let schedule = {}
         for (let day of Object.keys(programs[id].schedule)) {
@@ -285,13 +179,52 @@
         let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         for (let day of days) {
           if (programs[id].schedule[day] == undefined)
-            document.getElementById(`form${day}`).setAttribute("value", " ")
+            document.getElementById(`form${day}`).setAttribute("value", "")
           else
             document.getElementById(`form${day}`).setAttribute("value", schedule[day])
-        }
-      }
-      
+        };
+
+        // Store the id in case we make a change
+        changes.id = id;
+      };
     };
+
+    // Handle any changes
+    $('#formName').keyup(function() {changes.info.name = $('#formName').val()});
+    $('#formLength').keyup(function() {changes.info.length = $('#formLength').val()});
+    $('#formTopics').keyup(function() {changes.info.topics = $('#formTopics').val()});
+    $('#formPresenters').keyup(function() {changes.info.presenters = $('#formPresenters').val()});
+    $('#formAuthor').keyup(function() {changes.info.author = $('#formAuthor').val()});
+    $('#formDescriptionShort').keyup(function() {changes.info.descriptionShort = $('#formDescriptionShort').val()});
+    $('#formDescriptionLong').keyup(function() {changes.info.descriptionLong = $('#formDescriptionLong').val()});
+    $('#formmonday').keyup(function() {changes.schedule.monday = $('#formmonday').val()});
+    $('#formtuesday').keyup(function() {changes.schedule.tuesday = $('#formtuesday').val()});
+    $('#formwednesday').keyup(function() {changes.schedule.wednesday = $('#formwednesday').val()});
+    $('#formthursday').keyup(function() {changes.schedule.thursday = $('#formthursday').val()});
+    $('#formfriday').keyup(function() {changes.schedule.friday = $('#formfriday').val()});
+    $('#formsaturday').keyup(function() {changes.schedule.saturday = $('#formsaturday').val()});
+    $('#formsunday').keyup(function() {changes.schedule.sunday = $('#formsunday').val()});
+
+    // Handles submitting of changed information
+    $("#editingForm").submit(function(event) {
+      event.preventDefault()
+
+      // We create a list of the existing keys. Since in Flask the object gets spread,
+      // we use this list to know which keys we can iterate over
+      let infoKeys = Object.keys(changes.info)
+      let scheudleKeys = Object.keys(changes.schedule)
+      
+      $.post(
+        "/editProgram",
+        {id: changes.id, info: changes.info, schedule: changes.schedule, infoKeys, scheduleKeys},
+        function(data) { console.log(data) });
+    })
+
+    // Handles form reset
+    $("#editingForm").on("reset", function(event) {changes = {id: null, info: {}, schedule: {}}})
+
+    // Dev function to display what changes are stored
+    function showChanges() { console.log(changes) }
     
   </script>
 {% endblock %}

@@ -99,3 +99,11 @@ def changeTimezone():
     getData()
 
     return jsonify(timezone=session["timezone"])
+
+
+@app.route("/editProgram", methods=["POST"])
+def editProgram():
+  if request.method == "POST":
+    print(request.form.get("infoKeys"))
+
+    return jsonify(True)

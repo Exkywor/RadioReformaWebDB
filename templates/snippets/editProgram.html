@@ -1,0 +1,93 @@
+<div class="col-sm-4" id="editingContainer" hidden>
+  <!-- Instructions -->
+  <div class="border-bottom">
+    <p class="text-left font-weight-bold">EDITAR PROGRAMA</p>
+    <p class="text-left">Has click en un programa para editar su información</p>
+  </div>
+  <!-- Edit program form -->
+  <form action="" id="editingForm" class="py-3 px-2 form-cont">
+    <fieldset id="editingFieldset" disabled>
+      <div class="border-bottom">
+        <!-- name -->
+        <div class="form-group">
+          <label for="formName">Nombre</label>
+          <input type="text" class="form-control px-2" id="formName" placeholder="Nombre del Programa" value="">
+        </div>
+        <!-- ids -->
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="formLength">Duración</label>
+            <input type="number" class="form-control px-2" id="formLength" placeholder="X" value="">
+            <small id="lengthHelp" class="form-text text-muted">Duración en minutos</small>
+          </div>
+          <div class="form-group col">
+            <label for="formTopics">Temas</label>
+            <input type="text" class="form-control px-2" id="formTopics" placeholder="Tema 1, Tema 2" value="">
+            <small id="topicsHelp" class="form-text text-muted">Separados por comas</small>
+          </div>
+        </div>
+        <!-- presenters -->
+        <div class="form-group">
+          <label for="formPresenters">Presentadores</label>
+          <input type="text" class="form-control px-2" id="formPresenters" placeholder="Presentador 1, Presentador 2" value="">
+          <small id="presentersHelp" class="form-text text-muted">Separados por comas</small>
+        </div>
+        <!-- producer -->
+        <div class="form-group">
+          <label for="formAuthor">Producido por</label>
+          <input type="text" class="form-control px-2" id="formAuthor" placeholder="Productor" value="">
+        </div>
+        <!-- descriptions -->
+        <div class="form-group">
+          <label for="formDescriptionShort">Sinópsis</label>
+          <input type="text" class="form-control px-2" id="formDescriptionShort" placeholder="Sinópsis del programa" value="">
+          <small id="presentersHelp" class="form-text text-muted">250 caracteres máximos</small>
+        </div>
+        <div class="form-group">
+          <label for="formDescriptionLong">Descripción</label>
+          <input type="text" class="form-control px-2" id="formDescriptionLong" placeholder="Descripción del programa" value="">
+        </div>
+      </div>
+      <!-- schedule -->
+      <div class="pt-2">
+        <div class="form-group">
+          <p class="form-text font-weight-bold">HORARIOS</p>
+          <p class="form-text">Separados por comas, en formato de 24 horas</p>
+        </div>
+        <div class="form-group">
+          <label for="formmonday">Lunes</label>
+          <input type="text" class="form-control px-2" id="formmonday" placeholder="Hora lunes" value="">
+        </div>
+        <div class="form-group">
+          <label for="formtuesday">Martes</label>
+          <input type="text" class="form-control px-2" id="formtuesday" placeholder="Hora martes" value="">
+        </div>
+        <div class="form-group">
+          <label for="formwednesday">Miércoles</label>
+          <input type="text" class="form-control px-2" id="formwednesday" placeholder="Hora miércoles" value="">
+        </div>
+        <div class="form-group">
+          <label for="formthursday">Jueves</label>
+          <input type="text" class="form-control px-2" id="formthursday" placeholder="Hora jueves" value="">
+        </div>
+        <div class="form-group">
+          <label for="formfriday">Viernes</label>
+          <input type="text" class="form-control px-2" id="formfriday" placeholder="Hora viernes" value="">
+        </div>
+        <div class="form-group">
+          <label for="formsaturday">Sábado</label>
+          <input type="text" class="form-control px-2" id="formsaturday" placeholder="Hora sábado" value="">
+        </div>
+        <div class="form-group">
+          <label for="formsunday">Domingo</label>
+          <input type="text" class="form-control px-2" id="formsunday" placeholder="Hora domingo" value="">
+        </div>
+      </div>
+      <!-- Submit button -->
+      <div class="d-flex justify-content-between">
+        <button type="reset" class="btn btn-secondary">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
