@@ -1,36 +1,85 @@
 {% extends "layout.html" %}
 
 {% block main %}
+  <!-- Toolbar -->
+  <header>
+    <div class="text-center" role="alert">
+      <button class='btn btn-outline-dark btn-sm' onclick=toggleEditing()>Editar</button>
+    </div>
+  </header>
+
   <div>
-    <table class="table table-striped table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Abbr</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Duración</th>
-          <th scope="col">Temas</th>
-          <th scope="col">Presentador/es</th>
-          <th scope="col">Producido por</th>
-          <th scope="col">Sinopsis</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Lunes</th>
-          <th scope="col">Martes</th>
-          <th scope="col">Miércoles</th>
-          <th scope="col">Jueves</th>
-          <th scope="col">Viernes</th>
-          <th scope="col">Sábado</th>
-          <th scope="col">Domingo</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="row mx-2 justify-content-center">
+      <!-- Programs table -->
+      <div class="col-sm-12 table-responsive table-cont" id="tableContainer">
+        <table class="table table-striped table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Abbr</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Duración</th>
+              <th scope="col">Temas</th>
+              <th scope="col">Presentador/es</th>
+              <th scope="col">Producido por</th>
+              <th scope="col">Sinopsis</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Lunes</th>
+              <th scope="col">Martes</th>
+              <th scope="col">Miércoles</th>
+              <th scope="col">Jueves</th>
+              <th scope="col">Viernes</th>
+              <th scope="col">Sábado</th>
+              <th scope="col">Domingo</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Edit program container -->
+      <div class="col-sm-4" id="editingForm" hidden>
+        <!-- Instructions -->
+        <div class="border-bottom">
+          <p class="text-left font-weight-bold">EDITAR PROGRAMA</p>
+          <p class="text-left">Has click en un programa para editar su información</p>
+        </div>
+        <!-- Edit program form -->
+        <form class="py-3">
+          <fieldset >
+            <!-- name -->
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input type="text" class="form-control-plaintext" id="name" placeholder="Nombre del Programa" value="">
+            </div>
+            <!-- ids -->
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="length">Duración</label>
+                <input type="text" class="form-control-plaintext" id="length" placeholder="X" value="">
+                <small id="lengthHelp" class="form-text text-muted">Duración en minutos</small>
+              </div>
+              <div class="form-group col">
+                <label for="topics">Temas</label>
+                <input type="text" class="form-control-plaintext" id="topics" placeholder="Tema 1, Tema 2" value="">
+                <small id="topicsHelp" class="form-text text-muted">Separados por comas</small>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
   </div>
+
 
   <script>
     let programs;
+    let editing = false;
   
+    // TABLE CREATION
+    // Get the programs and fill the table
     function getPrograms() {
       $.post("/programs", null, function(data) {   
         programs = data;
@@ -44,7 +93,7 @@
   
           // We create the row with the non-iterable information of the program
           document.querySelector("tbody").innerHTML +=
-            "<tr>" + 
+            "<tr onclick='editProgram(" + programs[program].programID + ")'>" + 
               "<th scope='row'>" + programs[program].programID + "</th>" +
               "<td>" + programs[program].streamID + "</td>" +
               "<td>" + programs[program].name + "</td>" +
@@ -119,7 +168,35 @@
         `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
       };
     };
+
+
+    // PROGRAM EDITING
+    // Hide or display the editing form
+    function toggleEditing() {
+      if (!editing) {
+        // Make space for the form
+        document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8")
+        // Show the editing form
+        document.getElementById("editingForm").removeAttribute("hidden")
+        
+        editing = true
+
+        console.log(document.getElementById("editingForm").innerHTML);
+      } else {
+        // Make the table occupy the whole container
+        document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12")
+        // Hide the editing form
+        document.getElementById("editingForm").setAttribute("hidden", "true")
+        editing = false
+
+        console.log(document.getElementById("editingForm").innerHTML);
+      }
+    }
+
+    function editProgram(id) {
+      console.log(id);
+      
+    };
     
   </script>
 {% endblock %}
-
