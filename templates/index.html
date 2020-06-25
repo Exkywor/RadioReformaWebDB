@@ -247,7 +247,9 @@
       };
     };
 
+    // Fills the editing form with the selected program's information
     function editProgram(id) {
+      // Proceed if editing is enable
       if (editing) {
         // Makes the days in the schedule a ", " separated string. Otherwise you only get "," as separation
         let schedule = {}
@@ -268,9 +270,9 @@
           schedule[day] = stringified
         };
 
-
+        // Enable form editing
         document.getElementById("editingFieldset").removeAttribute("disabled")
-
+        // Fill the different fields with the current program's values
         document.getElementById("formName").setAttribute("value", programs[id].name)
         document.getElementById("formLength").setAttribute("value", programs[id].length)
         document.getElementById("formTopics").setAttribute("value", programs[id].topics)
@@ -279,6 +281,7 @@
         document.getElementById("formDescriptionShort").setAttribute("value", programs[id].descriptionShort)
         document.getElementById("formDescriptionLong").setAttribute("value", programs[id].descriptionLong)
 
+        // Make sure to leave the days that are blank, blank
         let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         for (let day of days) {
           if (programs[id].schedule[day] == undefined)

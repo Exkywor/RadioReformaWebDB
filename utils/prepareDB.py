@@ -32,7 +32,7 @@ def preparePrograms(programsList, airsList, timeoffset):
     programsList[i]["schedule"] = timezonedSchedule
 
     # Add elements to their corresponding dictionaries
-    # We use i+1 to make sure the key correlates with the programID
+    # We use the prgoramID as they index to make sure it correlates with the correct program
     index = programsList[i]["programID"]
 
     schedule[index] = timezonedSchedule
