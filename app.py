@@ -1,4 +1,4 @@
-import datetime, pytz, sqlite3
+import datetime, json, pytz, sqlite3
 from flask import Flask, jsonify, render_template, request, redirect, session
 from flask_session import Session
 from tempfile import mkdtemp
@@ -104,6 +104,8 @@ def changeTimezone():
 @app.route("/editProgram", methods=["POST"])
 def editProgram():
   if request.method == "POST":
-    print(request.form.get("infoKeys"))
+    # Converts the serialized string back into a dictionary
+    data = json.loads(request.form.get("data"))
+    print(data["info"]["name"])
 
     return jsonify(True)

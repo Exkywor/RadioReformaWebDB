@@ -208,16 +208,10 @@
     // Handles submitting of changed information
     $("#editingForm").submit(function(event) {
       event.preventDefault()
-
-      // We create a list of the existing keys. Since in Flask the object gets spread,
-      // we use this list to know which keys we can iterate over
-      let infoKeys = Object.keys(changes.info)
-      let scheudleKeys = Object.keys(changes.schedule)
-      
-      $.post(
-        "/editProgram",
-        {id: changes.id, info: changes.info, schedule: changes.schedule, infoKeys, scheduleKeys},
-        function(data) { console.log(data) });
+      // Converts the changes into a serialized string so we can send them and properly
+      let serialized = JSON.stringify(changes)
+      // Sends the changes to the server
+      $.post("/editProgram", {data: serialized}, function(data) { console.log(data) });
     })
 
     // Handles form reset
