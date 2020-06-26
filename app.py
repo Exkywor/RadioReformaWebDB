@@ -1,5 +1,5 @@
 import datetime, json, pytz, sqlite3
-from flask import Flask, jsonify, render_template, request, redirect, session
+from flask import Flask, g, jsonify, render_template, request, redirect, session
 from flask_session import Session
 from tempfile import mkdtemp
 
@@ -23,10 +23,22 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Open the db
-db = sqlite3.connect("programs.db", check_same_thread=False)
-db.row_factory = sqlite3.Row # We'll use this to convert the tuples into rows
-cursor = db.cursor()
+
+# Open the db and save it in the g namespace
+def getDB():
+  db = getattr(g, "_database", None)
+  if db is None:
+    db = g._database = sqlite3.connect("programs.db", check_same_thread=False)
+  db.row_factory = sqlite3.Row # We'll use this to convert the tuples into rows
+  
+  return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
 
 # Sets the programs and the schedule, which we'll use in the app
 def getData():
@@ -40,6 +52,8 @@ def getData():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+  cursor = getDB().cursor()
+
   # This would give us tuples, so we changed it to get Rows. We'll convert them into a dict later
   cursor.execute("SELECT * from Programs")
   programsToDict = cursor.fetchall()
