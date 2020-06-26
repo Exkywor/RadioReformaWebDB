@@ -8,6 +8,7 @@ def editDB(changes, cursor, offset, indexedSchedule):
 
   # Convert schedule by timezone
   toTimezoneSchedule = {}
+
   # Proceed only if the schedule has days to convert
   if bool(schedule):
     # Validate schedule
@@ -16,10 +17,13 @@ def editDB(changes, cursor, offset, indexedSchedule):
       return print(scheduleValidated["message"])
 
     for day in schedule:
-      # Delete the day if it's empty
-      if schedule[day] == "":
+      # Add to delete list
+      if schedule[day] in ("", " "):
         print("TO DELETE")
       else:
+        ogTime = schedule[day].strip() # Remove any trailing whitespaces
+        times = ogTime.split(", ")
+
         print("TO ADD")        
 
   print("Hi")

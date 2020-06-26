@@ -2,6 +2,10 @@
 # schedule = {"monday": "05:10, 15:00"}
 def validateSchedule(schedule, indexedSchedule, id):
   for day in schedule:
+    # Skip the day if it's empty
+    if schedule[day] in ("", " "):
+      continue
+
     ogTime = schedule[day].strip() # Remove any trailing whitespaces
     times = ogTime.split(", ")
 
