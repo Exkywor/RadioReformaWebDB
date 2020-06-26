@@ -76,11 +76,11 @@ def index():
   return render_template("index.html", title="Programas")
 
 
+# MAIN DATA RETRIEVAL ENDPOINTS
 @app.route("/programs", methods=["GET", "POST"])
 def getPrograms():
   if request.method == "POST":
     return jsonify(session["programs"])
-
 
 @app.route("/schedule", methods=["GET", "POST"])
 def getSchedule():
@@ -93,11 +93,11 @@ def getSchedule():
     return redirect(url_for("index"))
 
 
+# TIMEZONE RELATED ENDPOINTS
 @app.route("/getTimezone", methods=["POST"])
 def getTimezone():
   if request.method == "POST":
     return jsonify(timezone=session["timezone"], timezones=pytz.common_timezones)
-
 
 @app.route("/changeTimezone", methods=["POST"])
 def changeTimezone():
@@ -110,15 +110,18 @@ def changeTimezone():
 
     return jsonify(timezone=session["timezone"])
 
+
+# DB OPERATIONS ENDPOINTS
 @app.route("/editProgram", methods=["POST"])
 def editProgram():
   if request.method == "POST":
     # Converts the serialized string back into a dictionary
     data = json.loads(request.form.get("data"))
 
-    editDB(data, getDB().cursor(), session["timeoffset"])
+    editDB(data, getDB().cursor(), session["timeoffset"], session["schedule"]["schedule"])
 
     return jsonify(True)
+
 
 if __name__ == "__main__":
   app.run(debug=True)
