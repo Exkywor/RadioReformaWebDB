@@ -1,5 +1,5 @@
 import datetime, json, pytz, sqlite3
-from flask import Flask, g, jsonify, render_template, request, redirect, session
+from flask import Flask, g, jsonify, render_template, request, redirect, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 
@@ -73,7 +73,7 @@ def index():
   if "loaded" not in session:
     getData()
 
-  return render_template("index.html", title="Programas", loaded="True")
+  return render_template("index.html", title="Programas")
 
 
 @app.route("/programs", methods=["GET", "POST"])
@@ -84,11 +84,13 @@ def getPrograms():
 
 @app.route("/schedule", methods=["GET", "POST"])
 def getSchedule():
-  if request.method == "POST":
-    print(session["timeoffset"])
-    return jsonify(session["schedule"])
+  if "loaded" in session:
+    if request.method == "POST":
+      return jsonify(session["schedule"])
 
-  return render_template("schedule.html", title="Horarios")
+    return render_template("schedule.html", title="Horarios")
+  else:
+    return redirect(url_for("index"))
 
 
 @app.route("/getTimezone", methods=["POST"])
@@ -117,23 +119,6 @@ def editProgram():
     editDB(data, getDB().cursor(), session["timeoffset"])
 
     return jsonify(True)
-
-# @app.route("/editProgram", methods=["POST"])
-# def editProgram():
-#   if request.method == "POST":
-#     
-
-#     if "timeoffset" in session:
-#       timeoffset = session["timeoffset"]
-#       print(timeoffset)
-#       editDB(data, getDB().cursor(), timeoffset)
-
-#       return jsonify(True)
-#     else:
-#       print(session["timeoffset"])
-
-      
-#       return jsonify(False)
 
 if __name__ == "__main__":
   app.run(debug=True)
