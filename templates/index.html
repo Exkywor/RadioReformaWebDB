@@ -29,7 +29,7 @@
   
     // TABLE CREATION
     // Get the programs and fill the table
-    function getPrograms() {
+    function getPrograms(data) {
       $.post("/programs", null, function(data) {   
         programs = data;
         
@@ -86,7 +86,7 @@
         }
       });
     };
-    getPrograms();
+    getPrograms()
   
     // We use this function to show or hide the description of specific programs
     function toggleDescriptions(id) {
@@ -191,7 +191,7 @@
 
     // Handle any changes
     $('#formName').keyup(function() {changes.info.name = $('#formName').val()});
-    $('#formLength').keyup(function() {changes.info.length = $('#formLength').val()});
+    $('#formLength').on("change", function() {changes.info.length = $('#formLength').val()});
     $('#formTopics').keyup(function() {changes.info.topics = $('#formTopics').val()});
     $('#formPresenters').keyup(function() {changes.info.presenters = $('#formPresenters').val()});
     $('#formAuthor').keyup(function() {changes.info.author = $('#formAuthor').val()});

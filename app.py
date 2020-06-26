@@ -4,18 +4,11 @@ from flask_session import Session
 from tempfile import mkdtemp
 
 from utils.prepareDB import prepareDB
+from utils.editDB import editDB
 
 # Configure app
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-# Ensure responses aren't cached
-@app.after_request
-def after_request(response):
-  response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-  response.headers["Expires"] = 0
-  response.headers["Pragma"] = "no-cache"
-  return response
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
@@ -46,7 +39,7 @@ def getData():
   session["programs"] = processed["programs"]
   session["schedule"] = processed["schedule"]
   
-  if session.get("loaded") is None:
+  if "loaded" not in session:
     session["loaded"] = True
 
 
@@ -72,15 +65,15 @@ def index():
   session["airingList"] = airingList
 
   # Timezone variables
-  if session.get("timezone") is None:
+  if "timezone" not in session:
     session["timezone"] = "America/El_Salvador"
-  if session.get("timeoffset") is None:
+  if "timeoffset" not in session:
     session["timeoffset"] = -360
 
-  if session.get("loaded") is None:
+  if "loaded" not in session:
     getData()
 
-  return render_template("index.html", title="Programas")
+  return render_template("index.html", title="Programas", loaded="True")
 
 
 @app.route("/programs", methods=["GET", "POST"])
@@ -92,6 +85,7 @@ def getPrograms():
 @app.route("/schedule", methods=["GET", "POST"])
 def getSchedule():
   if request.method == "POST":
+    print(session["timeoffset"])
     return jsonify(session["schedule"])
 
   return render_template("schedule.html", title="Horarios")
@@ -114,12 +108,32 @@ def changeTimezone():
 
     return jsonify(timezone=session["timezone"])
 
-
 @app.route("/editProgram", methods=["POST"])
 def editProgram():
   if request.method == "POST":
     # Converts the serialized string back into a dictionary
     data = json.loads(request.form.get("data"))
-    print(data["info"]["name"])
+
+    editDB(data, getDB().cursor(), session["timeoffset"])
 
     return jsonify(True)
+
+# @app.route("/editProgram", methods=["POST"])
+# def editProgram():
+#   if request.method == "POST":
+#     
+
+#     if "timeoffset" in session:
+#       timeoffset = session["timeoffset"]
+#       print(timeoffset)
+#       editDB(data, getDB().cursor(), timeoffset)
+
+#       return jsonify(True)
+#     else:
+#       print(session["timeoffset"])
+
+      
+#       return jsonify(False)
+
+if __name__ == "__main__":
+  app.run(debug=True)
