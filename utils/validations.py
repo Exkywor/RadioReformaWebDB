@@ -1,9 +1,11 @@
+from utils.misc import isEmpty
+
 # Schedule validation
 # schedule = {"monday": "05:10, 15:00"}
 def validateSchedule(schedule, indexedSchedule, id):
   for day in schedule:
-    # Skip the day if it's empty
-    if schedule[day] in ("", " "):
+    # Skip the day if it's empty or contains only whitespaces
+    if isEmpty(schedule[day]):
       continue
 
     ogTime = schedule[day].strip() # Remove any trailing whitespaces
@@ -24,7 +26,6 @@ def validateSchedule(schedule, indexedSchedule, id):
     for c in range(len(ogTime)):
       if ogTime[c] not in validCharacters:
         return {"res": False, "message": f"ERROR: La hora para el {day.upper()} contiene caracteres inválidos: {ogTime[c]}"}
-    
     
     for time in times:
       split = time.split(":")
@@ -49,6 +50,7 @@ def validateSchedule(schedule, indexedSchedule, id):
 
   return {"res": True, "message": "El horario es válido"}
 
+
 # Info validation
 def validateInfo(info, id, programs, method ="edit"):
   if not bool(programs): # Check that a programs argument has been passed
@@ -59,34 +61,50 @@ def validateInfo(info, id, programs, method ="edit"):
     # Check that all required fields are filled
     if "name" not in info:
       return {"res": False, "message": f"Debes añadir un nombre para el programa"}
+    if "streamID" not in info:
+      return {"res": False, "message": f"Debes asignar un identificador del programa para el stream de audio"}
     if "author" not in info:
-      return {"res": False, "message": f"Debes añadir el autor del programa"}
+      return {"res": False, "message": f"Debes añadir el productor del programa"}
     if "length" not in info:
       return {"res": False, "message": f"Debes añadir la duración del programa"}
+    if "topics" not in info:
+      return {"res": False, "message": f"Debes añadir los temas del programa"}
     if "descriptionShort" not in info:
       return {"res": False, "message": f"Debes añadir una descripción corta (sinopsis) del programa"}
     if "descriptionLong" not in info:
       return {"res": False, "message": f"Debes añadir una descripción larga del programa"}
-    if "topics" not in info:
-      return {"res": False, "message": f"Debes añadir los temas del programa"}
-
+    
     # Validate the streamID
+    if isEmpty(info["streamID"]):
+      return {"res": False, "message": f"Debes asignar un identificador del programa para el stream de audio"}
     streamIDs = [programs[program]["streamID"] for program in programs]
     if info["streamID"] in streamIDs:
       return {"res": False, "message": f"El streamID {info['streamID']} ya está asignado a otro programa"}
-    if "streamID" not in info:
-      return {"res": False, "message": f"Debes asignar un identificador del programa para el stream de audio"}
-    
+  
+
   # Check that the program has a name, and that it is unique
   if "name" in info:
+    if isEmpty(info["name"]):
+      return {"res": False, "message": f"Debes añadir un nombre para el programa"}
     programNames = [programs[program]["name"] for program in programs]
     if info["name"] in programNames:
       return {"res": False, "message": f"El nombre '{info['name']}' ya está asignado a otro programa"}
-    if info["name"] == "":
-      return {"res": False, "message": f"El nombre del programa no puede quedar vacío"}
-    
-  # Check that the topics are separated by ", "
+  
+  # Check the author
+  if "author" in info:
+    if isEmpty(info["author"]):
+      return {"res": False, "message": f"Debes añadir el productor del programa"}
+
+  # Validate the length
+  if "length" in info:
+    if info["length"] == 0:
+      return {"res": False, "message": f"La duración debe ser mayor a 0"}
+
+  # Check the topics
   if "topics" in info:
+    if isEmpty(info["topics"]):
+      return {"res": False, "message": f"Debes añadir al menos un tema para el programa"}
+    # Check that the topics are separated by ", "
     for c in range(len(info["topics"])):
       if info["topics"][c] == ",":
         if info["topics"][c+1] != " ":
@@ -99,9 +117,17 @@ def validateInfo(info, id, programs, method ="edit"):
         if info["presenters"][c+1] != " ":
           return {"res": False, "message": f"Pon un espacio después de las comas para los presentadores"}
 
-  # Validate descriptionShort character count
+  # Check the descriptionShort
   if "descriptionShort" in info:
+    if isEmpty(info["descriptionShort"]):
+      return {"res": False, "message": f"Debes añadir una descripción corta (sinopsis) del programa"}
+    # Validate descriptionShort character count
     if len(info["descriptionShort"]) > 250:
       return {"res": False, "message": f"La sinópsis contiene más de 250 caracteres"}
-
+  
+  # Check the descriptionLong
+  if "descriptionLong" in info:
+    if isEmpty(info["descriptionLong"]):
+      return {"res": False, "message": f"Debes añadir una descripción larga del programa"}
+  
   return {"res": True, "message": "La información es válida"}
