@@ -118,7 +118,7 @@ def editProgram():
     # Converts the serialized string back into a dictionary
     data = json.loads(request.form.get("data"))
 
-    editDB(data, getDB().cursor(), session["timeoffset"], session["schedule"]["schedule"])
+    editDB(data, getDB().cursor(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
 
     return jsonify(True)
 
