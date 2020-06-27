@@ -34,7 +34,26 @@ def close_connection(exception):
 
 
 # Sets the programs and the schedule, which we'll use in the app
-def getData():
+def getData(fullLoad =False):
+  if fullLoad:
+    cursor = getDB().cursor()
+    # This would give us tuples, so we changed it to get Rows. We'll convert them into a dict later
+    cursor.execute("SELECT * from Programs")
+    programsToDict = cursor.fetchall()
+    cursor.execute("SELECT * from Airs") # We could join programs and airs but it would make it harder to filter an iterate through empty days
+    airingToDict = cursor.fetchall()
+
+    # We extract the information from the Rows and convert them to dicts
+    programsList = []
+    for program in programsToDict:
+      programsList.append({key:program[key] for key in program.keys()})
+    airingList = []
+    for airing in airingToDict:
+      airingList.append({key:airing[key] for key in airing.keys()})
+
+    session["programsList"] = programsList
+    session["airingList"] = airingList
+
   processed = prepareDB(session["programsList"], session["airingList"], session["timeoffset"])
   session["programs"] = processed["programs"]
   session["schedule"] = processed["schedule"]
@@ -45,25 +64,6 @@ def getData():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-  cursor = getDB().cursor()
-
-  # This would give us tuples, so we changed it to get Rows. We'll convert them into a dict later
-  cursor.execute("SELECT * from Programs")
-  programsToDict = cursor.fetchall()
-  cursor.execute("SELECT * from Airs") # We could join programs and airs but it would make it harder to filter an iterate through empty days
-  airingToDict = cursor.fetchall()
-
-  # We extract the information from the Rows and convert them to dicts
-  programsList = []
-  for program in programsToDict:
-    programsList.append({key:program[key] for key in program.keys()})
-  airingList = []
-  for airing in airingToDict:
-    airingList.append({key:airing[key] for key in airing.keys()})
-
-  session["programsList"] = programsList
-  session["airingList"] = airingList
-
   # Timezone variables
   if "timezone" not in session:
     session["timezone"] = "America/El_Salvador"
@@ -71,7 +71,7 @@ def index():
     session["timeoffset"] = -360
 
   if "loaded" not in session:
-    getData()
+    getData(True)
 
   return render_template("index.html", title="Programas")
 
@@ -118,7 +118,9 @@ def editProgram():
     # Converts the serialized string back into a dictionary
     data = json.loads(request.form.get("data"))
 
-    editRes = editDB(data, getDB().cursor(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+    editRes = editDB(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+
+    getData(True)
 
     return jsonify(editRes)
 

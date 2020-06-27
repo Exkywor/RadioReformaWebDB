@@ -2,16 +2,14 @@ from utils.handleTimezone import changeTimezone
 from utils.validations import validateSchedule, validateInfo
 from utils.misc import isEmpty
 
-def editDB(changes, cursor, offset, indexedSchedule, programs):
+def editDB(changes, db, offset, indexedSchedule, programs):
   id = changes["id"]
   info = changes["info"]
   schedule = changes["schedule"]
 
   # Store what we're going to do to the DB
   infoToChange = {}
-  infoToDelete = []
   scheduleToChange = {}
-  scheduleToDelete = []
   
   if bool(schedule): # Check that there are changes in the schedule
     # Validate schedule
@@ -22,8 +20,8 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
     # Prepare the schedule to change it by the timezone
     toTimezoneSchedule = {}
     for day in schedule:
-      if schedule[day] in ("", " "): # Add to delete list
-        scheduleToDelete.append(day)
+      if isEmpty(schedule[day]): # If empty we'll set it to None (NULL)
+        scheduleToChange[day] = None
       else:
         toTimezoneSchedule[day] = schedule[day].strip().split(", ") 
 
@@ -36,7 +34,7 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
 
   if bool(info): # Check that there are changes in the info
     # Validate info
-    infoValidated = validateInfo(info, id, programs, "edit")
+    infoValidated = validateInfo(info, id, programs)
     if infoValidated["res"] is False:
       return infoValidated["message"]
     
@@ -46,7 +44,7 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
         infoToChange[key] = int(info[key])
       elif key == "presenters":
         if isEmpty(info[key]) or info[key] == ("Desconocido" or "desconocido"):
-          infoToDelete.append(key)
+          infoToChange[key] = None
         else:
           elements = info[key].strip().split(", ")
           capitalized = [el.capitalize() for el in elements]
@@ -58,13 +56,16 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
       else:
         infoToChange[key] = info[key].strip()
 
-  print(infoToChange)
+  # EDIT THE DB
+  cursor = db.cursor()
+  # Update information
+  if bool(infoToChange):
+    for item in infoToChange:
+      cursor.execute(f"UPDATE Programs SET {item}=? WHERE programID={id}", [infoToChange[item]])
+    db.commit()
+  if bool(scheduleToChange):
+    for item in scheduleToChange:
+      cursor.execute(f"UPDATE Airs SET {item}=? WHERE programID={id}", [scheduleToChange[item]])
+    db.commit()
 
-
-    # Should move all of this into a getChanges() function so I can reuse this code for the addProgram()
-    # MAYBE! What do to with delete?
-
-  # cursor.execute("SELECT * from Programs")
-  # programsToDict = cursor.fetchall()
-  # print(programsToDict)
   return "Éxito"
