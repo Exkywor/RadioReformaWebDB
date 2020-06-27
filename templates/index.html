@@ -211,7 +211,9 @@
       // Converts the changes into a serialized string so we can send them and properly
       let serialized = JSON.stringify(changes)
       // Sends the changes to the server
-      $.post("/editProgram", {data: serialized}, function(data) { console.log(data) });
+      $.post("/editProgram", {data: serialized}, function(data) {
+        console.log(data)
+      });
     })
 
     // Handles form reset

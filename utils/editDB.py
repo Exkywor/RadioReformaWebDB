@@ -17,7 +17,7 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
     # Validate schedule
     scheduleValidated = validateSchedule(schedule, indexedSchedule, id)
     if scheduleValidated["res"] is False:
-      return print(scheduleValidated["message"])
+      return scheduleValidated["message"]
 
     # Prepare the schedule to change it by the timezone
     toTimezoneSchedule = {}
@@ -38,28 +38,25 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
     # Validate info
     infoValidated = validateInfo(info, id, programs, "edit")
     if infoValidated["res"] is False:
-      return print(infoValidated["message"])
+      return infoValidated["message"]
     
     # Prepare the elements to change
     for key in info:
-      # Prepare and add the string elements
-      if type(info[key]) == str:
-        if key == "presenters":
-          if isEmpty(info[key]) or info[key] == ("Desconocido" or "desconocido"):
-            infoToDelete.append(key)
-          else:
-            elements = info[key].strip().split(", ")
-            capitalized = [el.capitalize() for el in elements]
-            infoToChange[key] = ", ".join(capitalized)
-        elif key == "topics":
+      if key == "length":
+        infoToChange[key] = int(info[key])
+      elif key == "presenters":
+        if isEmpty(info[key]) or info[key] == ("Desconocido" or "desconocido"):
+          infoToDelete.append(key)
+        else:
           elements = info[key].strip().split(", ")
           capitalized = [el.capitalize() for el in elements]
           infoToChange[key] = ", ".join(capitalized)
-        else:
-          infoToChange[key] = info[key].strip()
+      elif key == "topics":
+        elements = info[key].strip().split(", ")
+        capitalized = [el.capitalize() for el in elements]
+        infoToChange[key] = ", ".join(capitalized)
       else:
-        infoToChange[key] = info[key]
-        
+        infoToChange[key] = info[key].strip()
 
   print(infoToChange)
 
@@ -70,3 +67,4 @@ def editDB(changes, cursor, offset, indexedSchedule, programs):
   # cursor.execute("SELECT * from Programs")
   # programsToDict = cursor.fetchall()
   # print(programsToDict)
+  return "Éxito"

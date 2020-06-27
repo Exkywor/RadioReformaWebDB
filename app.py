@@ -118,9 +118,9 @@ def editProgram():
     # Converts the serialized string back into a dictionary
     data = json.loads(request.form.get("data"))
 
-    editDB(data, getDB().cursor(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+    editRes = editDB(data, getDB().cursor(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
 
-    return jsonify(True)
+    return jsonify(editRes)
 
 
 if __name__ == "__main__":

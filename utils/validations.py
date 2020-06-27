@@ -78,8 +78,9 @@ def validateInfo(info, id, programs, method ="edit"):
     if isEmpty(info["streamID"]):
       return {"res": False, "message": f"Debes asignar un identificador del programa para el stream de audio"}
     streamIDs = [programs[program]["streamID"] for program in programs]
-    if info["streamID"] in streamIDs:
-      return {"res": False, "message": f"El streamID {info['streamID']} ya está asignado a otro programa"}
+    if info["streamID"].strip() in streamIDs:
+      if programs[id]["streamID"] != info["streamID"].strip(): # In case it's a none-modification for the same program
+        return {"res": False, "message": f"El streamID {info['streamID']} ya está asignado a otro programa"}
   
 
   # Check that the program has a name, and that it is unique
@@ -87,8 +88,9 @@ def validateInfo(info, id, programs, method ="edit"):
     if isEmpty(info["name"]):
       return {"res": False, "message": f"Debes añadir un nombre para el programa"}
     programNames = [programs[program]["name"] for program in programs]
-    if info["name"] in programNames:
-      return {"res": False, "message": f"El nombre '{info['name']}' ya está asignado a otro programa"}
+    if info["name"].strip() in programNames:
+      if programs[id]["name"] != info["name"].strip(): # In case it's a none-modification for the same program
+        return {"res": False, "message": f"El nombre '{info['name']}' ya está asignado a otro programa"}
   
   # Check the author
   if "author" in info:
@@ -97,7 +99,7 @@ def validateInfo(info, id, programs, method ="edit"):
 
   # Validate the length
   if "length" in info:
-    if info["length"] == 0:
+    if int(info["length"]) < 1:
       return {"res": False, "message": f"La duración debe ser mayor a 0"}
 
   # Check the topics
