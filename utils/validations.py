@@ -14,8 +14,10 @@ def validateSchedule(schedule, indexedSchedule, id):
     # Check that the times are separated by ", "
     for c in range(len(ogTime)):
       if ogTime[c] == ",":
+        if c == len(ogTime)-1:
+          return {"res": False, "message": f"Quita las comas al final de los tiempos para el día {day.upper()}"}
         if ogTime[c+1] != " ":
-          return {"res": False, "message": f"Pon un espacio después de las comas para el día {day.upper()}"}
+          return {"res": False, "message": f"Pon un espacio después de las comas en las separaciones de los tiempos para el día {day.upper()}"}
 
     # Check if a time was input
     if times[0] == ",":
@@ -107,9 +109,12 @@ def validateInfo(info, id, programs, method ="edit"):
     if isEmpty(info["topics"]):
       return {"res": False, "message": f"Debes añadir al menos un tema para el programa"}
     # Check that the topics are separated by ", "
-    for c in range(len(info["topics"])):
-      if info["topics"][c] == ",":
-        if info["topics"][c+1] != " ":
+    topics = info["topics"].strip()
+    for c in range(len(topics)):
+      if topics[c] == ",":
+        if c == len(topics)-1:
+          return {"res": False, "message": f"Quita las comas al final de los temas"}
+        if topics[c+1] != " ":
           return {"res": False, "message": f"Pon un espacio después de las comas para los temas"}
 
   # Check that the presenters are separated by ", "
