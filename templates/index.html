@@ -118,7 +118,6 @@
       };
     };
 
-
     // PROGRAM EDITING
     // Hide or display the editing form
     function toggleEditing() {
@@ -136,104 +135,6 @@
         editing = false
       };
     };
-
-    // Fills the editing form with the selected program's information
-    function editProgram(id) {
-      // Proceed if editing is enable
-      if (editing) {
-        // Resets the variables that store any changes so we don't send previous changes by mistake
-        changes = {id: null, info: {}, schedule: {}}
-        $("#editingForm").trigger("reset")
-
-        // Makes the days in the schedule a ", " separated string. Otherwise you only get "," as separation
-        let schedule = {}
-        for (let day of Object.keys(programs[id].schedule)) {
-          let stringified = ""
-          let length = programs[id].schedule[day].length
-
-          if (length === 0)
-            stringified = undefined
-          else if (length === 1)
-            stringified = programs[id].schedule[day][0]
-          else
-            stringified = programs[id].schedule[day].reduce((string, time, i) => {
-              if (i === 0) return time
-              else return string += `, ${time}`
-            }, "")
-          
-          schedule[day] = stringified
-        };
-
-        // Enable form editing
-        document.getElementById("editingFieldset").removeAttribute("disabled")
-        // Fill the different fields with the current program's values
-        document.getElementById("formName").setAttribute("value", programs[id].name)
-        document.getElementById("formLength").setAttribute("value", programs[id].length)
-        document.getElementById("formTopics").setAttribute("value", programs[id].topics)
-        document.getElementById("formPresenters").setAttribute("value", programs[id].presenters)
-        document.getElementById("formAuthor").setAttribute("value", programs[id].author)
-        document.getElementById("formDescriptionShort").setAttribute("value", programs[id].descriptionShort)
-        document.getElementById("formDescriptionLong").setAttribute("value", programs[id].descriptionLong)
-
-        // Make sure to leave the days that are blank, blank
-        let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-        for (let day of days) {
-          if (programs[id].schedule[day] == undefined)
-            document.getElementById(`form${day}`).setAttribute("value", "")
-          else
-            document.getElementById(`form${day}`).setAttribute("value", schedule[day])
-        };
-
-        // Store the id in case we make a change
-        changes.id = id;
-      };
-    };
-
-    // Handle any changes
-    $('#formName').keyup(function() {changes.info.name = $('#formName').val()});
-    $('#formLength').on("change", function() {changes.info.length = $('#formLength').val()});
-    $('#formTopics').keyup(function() {changes.info.topics = $('#formTopics').val()});
-    $('#formPresenters').keyup(function() {changes.info.presenters = $('#formPresenters').val()});
-    $('#formAuthor').keyup(function() {changes.info.author = $('#formAuthor').val()});
-    $('#formDescriptionShort').keyup(function() {changes.info.descriptionShort = $('#formDescriptionShort').val()});
-    $('#formDescriptionLong').keyup(function() {changes.info.descriptionLong = $('#formDescriptionLong').val()});
-    $('#formmonday').keyup(function() {changes.schedule.monday = $('#formmonday').val()});
-    $('#formtuesday').keyup(function() {changes.schedule.tuesday = $('#formtuesday').val()});
-    $('#formwednesday').keyup(function() {changes.schedule.wednesday = $('#formwednesday').val()});
-    $('#formthursday').keyup(function() {changes.schedule.thursday = $('#formthursday').val()});
-    $('#formfriday').keyup(function() {changes.schedule.friday = $('#formfriday').val()});
-    $('#formsaturday').keyup(function() {changes.schedule.saturday = $('#formsaturday').val()});
-    $('#formsunday').keyup(function() {changes.schedule.sunday = $('#formsunday').val()});
-
-    // Handles submitting of changed information
-    $("#editingForm").submit(function(event) {
-      event.preventDefault()
-      // Converts the changes into a serialized string so we can send them and properly
-      let serialized = JSON.stringify(changes)
-      // Sends the changes to the server
-      $.post("/editProgram", {data: serialized}, function(data) {
-        if (data !== "Éxito") {
-          $("#messages").html(
-            '<div class="alert alert-danger" >' +
-              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-              '<span>' + data + '</span>' +
-            '</div>'
-          );
-        } else {
-          $("#messages").html(
-            '<div class="alert alert-success" >' +
-              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-              '<span>' + data + '</span>' +
-            '</div>'
-          );
-          // On success, reload the page after 2 seconds
-          setTimeout(function() { location.reload() }, 2000)
-        };
-      });
-    });
-
-    // Handles form reset
-    $("#editingForm").on("reset", function(event) {changes = {id: null, info: {}, schedule: {}}})
 
     // Dev function to display what changes are stored
     function showChanges() { console.log(changes) }

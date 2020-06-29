@@ -10,42 +10,43 @@
       <div class="border-bottom">
         <!-- name -->
         <div class="form-group">
-          <label for="formName">Nombre</label>
-          <input type="text" class="form-control px-2" id="formName" placeholder="Nombre del Programa" value="">
+          <label for="editName">Nombre</label>
+          <input type="text" class="form-control px-2" id="editName" placeholder="Nombre del Programa" value="">
+          <div id="editNameFeedback"></div>
         </div>
         <!-- ids -->
         <div class="form-row">
           <div class="form-group col">
-            <label for="formLength">Duración</label>
-            <input type="number" min="1" class="form-control px-2" id="formLength" placeholder="X" value="">
-            <small id="lengthHelp" class="form-text text-muted">Duración en minutos. Mayor a 0</small>
+            <label for="editLength">Duración</label>
+            <input type="number" min="1" class="form-control px-2" id="editLength" placeholder="X" value="">
+            <small id="editlengthHelp" class="form-text text-muted">Duración en minutos. Mayor a 0</small>
           </div>
           <div class="form-group col">
-            <label for="formTopics">Temas</label>
-            <input type="text" class="form-control px-2" id="formTopics" placeholder="Tema 1, Tema 2" value="">
-            <small id="topicsHelp" class="form-text text-muted">Separados por comas</small>
+            <label for="editTopics">Temas</label>
+            <input type="text" class="form-control px-2" id="editTopics" placeholder="Tema 1, Tema 2" value="">
+            <small id="edittopicsHelp" class="form-text text-muted">Separados por comas</small>
           </div>
         </div>
         <!-- presenters -->
         <div class="form-group">
-          <label for="formPresenters">Presentadores</label>
-          <input type="text" class="form-control px-2" id="formPresenters" placeholder="Presentador 1, Presentador 2" value="">
-          <small id="presentersHelp" class="form-text text-muted">Separados por comas</small>
+          <label for="editPresenters">Presentadores</label>
+          <input type="text" class="form-control px-2" id="editPresenters" placeholder="Presentador 1, Presentador 2" value="">
+          <small id="editpresentersHelp" class="form-text text-muted">Separados por comas</small>
         </div>
         <!-- producer -->
         <div class="form-group">
-          <label for="formAuthor">Producido por</label>
-          <input type="text" class="form-control px-2" id="formAuthor" placeholder="Productor" value="">
+          <label for="editAuthor">Producido por</label>
+          <input type="text" class="form-control px-2" id="editAuthor" placeholder="Productor" value="">
         </div>
         <!-- descriptions -->
         <div class="form-group">
-          <label for="formDescriptionShort">Sinópsis</label>
-          <input type="text" class="form-control px-2" id="formDescriptionShort" placeholder="Sinópsis del programa" value="">
-          <small id="presentersHelp" class="form-text text-muted">250 caracteres máximos</small>
+          <label for="editDescriptionShort">Sinópsis</label>
+          <input type="text" class="form-control px-2" id="editDescriptionShort" placeholder="Sinópsis del programa" value="">
+          <small id="editpresentersHelp" class="form-text text-muted">250 caracteres máximos</small>
         </div>
         <div class="form-group">
-          <label for="formDescriptionLong">Descripción</label>
-          <input type="text" class="form-control px-2" id="formDescriptionLong" placeholder="Descripción del programa" value="">
+          <label for="editDescriptionLong">Descripción</label>
+          <input type="text" class="form-control px-2" id="editDescriptionLong" placeholder="Descripción del programa" value="">
         </div>
       </div>
       <!-- schedule -->
@@ -55,32 +56,32 @@
           <p class="form-text">Separados por ", " en formato de 24 horas</p>
         </div>
         <div class="form-group">
-          <label for="formmonday">Lunes</label>
-          <input type="text" class="form-control px-2" id="formmonday" placeholder="Hora lunes" value="">
+          <label for="editmonday">Lunes</label>
+          <input type="text" class="form-control px-2" id="editmonday" placeholder="Hora lunes" value="">
         </div>
         <div class="form-group">
-          <label for="formtuesday">Martes</label>
-          <input type="text" class="form-control px-2" id="formtuesday" placeholder="Hora martes" value="">
+          <label for="edittuesday">Martes</label>
+          <input type="text" class="form-control px-2" id="edittuesday" placeholder="Hora martes" value="">
         </div>
         <div class="form-group">
-          <label for="formwednesday">Miércoles</label>
-          <input type="text" class="form-control px-2" id="formwednesday" placeholder="Hora miércoles" value="">
+          <label for="editwednesday">Miércoles</label>
+          <input type="text" class="form-control px-2" id="editwednesday" placeholder="Hora miércoles" value="">
         </div>
         <div class="form-group">
-          <label for="formthursday">Jueves</label>
-          <input type="text" class="form-control px-2" id="formthursday" placeholder="Hora jueves" value="">
+          <label for="editthursday">Jueves</label>
+          <input type="text" class="form-control px-2" id="editthursday" placeholder="Hora jueves" value="">
         </div>
         <div class="form-group">
-          <label for="formfriday">Viernes</label>
-          <input type="text" class="form-control px-2" id="formfriday" placeholder="Hora viernes" value="">
+          <label for="editfriday">Viernes</label>
+          <input type="text" class="form-control px-2" id="editfriday" placeholder="Hora viernes" value="">
         </div>
         <div class="form-group">
-          <label for="formsaturday">Sábado</label>
-          <input type="text" class="form-control px-2" id="formsaturday" placeholder="Hora sábado" value="">
+          <label for="editsaturday">Sábado</label>
+          <input type="text" class="form-control px-2" id="editsaturday" placeholder="Hora sábado" value="">
         </div>
         <div class="form-group">
-          <label for="formsunday">Domingo</label>
-          <input type="text" class="form-control px-2" id="formsunday" placeholder="Hora domingo" value="">
+          <label for="editsunday">Domingo</label>
+          <input type="text" class="form-control px-2" id="editsunday" placeholder="Hora domingo" value="">
         </div>
       </div>
       <!-- Submit button -->
@@ -93,5 +94,135 @@
 </div>
 
 <script>
+  // Fills the editing form with the selected program's information
+  function editProgram(id) {
+    // Proceed if editing is enable
+    if (editing) {
+      // Resets the variables that store any changes so we don't send previous changes by mistake
+      changes = {id: null, info: {}, schedule: {}}
+      $("#editingForm").trigger("reset")
 
+      // Makes the days in the schedule a ", " separated string. Otherwise you only get "," as separation
+      let schedule = {}
+      for (let day of Object.keys(programs[id].schedule)) {
+        let stringified = ""
+        let length = programs[id].schedule[day].length
+
+        if (length === 0)
+          stringified = undefined
+        else if (length === 1)
+          stringified = programs[id].schedule[day][0]
+        else
+          stringified = programs[id].schedule[day].reduce((string, time, i) => {
+            if (i === 0) return time
+            else return string += `, ${time}`
+          }, "")
+        
+        schedule[day] = stringified
+      };
+
+      // Enable form editing
+      document.getElementById("editingFieldset").removeAttribute("disabled")
+      // Fill the different fields with the current program's values
+      document.getElementById("editName").setAttribute("value", programs[id].name)
+      document.getElementById("editLength").setAttribute("value", programs[id].length)
+      document.getElementById("editTopics").setAttribute("value", programs[id].topics)
+      document.getElementById("editPresenters").setAttribute("value", programs[id].presenters)
+      document.getElementById("editAuthor").setAttribute("value", programs[id].author)
+      document.getElementById("editDescriptionShort").setAttribute("value", programs[id].descriptionShort)
+      document.getElementById("editDescriptionLong").setAttribute("value", programs[id].descriptionLong)
+
+      // Make sure to leave the days that are blank, blank
+      let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+      for (let day of days) {
+        if (programs[id].schedule[day] == undefined)
+          document.getElementById(`edit${day}`).setAttribute("value", "")
+        else
+          document.getElementById(`edit${day}`).setAttribute("value", schedule[day])
+      };
+
+      // Store the id in case we make a change
+      changes.id = id;
+    };
+  };
+
+  // Handle any changes
+  $('#editName').keyup(function() {
+    changes.info.name = $('#editName').val()
+    validate("name", $('#editName').val())
+  });
+  $('#editLength').on("change", function() {changes.info.length = $('#editLength').val()});
+  $('#editTopics').keyup(function() {changes.info.topics = $('#editTopics').val()});
+  $('#editPresenters').keyup(function() {changes.info.presenters = $('#editPresenters').val()});
+  $('#editAuthor').keyup(function() {changes.info.author = $('#editAuthor').val()});
+  $('#editDescriptionShort').keyup(function() {changes.info.descriptionShort = $('#editDescriptionShort').val()});
+  $('#editDescriptionLong').keyup(function() {changes.info.descriptionLong = $('#editDescriptionLong').val()});
+  $('#editmonday').keyup(function() {changes.schedule.monday = $('#editmonday').val()});
+  $('#edittuesday').keyup(function() {changes.schedule.tuesday = $('#edittuesday').val()});
+  $('#editwednesday').keyup(function() {changes.schedule.wednesday = $('#editwednesday').val()});
+  $('#editthursday').keyup(function() {changes.schedule.thursday = $('#editthursday').val()});
+  $('#editfriday').keyup(function() {changes.schedule.friday = $('#editfriday').val()});
+  $('#editsaturday').keyup(function() {changes.schedule.saturday = $('#editsaturday').val()});
+  $('#editsunday').keyup(function() {changes.schedule.sunday = $('#editsunday').val()});
+
+  // Handles submitting of changed information
+  $("#editingForm").submit(function(event) {
+    event.preventDefault()
+    // Converts the changes into a serialized string so we can send them and properly
+    let serialized = JSON.stringify(changes)
+    // Sends the changes to the server
+    // $.post("/editProgram", {data: serialized}, function(data) {
+    //   if (data !== "Éxito") {
+    //     $("#messages").html(
+    //       '<div class="alert alert-danger" >' +
+    //         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+    //         '<span>' + data + '</span>' +
+    //       '</div>'
+    //     );
+    //   } else {
+    //     $("#messages").html(
+    //       '<div class="alert alert-success" >' +
+    //         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+    //         '<span>' + data + '</span>' +
+    //       '</div>'
+    //     );
+    //     // On success, reload the page after 2 seconds
+    //     setTimeout(function() { location.reload() }, 2000)
+    //   };
+    // });
+  });
+
+  function validate(field, value) {
+    if (field === "name") {
+      if (value === "Alimento") displayInputValidation(true, "Name")
+      else displayInputValidation(false, "Name", "Nombre inválido")
+    }
+  }
+
+  // Handles input's class management
+  function displayInputValidation(valid, field, message = null) {
+    // Changes the validation class of the input
+    if (valid) {
+      if ($(`#edit${field}`).hasClass("is-invalid")) {
+        $(`#edit${field}`).removeClass("is-invalid")
+        $(`#edit${field}`).addClass("is-valid")
+      }
+      else $(`#edit${field}`).addClass("is-valid")
+    } else {
+      if ($(`#edit${field}`).hasClass("is-valid")) {
+        $(`#edit${field}`).removeClass("is-valid")
+        $(`#edit${field}`).addClass("is-invalid")
+      }
+      else $(`#edit${field}`).addClass("is-invalid")
+    };
+    
+    // Changes the validation class of the tooltip
+    $(`#edit${field}Feedback`).attr("class", valid ? "valid-feedback" : "invalid-feedback")
+
+    if (valid) $(`#edit${field}Feedback`).empty() // Clears the tooltip
+    else $(`#edit${field}Feedback`).text(message) // Displays an invalid message
+  };
+
+  // Handles form reset
+  $("#editingForm").on("reset", function(event) {changes = {id: null, info: {}, schedule: {}}})
 </script>
