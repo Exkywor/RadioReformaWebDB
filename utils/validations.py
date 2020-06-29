@@ -119,9 +119,12 @@ def validateInfo(info, id, programs, method ="edit"):
 
   # Check that the presenters are separated by ", "
   if "presenters" in info:
-    for c in range(len(info["presenters"])):
-      if info["presenters"][c] == ",":
-        if info["presenters"][c+1] != " ":
+    presenters = info["presenters"].strip()
+    for c in range(len(presenters)):
+      if presenters[c] == ",":
+        if c == len(presenters)-1:
+          return {"res": False, "message": f"Quita las comas al final de los presentadores"}
+        if presenters[c+1] != " ":
           return {"res": False, "message": f"Pon un espacio después de las comas para los presentadores"}
 
   # Check the descriptionShort

@@ -212,10 +212,25 @@
       let serialized = JSON.stringify(changes)
       // Sends the changes to the server
       $.post("/editProgram", {data: serialized}, function(data) {
-        if (data !== "Éxito") console.log(data)
-        else location.reload() // On success, reload the page
+        if (data !== "Éxito") {
+          $("#messages").html(
+            '<div class="alert alert-danger" >' +
+              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+              '<span>' + data + '</span>' +
+            '</div>'
+          );
+        } else {
+          $("#messages").html(
+            '<div class="alert alert-success" >' +
+              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+              '<span>' + data + '</span>' +
+            '</div>'
+          );
+          // On success, reload the page after 2 seconds
+          setTimeout(function() { location.reload() }, 2000)
+        };
       });
-    })
+    });
 
     // Handles form reset
     $("#editingForm").on("reset", function(event) {changes = {id: null, info: {}, schedule: {}}})
