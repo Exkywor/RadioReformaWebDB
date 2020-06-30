@@ -1,4 +1,4 @@
-from utils.misc import isEmpty
+from utils.misc import isEmpty, isAlphanumeric
 
 # Schedule validation
 # schedule = {"monday": "05:10, 15:00"}
@@ -90,7 +90,7 @@ def validateInfo(info, id, programs, action ="edit"):
   if "name" in info:
     if isEmpty(info["name"]):
       return {"res": False, "message": f"Debes añadir un nombre para el programa"}
-    if not info["name"].strip().isalnum():
+    if not isAlphanumeric(info["name"]):
       return {"res": False, "message": f"El nombre no puede contener solo caracteres especiales"}
     programNames = [programs[program]["name"] for program in programs]
     if info["name"].strip() in programNames:
@@ -101,7 +101,7 @@ def validateInfo(info, id, programs, action ="edit"):
   if "author" in info:
     if isEmpty(info["author"]):
       return {"res": False, "message": f"Debes añadir el productor del programa"}
-    if not info["author"].strip().isalnum():
+    if not isAlphanumeric(info["author"]):
       return {"res": False, "message": f"El productor no puede contener solo caracteres especiales"}
 
   # Validate the length
@@ -114,7 +114,7 @@ def validateInfo(info, id, programs, action ="edit"):
     if isEmpty(info["topics"]):
       return {"res": False, "message": f"Debes añadir al menos un tema para el programa"}
     topics = info["topics"].strip()
-    if not topics.isalnum():
+    if not isAlphanumeric(topics):
       return {"res": False, "message": f"El tema no puede contener solo caracteres especiales"}
     # Check that the topics are separated by ", "
     for c in range(len(topics)):
@@ -128,7 +128,7 @@ def validateInfo(info, id, programs, action ="edit"):
   if "presenters" in info:
     presenters = info["presenters"].strip()
     if (len(presenters) > 0): # Proceed if presenters is not empty, ignore and consider as valid otherwise
-      if not presenters.isalnum():
+      if not isAlphanumeric(presenters):
         return {"res": False, "message": f"Los presentadores no pueden contener solo caracteres especiales"}
       for c in range(len(presenters)):
         if presenters[c] == ",": # The program finds a ,
@@ -141,7 +141,7 @@ def validateInfo(info, id, programs, action ="edit"):
   if "descriptionShort" in info:
     if isEmpty(info["descriptionShort"]):
       return {"res": False, "message": f"Debes añadir una descripción corta (sinopsis) del programa"}
-    if not info["descriptionShort"].strip().isalnum():
+    if not isAlphanumeric(info["descriptionShort"]):
       return {"res": False, "message": f"La descripción corta (sinopsis) no puede contener solo caracteres especiales"}
     
     # Validate descriptionShort character count
@@ -152,7 +152,7 @@ def validateInfo(info, id, programs, action ="edit"):
   if "descriptionLong" in info:
     if isEmpty(info["descriptionLong"]):
       return {"res": False, "message": f"Debes añadir una descripción larga del programa"}
-    if not info["descriptionLong"].strip().isalnum():
+    if not isAlphanumeric(info["descriptionLong"]):
       return {"res": False, "message": f"La descripción no puede contener solo caracteres especiales"}
   
   return {"res": True, "message": "La información es válida"}

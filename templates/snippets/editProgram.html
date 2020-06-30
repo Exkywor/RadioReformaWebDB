@@ -161,60 +161,60 @@
   };
 
   // Handle any changes
-  $('#editName').on("change", function() {
+  $('#editName').on("input", function() {
     changes.info.name = $('#editName').val()
-    validate("edit", "Name", $('#editName').val(), programs)
+    validate("edit", "Name", $('#editName').val(), programs, null, changes.id)
   });
   $('#editLength').on("change", function() {
     changes.info.length = $('#editLength').val()
     validate("edit", "Length", $('#editLength').val())
   });
-  $('#editTopics').on("change", function() {
+  $('#editTopics').on("input", function() {
     changes.info.topics = $('#editTopics').val()
     validate("edit", "Topics", $('#editTopics').val())
   });
-  $('#editPresenters').on("change", function() {
+  $('#editPresenters').on("input", function() {
     changes.info.presenters = $('#editPresenters').val()
     validate("edit", "Presenters", $('#editPresenters').val())
   });
-  $('#editAuthor').on("change", function() {
+  $('#editAuthor').on("input", function() {
     changes.info.author = $('#editAuthor').val()
     validate("edit", "Author", $('#editAuthor').val())
   });
-  $('#editDescriptionShort').on("change", function() {
+  $('#editDescriptionShort').on("input", function() {
     changes.info.descriptionShort = $('#editDescriptionShort').val()
     $("#editDescriptionShortHelp").text(`${$('#editDescriptionShort').val().length}/250 caracteres`)
     validate("edit", "DescriptionShort", $('#editDescriptionShort').val())
   });
-  $('#editDescriptionLong').on("change", function() {
+  $('#editDescriptionLong').on("input", function() {
     changes.info.descriptionLong = $('#editDescriptionLong').val()
     validate("edit", "DescriptionLong", $('#editDescriptionLong').val())
   });
-  $('#editmonday').on("change", function() {
+  $('#editmonday').on("input", function() {
     changes.schedule.monday = $('#editmonday').val()
     validate("edit", "monday", $('#editmonday').val(), null, schedule, changes.id)
   });
-  $('#edittuesday').on("change", function() {
+  $('#edittuesday').on("input", function() {
     changes.schedule.tuesday = $('#edittuesday').val()
     validate("edit", "tuesday", $('#edittuesday').val(), null, schedule, changes.id)
   });
-  $('#editwednesday').on("change", function() {
+  $('#editwednesday').on("input", function() {
     changes.schedule.wednesday = $('#editwednesday').val()
     validate("edit", "wednesday", $('#editwednesday').val(), null, schedule, changes.id)
   });
-  $('#editthursday').on("change", function() {
+  $('#editthursday').on("input", function() {
     changes.schedule.thursday = $('#editthursday').val()
     validate("edit", "thursday", $('#editthursday').val(), null, schedule, changes.id)
   });
-  $('#editfriday').on("change", function() {
+  $('#editfriday').on("input", function() {
     changes.schedule.friday = $('#editfriday').val()
     validate("edit", "friday", $('#editfriday').val(), null, schedule, changes.id)
   });
-  $('#editsaturday').on("change", function() {
+  $('#editsaturday').on("input", function() {
     changes.schedule.saturday = $('#editsaturday').val()
     validate("edit", "saturday", $('#editsaturday').val(), null, schedule, changes.id)
   });
-  $('#editsunday').on("change", function() {
+  $('#editsunday').on("input", function() {
     changes.schedule.sunday = $('#editsunday').val()
     validate("edit", "sunday", $('#editsunday').val(), null, schedule)
   });
@@ -225,27 +225,33 @@
     // Converts the changes into a serialized string so we can send them and properly
     let serialized = JSON.stringify(changes)
     // Sends the changes to the server
-    // $.post("/editProgram", {data: serialized}, function(data) {
-    //   if (data !== "Éxito") {
-    //     $("#messages").html(
-    //       '<div class="alert alert-danger" >' +
-    //         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-    //         '<span>' + data + '</span>' +
-    //       '</div>'
-    //     );
-    //   } else {
-    //     $("#messages").html(
-    //       '<div class="alert alert-success" >' +
-    //         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-    //         '<span>' + data + '</span>' +
-    //       '</div>'
-    //     );
-    //     // On success, reload the page after 2 seconds
-    //     setTimeout(function() { location.reload() }, 2000)
-    //   };
-    // });
+    $.post("/editProgram", {data: serialized}, function(data) {
+      if (data !== "Éxito") {
+        $("#messages").html(
+          '<div class="alert alert-danger" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+      } else {
+        $("#messages").html(
+          '<div class="alert alert-success" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+        // On success, reload the page after 2 seconds
+        setTimeout(function() { location.reload() }, 1500)
+      };
+    });
   });
 
   // Handles form reset
-  $("#editingForm").on("reset", function(event) {changes = {id: null, info: {}, schedule: {}}})
+  $("#editingForm").on("reset", function(event) {
+    changes = {id: null, info: {}, schedule: {}};
+    $("#editingFieldset").prop("disabled", true)
+    $("#editingForm").find("*").attr("value", "")
+    $("#editingForm").find("*").removeClass("is-valid")
+    $("#editingForm").find("*").removeClass("is-invalid")
+  })
 </script>

@@ -6,8 +6,9 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         return displayInputValidation("edit", false, "Name", "Debes añadir un nombre para el programa");
       else if (!isAlphaNumeric(value)) // Check if it's not alphanumeric
         return displayInputValidation("edit", false, "Name", `El nombre no puede contener solo caracteres especiales`);
-      else if (programNames.includes(value.trim())) // Check if the name already exists
-        return displayInputValidation("edit", false, "Name", `El nombre ${value} ya está asignado a otro programa`);
+      else if (programs[id].name !== value.trim()) // In case it's a non-modification for the same program
+        if (programNames.includes(value.trim())) // Check if the name already exists
+          return displayInputValidation("edit", false, "Name", `El nombre ${value} ya está asignado a otro programa`);
       else
         return displayInputValidation("edit", true, "Name");
     case "Length":
@@ -43,13 +44,17 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
               return displayInputValidation("edit", false, "Presenters", "Separa los presentadores con una coma seguida de un espacio");
           };
         };
-      };
-      return displayInputValidation("edit", true, "Presenters");
+        return displayInputValidation("edit", true, "Presenters");
+      }
+      else
+        return displayInputValidation("edit", true, "Presenters");
     case "Author":
       if (isEmpty(value)) // Check if the author is empty
         return displayInputValidation("edit", false, "Author", "Debes añadir el productor del programa");
       else if (!isAlphaNumeric(value)) // Check if it's not alphanumeric
         return displayInputValidation("edit", false, "Author", `El productor no puede contener solo caracteres especiales`);
+      else
+        return displayInputValidation("edit", true, "Author");
     case "DescriptionShort":
       if (isEmpty(value)) // Check if the descriptionShort is empty
         return displayInputValidation("edit", false, "DescriptionShort", "Debes añadir una descripción corta (sinopsis) del programa");
@@ -122,7 +127,8 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
           if (id != schedule[field][timeIndex])
             return displayInputValidation("edit", false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
         }
-      };      
+      };
+      return displayInputValidation("edit", true, field);
     default:
       return displayInputValidation("edit", true, field);
   }

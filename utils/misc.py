@@ -1,3 +1,5 @@
+import re
+
 # Converts a timeIndex (time in minutes) into a readable string
 def makeReadable(time):
   hour = str(int(time / 60))
@@ -9,6 +11,14 @@ def makeReadable(time):
 # Check if a string is empty or only whitespaces
 def isEmpty(string):
   if (string == "") or (string.isspace()):
+    return True
+  else:
+    return False
+
+def isAlphanumeric(string):
+  noSpaces = string.strip().replace(" ", "")
+  
+  if any(c.isalnum() for c in noSpaces):
     return True
   else:
     return False
