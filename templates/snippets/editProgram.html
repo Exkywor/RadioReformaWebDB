@@ -18,8 +18,8 @@
         <div class="form-row">
           <div class="form-group col">
             <label for="editLength">Duración</label>
-            <input type="number" class="form-control px-2" id="editLength" placeholder="X" value="">
-            <small id="editLengthHelp" class="form-text text-muted">Duración en minutos. Mayor a 0</small>
+            <input type="number" class="form-control px-2" min=1 id="editLength" placeholder="X" value="">
+            <small id="editLengthHelp" class="form-text text-muted">Duración en minutos.</small>
             <div id="editLengthFeedback"></div>
           </div>
           <div class="form-group col">
@@ -46,7 +46,7 @@
         <div class="form-group">
           <label for="editDescriptionShort">Sinópsis</label>
           <input type="text" class="form-control px-2" id="editDescriptionShort" placeholder="Sinópsis del programa" value="">
-          <small id="editDescriptionShortHelp" class="form-text text-muted">250 caracteres máximos</small>
+          <small id="editDescriptionShortHelp" class="form-text text-muted">0/250 caracteres</small>
           <div id="editDescriptionShortFeedback"></div>
         </div>
         <div class="form-group">
@@ -143,6 +143,7 @@
       document.getElementById("editPresenters").setAttribute("value", programs[id].presenters)
       document.getElementById("editAuthor").setAttribute("value", programs[id].author)
       document.getElementById("editDescriptionShort").setAttribute("value", programs[id].descriptionShort)
+      document.getElementById("editDescriptionShortHelp").innerText = `${$('#editDescriptionShort').val().length}/250 caracteres`
       document.getElementById("editDescriptionLong").setAttribute("value", programs[id].descriptionLong)
 
       // Make sure to leave the days that are blank, blank
@@ -162,59 +163,60 @@
   // Handle any changes
   $('#editName').on("change", function() {
     changes.info.name = $('#editName').val()
-    validate("edit", "name", $('#editName').val())
+    validate("edit", "Name", $('#editName').val(), programs)
   });
   $('#editLength').on("change", function() {
     changes.info.length = $('#editLength').val()
-    validate("edit", "length", $('#editLength').val())
+    validate("edit", "Length", $('#editLength').val())
   });
   $('#editTopics').on("change", function() {
     changes.info.topics = $('#editTopics').val()
-    validate("edit", "topics", $('#editTopics').val())
+    validate("edit", "Topics", $('#editTopics').val())
   });
   $('#editPresenters').on("change", function() {
     changes.info.presenters = $('#editPresenters').val()
-    validate("edit", "presenters", $('#editPresenters').val())
+    validate("edit", "Presenters", $('#editPresenters').val())
   });
   $('#editAuthor').on("change", function() {
     changes.info.author = $('#editAuthor').val()
-    validate("edit", "author", $('#editAuthor').val())
+    validate("edit", "Author", $('#editAuthor').val())
   });
   $('#editDescriptionShort').on("change", function() {
     changes.info.descriptionShort = $('#editDescriptionShort').val()
-    validate("edit", "descriptionShort", $('#editDescriptionShort').val())
+    $("#editDescriptionShortHelp").text(`${$('#editDescriptionShort').val().length}/250 caracteres`)
+    validate("edit", "DescriptionShort", $('#editDescriptionShort').val())
   });
   $('#editDescriptionLong').on("change", function() {
     changes.info.descriptionLong = $('#editDescriptionLong').val()
-    validate("edit", "descriptionLong", $('#editDescriptionLong').val())
+    validate("edit", "DescriptionLong", $('#editDescriptionLong').val())
   });
   $('#editmonday').on("change", function() {
     changes.schedule.monday = $('#editmonday').val()
-    validate("edit", "monday", $('#editmonday').val())
+    validate("edit", "monday", $('#editmonday').val(), null, schedule, changes.id)
   });
   $('#edittuesday').on("change", function() {
     changes.schedule.tuesday = $('#edittuesday').val()
-    validate("edit", "tuesday", $('#edittuesday').val())
+    validate("edit", "tuesday", $('#edittuesday').val(), null, schedule, changes.id)
   });
   $('#editwednesday').on("change", function() {
     changes.schedule.wednesday = $('#editwednesday').val()
-    validate("edit", "wednesday", $('#editwednesday').val())
+    validate("edit", "wednesday", $('#editwednesday').val(), null, schedule, changes.id)
   });
   $('#editthursday').on("change", function() {
     changes.schedule.thursday = $('#editthursday').val()
-    validate("edit", "thursday", $('#editthursday').val())
+    validate("edit", "thursday", $('#editthursday').val(), null, schedule, changes.id)
   });
   $('#editfriday').on("change", function() {
     changes.schedule.friday = $('#editfriday').val()
-    validate("edit", "friday", $('#editfriday').val())
+    validate("edit", "friday", $('#editfriday').val(), null, schedule, changes.id)
   });
   $('#editsaturday').on("change", function() {
     changes.schedule.saturday = $('#editsaturday').val()
-    validate("edit", "saturday", $('#editsaturday').val())
+    validate("edit", "saturday", $('#editsaturday').val(), null, schedule, changes.id)
   });
   $('#editsunday').on("change", function() {
     changes.schedule.sunday = $('#editsunday').val()
-    validate("edit", "sunday", $('#editsunday').val())
+    validate("edit", "sunday", $('#editsunday').val(), null, schedule)
   });
 
   // Handles submitting of changed information

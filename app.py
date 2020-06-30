@@ -80,7 +80,7 @@ def index():
 @app.route("/programs", methods=["GET", "POST"])
 def getPrograms():
   if request.method == "POST":
-    return jsonify(session["programs"])
+    return jsonify(programs=session["programs"], schedule=session["schedule"])
 
 @app.route("/schedule", methods=["GET", "POST"])
 def getSchedule():

@@ -11,26 +11,27 @@ def validateSchedule(schedule, indexedSchedule, id):
     ogTime = schedule[day].strip() # Remove any trailing whitespaces
     times = ogTime.split(", ")
 
-    # Check that the times are separated by ", "
+    
+    validCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ",", " "]
     for c in range(len(ogTime)):
+      if ogTime[c] not in validCharacters: # Check if the time contains invalid characters
+        return {"res": False, "message": f"La hora para el {day.upper()} contiene caracteres inválidos: {ogTime[c]}"}
+      # Check that the times are separated by ", "
       if ogTime[c] == ",":
         if c == len(ogTime)-1:
-          return {"res": False, "message": f"Quita las comas al final de los tiempos para el día {day.upper()}"}
+          return {"res": False, "message": f"Quita las comas al final de las horas para el {day.upper()}"}
         if ogTime[c+1] != " ":
-          return {"res": False, "message": f"Pon un espacio después de las comas en las separaciones de los tiempos para el día {day.upper()}"}
+          return {"res": False, "message": f"Separa las horas para el {day.upper()} con una coma seguida de un espacio"}
 
     # Check if a time was input
     if times[0] == ",":
-      return {"res": False, "message": f"ERROR: El día {day.upper()} no contiene ninguna hora"}
-    
-    # Check if the time contains invalid characters
-    validCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ",", " "]
-    for c in range(len(ogTime)):
-      if ogTime[c] not in validCharacters:
-        return {"res": False, "message": f"ERROR: La hora para el {day.upper()} contiene caracteres inválidos: {ogTime[c]}"}
+      return {"res": False, "message": f"El {day.upper()} no puede contener solo una coma"}
     
     for time in times:
       split = time.split(":")
+
+      if len(split) <= 1:
+        return {"res": False, "message": f"La hora para el {day.upper()} tiene un formato incorrecto. El formato debe ser: hh:mm, hh:mm"}
       
       # Check if the time is formatted properly
       # Avoid 05:5
@@ -38,7 +39,7 @@ def validateSchedule(schedule, indexedSchedule, id):
         return {"res": False, "message": f"La hora para el {day.upper()} tiene un formato incorrecto. El formato debe ser: hh:mm, hh:mm"}
       # Avoid 050:00 or 05:000
       for i in split:
-        if len(i) > 2 :
+        if (len(i) > 2) or (len(i) == 0) :
           return {"res": False, "message": f"La hora para el {day.upper()} tiene un formato incorrecto. El formato debe ser: hh:mm, hh:mm"}
       
       # Check that the time doesn't exist already for other programs, in other words, that it's unique
@@ -89,6 +90,8 @@ def validateInfo(info, id, programs, action ="edit"):
   if "name" in info:
     if isEmpty(info["name"]):
       return {"res": False, "message": f"Debes añadir un nombre para el programa"}
+    if not info["name"].strip().isalnum():
+      return {"res": False, "message": f"El nombre no puede contener solo caracteres especiales"}
     programNames = [programs[program]["name"] for program in programs]
     if info["name"].strip() in programNames:
       if programs[id]["name"] != info["name"].strip(): # In case it's a none-modification for the same program
@@ -98,6 +101,8 @@ def validateInfo(info, id, programs, action ="edit"):
   if "author" in info:
     if isEmpty(info["author"]):
       return {"res": False, "message": f"Debes añadir el productor del programa"}
+    if not info["author"].strip().isalnum():
+      return {"res": False, "message": f"El productor no puede contener solo caracteres especiales"}
 
   # Validate the length
   if "length" in info:
@@ -108,36 +113,46 @@ def validateInfo(info, id, programs, action ="edit"):
   if "topics" in info:
     if isEmpty(info["topics"]):
       return {"res": False, "message": f"Debes añadir al menos un tema para el programa"}
-    # Check that the topics are separated by ", "
     topics = info["topics"].strip()
+    if not topics.isalnum():
+      return {"res": False, "message": f"El tema no puede contener solo caracteres especiales"}
+    # Check that the topics are separated by ", "
     for c in range(len(topics)):
-      if topics[c] == ",":
-        if c == len(topics)-1:
+      if topics[c] == ",": # The program finds a ,
+        if c == len(topics)-1: # Is it the last character?
           return {"res": False, "message": f"Quita las comas al final de los temas"}
-        if topics[c+1] != " ":
-          return {"res": False, "message": f"Pon un espacio después de las comas para los temas"}
+        if topics[c+1] != " ": # Is it followed by a space?
+          return {"res": False, "message": f"Separa los temas con una coma seguida de un espacio"}
 
   # Check that the presenters are separated by ", "
   if "presenters" in info:
     presenters = info["presenters"].strip()
-    for c in range(len(presenters)):
-      if presenters[c] == ",":
-        if c == len(presenters)-1:
-          return {"res": False, "message": f"Quita las comas al final de los presentadores"}
-        if presenters[c+1] != " ":
-          return {"res": False, "message": f"Pon un espacio después de las comas para los presentadores"}
+    if (len(presenters) > 0): # Proceed if presenters is not empty, ignore and consider as valid otherwise
+      if not presenters.isalnum():
+        return {"res": False, "message": f"Los presentadores no pueden contener solo caracteres especiales"}
+      for c in range(len(presenters)):
+        if presenters[c] == ",": # The program finds a ,
+          if c == len(presenters)-1: # Is it the last character?
+            return {"res": False, "message": f"Quita las comas al final de los presentadores"}
+          if presenters[c+1] != " ": # Is it followed by a space?
+            return {"res": False, "message": f"Separa los presentadores con una coma seguida de un espacio"}
 
   # Check the descriptionShort
   if "descriptionShort" in info:
     if isEmpty(info["descriptionShort"]):
       return {"res": False, "message": f"Debes añadir una descripción corta (sinopsis) del programa"}
+    if not info["descriptionShort"].strip().isalnum():
+      return {"res": False, "message": f"La descripción corta (sinopsis) no puede contener solo caracteres especiales"}
+    
     # Validate descriptionShort character count
     if len(info["descriptionShort"]) > 250:
-      return {"res": False, "message": f"La sinópsis contiene más de 250 caracteres"}
+      return {"res": False, "message": f"La descripción corta (sinopsis) contiene más de 250 caracteres"}
   
   # Check the descriptionLong
   if "descriptionLong" in info:
     if isEmpty(info["descriptionLong"]):
       return {"res": False, "message": f"Debes añadir una descripción larga del programa"}
+    if not info["descriptionLong"].strip().isalnum():
+      return {"res": False, "message": f"La descripción no puede contener solo caracteres especiales"}
   
   return {"res": True, "message": "La información es válida"}

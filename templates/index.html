@@ -21,6 +21,7 @@
 
   <script>
     let programs;
+    let schedule;
     let editing = false;
 
     // We're gonna store any changed values here so we know what to send
@@ -30,8 +31,9 @@
     // TABLE CREATION
     // Get the programs and fill the table
     function getPrograms() {
-      $.post("/programs", null, function(data) {   
-        programs = data;
+      $.post("/programs", null, function(data) {
+        programs = data.programs;
+        schedule = data.schedule.schedule
         
         for (const program of Object.keys(programs)) {
           // Check if the producer a link or not
