@@ -149,7 +149,7 @@
   // Handle any changes
   $('#editName').keyup(function() {
     changes.info.name = $('#editName').val()
-    validate("name", $('#editName').val())
+    validate("edit", "name", $('#editName').val())
   });
   $('#editLength').on("change", function() {changes.info.length = $('#editLength').val()});
   $('#editTopics').keyup(function() {changes.info.topics = $('#editTopics').val()});
@@ -191,37 +191,6 @@
     //   };
     // });
   });
-
-  function validate(field, value) {
-    if (field === "name") {
-      if (value === "Alimento") displayInputValidation(true, "Name")
-      else displayInputValidation(false, "Name", "Nombre inválido")
-    }
-  }
-
-  // Handles input's class management
-  function displayInputValidation(valid, field, message = null) {
-    // Changes the validation class of the input
-    if (valid) {
-      if ($(`#edit${field}`).hasClass("is-invalid")) {
-        $(`#edit${field}`).removeClass("is-invalid")
-        $(`#edit${field}`).addClass("is-valid")
-      }
-      else $(`#edit${field}`).addClass("is-valid")
-    } else {
-      if ($(`#edit${field}`).hasClass("is-valid")) {
-        $(`#edit${field}`).removeClass("is-valid")
-        $(`#edit${field}`).addClass("is-invalid")
-      }
-      else $(`#edit${field}`).addClass("is-invalid")
-    };
-    
-    // Changes the validation class of the tooltip
-    $(`#edit${field}Feedback`).attr("class", valid ? "valid-feedback" : "invalid-feedback")
-
-    if (valid) $(`#edit${field}Feedback`).empty() // Clears the tooltip
-    else $(`#edit${field}Feedback`).text(message) // Displays an invalid message
-  };
 
   // Handles form reset
   $("#editingForm").on("reset", function(event) {changes = {id: null, info: {}, schedule: {}}})
