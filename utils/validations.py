@@ -54,12 +54,12 @@ def validateSchedule(schedule, indexedSchedule, id):
 
 
 # Info validation
-def validateInfo(info, id, programs, method ="edit"):
+def validateInfo(info, id, programs, action ="edit"):
   if not bool(programs): # Check that a programs argument has been passed
     return print("ERROR: No programs passed to validateInfo()")
 
   # Validation for new programs
-  if method == "add":
+  if action == "add":
     # Check that all required fields are filled
     if "name" not in info:
       return {"res": False, "message": f"Debes añadir un nombre para el programa"}

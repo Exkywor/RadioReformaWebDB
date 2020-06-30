@@ -1,4 +1,4 @@
-function validate(type, field, value, programs = {}, schedule = {}) {
+function validate(action, field, value, programs = {}, schedule = {}) {
   switch(field) {
     case "name":
       if (value === "Alimento") displayInputValidation("edit", true, "Name");
@@ -9,25 +9,25 @@ function validate(type, field, value, programs = {}, schedule = {}) {
 };
 
 // Handles input's class management
-function displayInputValidation(type, valid, field, message = null) {
+function displayInputValidation(action, valid, field, message = null) {
   // Changes the validation class of the input
   if (valid) {
-    if ($(`#${type}${field}`).hasClass("is-invalid")) {
-      $(`#${type}${field}`).removeClass("is-invalid")
-      $(`#${type}${field}`).addClass("is-valid")
+    if ($(`#${action}${field}`).hasClass("is-invalid")) {
+      $(`#${action}${field}`).removeClass("is-invalid")
+      $(`#${action}${field}`).addClass("is-valid")
     }
-    else $(`#${type}${field}`).addClass("is-valid")
+    else $(`#${action}${field}`).addClass("is-valid")
   } else {
-    if ($(`#${type}${field}`).hasClass("is-valid")) {
-      $(`#${type}${field}`).removeClass("is-valid")
-      $(`#${type}${field}`).addClass("is-invalid")
+    if ($(`#${action}${field}`).hasClass("is-valid")) {
+      $(`#${action}${field}`).removeClass("is-valid")
+      $(`#${action}${field}`).addClass("is-invalid")
     }
-    else $(`#${type}${field}`).addClass("is-invalid")
+    else $(`#${action}${field}`).addClass("is-invalid")
   };
   
   // Changes the validation class of the tooltip
-  $(`#${type}${field}Feedback`).attr("class", valid ? "valid-feedback" : "invalid-feedback")
+  $(`#${action}${field}Feedback`).attr("class", valid ? "valid-feedback" : "invalid-feedback")
 
-  if (valid) $(`#${type}${field}Feedback`).empty() // Clears the tooltip
-  else $(`#${type}${field}Feedback`).text(message) // Displays an invalid message
+  if (valid) $(`#${action}${field}Feedback`).empty() // Clears the tooltip
+  else $(`#${action}${field}Feedback`).text(message) // Displays an invalid message
 };
