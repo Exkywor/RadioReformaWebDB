@@ -1,8 +1,11 @@
 function validate(type, field, value, programs = {}, schedule = {}) {
-  if (field === "name") {
-    if (value === "Alimento") displayInputValidation("edit", true, "Name")
-    else displayInputValidation("edit", false, "Name", "Nombre inválido")
-  };
+  switch(field) {
+    case "name":
+      if (value === "Alimento") displayInputValidation("edit", true, "Name");
+      else displayInputValidation("edit", false, "Name", "Nombre inválido");
+      break;
+  }
+
 };
 
 // Handles input's class management

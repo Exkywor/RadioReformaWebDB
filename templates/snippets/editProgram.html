@@ -18,35 +18,41 @@
         <div class="form-row">
           <div class="form-group col">
             <label for="editLength">Duración</label>
-            <input type="number" min="1" class="form-control px-2" id="editLength" placeholder="X" value="">
-            <small id="editlengthHelp" class="form-text text-muted">Duración en minutos. Mayor a 0</small>
+            <input type="number" class="form-control px-2" id="editLength" placeholder="X" value="">
+            <small id="editLengthHelp" class="form-text text-muted">Duración en minutos. Mayor a 0</small>
+            <div id="editLengthFeedback"></div>
           </div>
           <div class="form-group col">
             <label for="editTopics">Temas</label>
             <input type="text" class="form-control px-2" id="editTopics" placeholder="Tema 1, Tema 2" value="">
-            <small id="edittopicsHelp" class="form-text text-muted">Separados por comas</small>
+            <small id="editTopicsHelp" class="form-text text-muted">Separados por comas</small>
+            <div id="editTopicsFeedback"></div>
           </div>
         </div>
         <!-- presenters -->
         <div class="form-group">
           <label for="editPresenters">Presentadores</label>
           <input type="text" class="form-control px-2" id="editPresenters" placeholder="Presentador 1, Presentador 2" value="">
-          <small id="editpresentersHelp" class="form-text text-muted">Separados por comas</small>
+          <small id="editPresentersHelp" class="form-text text-muted">Separados por comas</small>
+          <div id="editPresentersFeedback"></div>
         </div>
         <!-- producer -->
         <div class="form-group">
           <label for="editAuthor">Producido por</label>
           <input type="text" class="form-control px-2" id="editAuthor" placeholder="Productor" value="">
+          <div id="editAuthorFeedback"></div>
         </div>
         <!-- descriptions -->
         <div class="form-group">
           <label for="editDescriptionShort">Sinópsis</label>
           <input type="text" class="form-control px-2" id="editDescriptionShort" placeholder="Sinópsis del programa" value="">
-          <small id="editpresentersHelp" class="form-text text-muted">250 caracteres máximos</small>
+          <small id="editDescriptionShortHelp" class="form-text text-muted">250 caracteres máximos</small>
+          <div id="editDescriptionShortFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editDescriptionLong">Descripción</label>
           <input type="text" class="form-control px-2" id="editDescriptionLong" placeholder="Descripción del programa" value="">
+          <div id="editDescriptionLongFeedback"></div>
         </div>
       </div>
       <!-- schedule -->
@@ -58,30 +64,37 @@
         <div class="form-group">
           <label for="editmonday">Lunes</label>
           <input type="text" class="form-control px-2" id="editmonday" placeholder="Hora lunes" value="">
+          <div id="editmondayFeedback"></div>
         </div>
         <div class="form-group">
           <label for="edittuesday">Martes</label>
           <input type="text" class="form-control px-2" id="edittuesday" placeholder="Hora martes" value="">
+          <div id="edittuesdayFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editwednesday">Miércoles</label>
           <input type="text" class="form-control px-2" id="editwednesday" placeholder="Hora miércoles" value="">
+          <div id="editWednesdayFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editthursday">Jueves</label>
           <input type="text" class="form-control px-2" id="editthursday" placeholder="Hora jueves" value="">
+          <div id="editthursdayFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editfriday">Viernes</label>
           <input type="text" class="form-control px-2" id="editfriday" placeholder="Hora viernes" value="">
+          <div id="editfridayFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editsaturday">Sábado</label>
           <input type="text" class="form-control px-2" id="editsaturday" placeholder="Hora sábado" value="">
+          <div id="editsaturdayFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editsunday">Domingo</label>
           <input type="text" class="form-control px-2" id="editsunday" placeholder="Hora domingo" value="">
+          <div id="editsundayFeedback"></div>
         </div>
       </div>
       <!-- Submit button -->
@@ -147,23 +160,62 @@
   };
 
   // Handle any changes
-  $('#editName').keyup(function() {
+  $('#editName').on("change", function() {
     changes.info.name = $('#editName').val()
     validate("edit", "name", $('#editName').val())
   });
-  $('#editLength').on("change", function() {changes.info.length = $('#editLength').val()});
-  $('#editTopics').keyup(function() {changes.info.topics = $('#editTopics').val()});
-  $('#editPresenters').keyup(function() {changes.info.presenters = $('#editPresenters').val()});
-  $('#editAuthor').keyup(function() {changes.info.author = $('#editAuthor').val()});
-  $('#editDescriptionShort').keyup(function() {changes.info.descriptionShort = $('#editDescriptionShort').val()});
-  $('#editDescriptionLong').keyup(function() {changes.info.descriptionLong = $('#editDescriptionLong').val()});
-  $('#editmonday').keyup(function() {changes.schedule.monday = $('#editmonday').val()});
-  $('#edittuesday').keyup(function() {changes.schedule.tuesday = $('#edittuesday').val()});
-  $('#editwednesday').keyup(function() {changes.schedule.wednesday = $('#editwednesday').val()});
-  $('#editthursday').keyup(function() {changes.schedule.thursday = $('#editthursday').val()});
-  $('#editfriday').keyup(function() {changes.schedule.friday = $('#editfriday').val()});
-  $('#editsaturday').keyup(function() {changes.schedule.saturday = $('#editsaturday').val()});
-  $('#editsunday').keyup(function() {changes.schedule.sunday = $('#editsunday').val()});
+  $('#editLength').on("change", function() {
+    changes.info.length = $('#editLength').val()
+    validate("edit", "length", $('#editLength').val())
+  });
+  $('#editTopics').on("change", function() {
+    changes.info.topics = $('#editTopics').val()
+    validate("edit", "topics", $('#editTopics').val())
+  });
+  $('#editPresenters').on("change", function() {
+    changes.info.presenters = $('#editPresenters').val()
+    validate("edit", "presenters", $('#editPresenters').val())
+  });
+  $('#editAuthor').on("change", function() {
+    changes.info.author = $('#editAuthor').val()
+    validate("edit", "author", $('#editAuthor').val())
+  });
+  $('#editDescriptionShort').on("change", function() {
+    changes.info.descriptionShort = $('#editDescriptionShort').val()
+    validate("edit", "descriptionShort", $('#editDescriptionShort').val())
+  });
+  $('#editDescriptionLong').on("change", function() {
+    changes.info.descriptionLong = $('#editDescriptionLong').val()
+    validate("edit", "descriptionLong", $('#editDescriptionLong').val())
+  });
+  $('#editmonday').on("change", function() {
+    changes.schedule.monday = $('#editmonday').val()
+    validate("edit", "monday", $('#editmonday').val())
+  });
+  $('#edittuesday').on("change", function() {
+    changes.schedule.tuesday = $('#edittuesday').val()
+    validate("edit", "tuesday", $('#edittuesday').val())
+  });
+  $('#editwednesday').on("change", function() {
+    changes.schedule.wednesday = $('#editwednesday').val()
+    validate("edit", "wednesday", $('#editwednesday').val())
+  });
+  $('#editthursday').on("change", function() {
+    changes.schedule.thursday = $('#editthursday').val()
+    validate("edit", "thursday", $('#editthursday').val())
+  });
+  $('#editfriday').on("change", function() {
+    changes.schedule.friday = $('#editfriday').val()
+    validate("edit", "friday", $('#editfriday').val())
+  });
+  $('#editsaturday').on("change", function() {
+    changes.schedule.saturday = $('#editsaturday').val()
+    validate("edit", "saturday", $('#editsaturday').val())
+  });
+  $('#editsunday').on("change", function() {
+    changes.schedule.sunday = $('#editsunday').val()
+    validate("edit", "sunday", $('#editsunday').val())
+  });
 
   // Handles submitting of changed information
   $("#editingForm").submit(function(event) {
