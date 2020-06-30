@@ -5,6 +5,7 @@
   <header>
     <div class="text-center" role="alert">
       <button class='btn btn-outline-dark btn-sm' onclick=toggleEditing()>Editar</button>
+      <button class='btn btn-outline-dark btn-sm' onclick=toggleAdding()>Nuevo</button>
       <button class='btn btn-outline-dark btn-sm' onclick=showChanges()>Changes</button>
     </div>
   </header>
@@ -23,6 +24,7 @@
     let programs;
     let schedule;
     let editing = false;
+    let add = false;
 
     // We're gonna store any changed values here so we know what to send
     // We declare it here so we can use it before the main function that cares for it
@@ -135,6 +137,22 @@
         // Hide the editing form
         document.getElementById("editingContainer").setAttribute("hidden", "true")
         editing = false
+      };
+    };
+
+    function toggleAdding() {
+      if (!add) {
+        // Make space for the form
+        document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8")
+        // Show the editing form
+        document.getElementById("editingContainer").removeAttribute("hidden")
+        add = true
+      } else {
+        // Make the table occupy the whole container
+        document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12")
+        // Hide the editing form
+        document.getElementById("editingContainer").setAttribute("hidden", "true")
+        add = false
       };
     };
 

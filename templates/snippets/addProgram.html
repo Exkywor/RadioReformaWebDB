@@ -1,0 +1,216 @@
+<div class="col-sm-4" id="addContainer" hidden>
+  <!-- Instructions -->
+  <div class="border-bottom">
+    <p class="text-left font-weight-bold">AÑADIR PROGRAMA</p>
+    <p class="text-left">Añade un nuevo programa</p>
+  </div>
+  <!-- Add program form -->
+  <form action="" id="addForm" class="py-3 px-2 form-cont">
+    <fieldset id="addFieldset" disabled>
+      <div class="border-bottom">
+        <!-- name -->
+        <div class="form-group">
+          <label for="addName">Nombre</label>
+          <input type="text" class="form-control px-2" id="addName" placeholder="Nombre del Programa" value="">
+          <div id="addNameFeedback"></div>
+        </div>
+        <!-- length & topics -->
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="addLength">Duración</label>
+            <input type="number" class="form-control px-2" min=1 id="addLength" placeholder="X" value="">
+            <small id="addLengthHelp" class="form-text text-muted">Duración en minutos.</small>
+            <div id="addLengthFeedback"></div>
+          </div>
+          <div class="form-group col">
+            <label for="addTopics">Temas</label>
+            <input type="text" class="form-control px-2" id="addTopics" placeholder="Tema 1, Tema 2..." value="">
+            <small id="addTopicsHelp" class="form-text text-muted">Separados por comas</small>
+            <div id="addTopicsFeedback"></div>
+          </div>
+        </div>
+        <!-- presenters -->
+        <div class="form-group">
+          <label for="addPresenters">Presentadores</label>
+          <input type="text" class="form-control px-2" id="addPresenters" placeholder="Presentador 1, Presentador 2..." value="">
+          <small id="addPresentersHelp" class="form-text text-muted">Separados por comas</small>
+          <div id="addPresentersFeedback"></div>
+        </div>
+        <!-- producer -->
+        <div class="form-group">
+          <label for="addAuthor">Producido por</label>
+          <input type="text" class="form-control px-2" id="addAuthor" placeholder="Productor" value="">
+          <div id="addAuthorFeedback"></div>
+        </div>
+        <!-- descriptions -->
+        <div class="form-group">
+          <label for="addDescriptionShort">Sinópsis</label>
+          <input type="text" class="form-control px-2" id="addDescriptionShort" placeholder="Sinópsis del programa" value="">
+          <small id="addDescriptionShortHelp" class="form-text text-muted">0/250 caracteres</small>
+          <div id="addDescriptionShortFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addDescriptionLong">Descripción</label>
+          <input type="text" class="form-control px-2" id="addDescriptionLong" placeholder="Descripción del programa" value="">
+          <div id="addDescriptionLongFeedback"></div>
+        </div>
+      </div>
+      <!-- schedule -->
+      <div class="pt-2">
+        <div class="form-group">
+          <p class="form-text font-weight-bold">HORARIOS</p>
+          <p class="form-text">Separados por ", " en formato de 24 horas</p>
+        </div>
+        <div class="form-group">
+          <label for="addmonday">Lunes</label>
+          <input type="text" class="form-control px-2" id="addmonday" placeholder="Hora lunes" value="">
+          <div id="addmondayFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addtuesday">Martes</label>
+          <input type="text" class="form-control px-2" id="addtuesday" placeholder="Hora martes" value="">
+          <div id="addtuesdayFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addwednesday">Miércoles</label>
+          <input type="text" class="form-control px-2" id="addwednesday" placeholder="Hora miércoles" value="">
+          <div id="addWednesdayFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addthursday">Jueves</label>
+          <input type="text" class="form-control px-2" id="addthursday" placeholder="Hora jueves" value="">
+          <div id="addthursdayFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addfriday">Viernes</label>
+          <input type="text" class="form-control px-2" id="addfriday" placeholder="Hora viernes" value="">
+          <div id="addfridayFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addsaturday">Sábado</label>
+          <input type="text" class="form-control px-2" id="addsaturday" placeholder="Hora sábado" value="">
+          <div id="addsaturdayFeedback"></div>
+        </div>
+        <div class="form-group">
+          <label for="addsunday">Domingo</label>
+          <input type="text" class="form-control px-2" id="addsunday" placeholder="Hora domingo" value="">
+          <div id="addsundayFeedback"></div>
+        </div>
+      </div>
+      <!-- Submit button -->
+      <div class="d-flex justify-content-between">
+        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn btn-primary">Añadir</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+<script>
+  function addProgram(id) {
+    // Proceed if adding is enabled
+    if (add) {
+      // Resets the variables that store any changes so we don't send previous changes by mistake
+      changes = {id: null, info: {}, schedule: {}}
+      $("#addForm").trigger("reset")
+
+      // Enable form adding
+      document.getElementById("addFieldset").removeAttribute("disabled")
+    };
+  };
+
+  // Handle any changes
+  $('#addName').on("input", function() {
+    changes.info.name = $('#addName').val()
+    validate("add", "Name", $('#addName').val(), programs)
+  });
+  $('#addLength').on("change", function() {
+    changes.info.length = $('#addLength').val()
+    validate("add", "Length", $('#addLength').val())
+  });
+  $('#addTopics').on("input", function() {
+    changes.info.topics = $('#addTopics').val()
+    validate("add", "Topics", $('#addTopics').val())
+  });
+  $('#addPresenters').on("input", function() {
+    changes.info.presenters = $('#addPresenters').val()
+    validate("add", "Presenters", $('#addPresenters').val())
+  });
+  $('#addAuthor').on("input", function() {
+    changes.info.author = $('#addAuthor').val()
+    validate("add", "Author", $('#addAuthor').val())
+  });
+  $('#addDescriptionShort').on("input", function() {
+    changes.info.descriptionShort = $('#addDescriptionShort').val()
+    $("#addDescriptionShortHelp").text(`${$('#addDescriptionShort').val().length}/250 caracteres`)
+    validate("add", "DescriptionShort", $('#addDescriptionShort').val())
+  });
+  $('#addDescriptionLong').on("input", function() {
+    changes.info.descriptionLong = $('#addDescriptionLong').val()
+    validate("add", "DescriptionLong", $('#addDescriptionLong').val())
+  });
+  $('#addmonday').on("input", function() {
+    changes.schedule.monday = $('#addmonday').val()
+    validate("add", "monday", $('#addmonday').val(), null, schedule)
+  });
+  $('#addtuesday').on("input", function() {
+    changes.schedule.tuesday = $('#addtuesday').val()
+    validate("add", "tuesday", $('#addtuesday').val(), null, schedule)
+  });
+  $('#addwednesday').on("input", function() {
+    changes.schedule.wednesday = $('#addwednesday').val()
+    validate("add", "wednesday", $('#addwednesday').val(), null, schedule)
+  });
+  $('#addthursday').on("input", function() {
+    changes.schedule.thursday = $('#addthursday').val()
+    validate("add", "thursday", $('#addthursday').val(), null, schedule)
+  });
+  $('#addfriday').on("input", function() {
+    changes.schedule.friday = $('#addfriday').val()
+    validate("add", "friday", $('#addfriday').val(), null, schedule)
+  });
+  $('#addsaturday').on("input", function() {
+    changes.schedule.saturday = $('#addsaturday').val()
+    validate("add", "saturday", $('#addsaturday').val(), null, schedule)
+  });
+  $('#addsunday').on("input", function() {
+    changes.schedule.sunday = $('#addsunday').val()
+    validate("add", "sunday", $('#addsunday').val(), null, schedule)
+  });
+
+  // Handles submitting of changed information
+  $("#addForm").submit(function(event) {
+    event.preventDefault()
+    // Converts the changes into a serialized string so we can send them and properly
+    let serialized = JSON.stringify(changes)
+    // Sends the changes to the server
+    $.post("/addProgram", {data: serialized}, function(data) {
+      if (data !== "Éxito") {
+        $("#messages").html(
+          '<div class="alert alert-danger" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+      } else {
+        $("#messages").html(
+          '<div class="alert alert-success" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+        // On success, reload the page after 2 seconds
+        setTimeout(function() { location.reload() }, 1500)
+      };
+    });
+  });
+
+  // Handles form reset
+  $("#addForm").on("reset", function(event) {
+    changes = {id: null, info: {}, schedule: {}};
+    $("#addFieldset").prop("disabled", true)
+    $("#addForm").find("*").attr("value", "")
+    $("#addForm").find("*").removeClass("is-valid")
+    $("#addForm").find("*").removeClass("is-invalid")
+  })
+</script>

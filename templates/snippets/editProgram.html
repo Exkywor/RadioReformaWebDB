@@ -14,7 +14,7 @@
           <input type="text" class="form-control px-2" id="editName" placeholder="Nombre del Programa" value="">
           <div id="editNameFeedback"></div>
         </div>
-        <!-- ids -->
+        <!-- length & topics -->
         <div class="form-row">
           <div class="form-group col">
             <label for="editLength">Duración</label>
@@ -24,7 +24,7 @@
           </div>
           <div class="form-group col">
             <label for="editTopics">Temas</label>
-            <input type="text" class="form-control px-2" id="editTopics" placeholder="Tema 1, Tema 2" value="">
+            <input type="text" class="form-control px-2" id="editTopics" placeholder="Tema 1, Tema 2..." value="">
             <small id="editTopicsHelp" class="form-text text-muted">Separados por comas</small>
             <div id="editTopicsFeedback"></div>
           </div>
@@ -32,7 +32,7 @@
         <!-- presenters -->
         <div class="form-group">
           <label for="editPresenters">Presentadores</label>
-          <input type="text" class="form-control px-2" id="editPresenters" placeholder="Presentador 1, Presentador 2" value="">
+          <input type="text" class="form-control px-2" id="editPresenters" placeholder="Presentador 1, Presentador 2..." value="">
           <small id="editPresentersHelp" class="form-text text-muted">Separados por comas</small>
           <div id="editPresentersFeedback"></div>
         </div>
@@ -109,7 +109,7 @@
 <script>
   // Fills the editing form with the selected program's information
   function editProgram(id) {
-    // Proceed if editing is enable
+    // Proceed if editing is enabled
     if (editing) {
       // Resets the variables that store any changes so we don't send previous changes by mistake
       changes = {id: null, info: {}, schedule: {}}

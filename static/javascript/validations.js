@@ -6,9 +6,12 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         return displayInputValidation("edit", false, "Name", "Debes añadir un nombre para el programa");
       else if (!isAlphaNumeric(value)) // Check if it's not alphanumeric
         return displayInputValidation("edit", false, "Name", `El nombre no puede contener solo caracteres especiales`);
-      else if (programs[id].name !== value.trim()) // In case it's a non-modification for the same program
-        if (programNames.includes(value.trim())) // Check if the name already exists
-          return displayInputValidation("edit", false, "Name", `El nombre ${value} ya está asignado a otro programa`);
+      else if (programNames.includes(value.trim())) // Check if the name already exists
+        if (action === "edit")
+          if (programs[id].name !== value.trim()) // In case it's a non-modification for the same program
+            return displayInputValidation("edit", false, "Name", `El nombre ${value} ya está asignado a otro programa`);
+          else return displayInputValidation("edit", true, field);
+        else return displayInputValidation("edit", false, "Name", `El nombre ${value} ya está asignado a otro programa`);
       else
         return displayInputValidation("edit", true, "Name");
     case "Length":
@@ -71,6 +74,14 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         return displayInputValidation("edit", false, "DescriptionLong", `La descripción no puede contener solo caracteres especiales`);
       else
         return displayInputValidation("edit", true, "DescriptionLong");
+    case "StreamID":
+      let streamIDs = Object.keys(programs).map(ID => programs[program].streamID) // Retrieve all the streamIDs
+      if (isEmpty(value)) // Check if the descriptionLong is empty
+        return displayInputValidation("edit", false, "StreamID", "Debes asignar un identificador del programa para el stream de audio");
+      else if (streamIDs.includes(value.trim())) // Check if the streamID already exists
+        return displayInputValidation("edit", false, "StreamID", `El streamID ${value} ya está asignado a otro programa`);
+      else
+        return displayInputValidation("edit", true, "StreamID");
     // Schedule cases
     case "sunday":
     case "saturday":
@@ -121,10 +132,14 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         let timeIndex = ((parseInt(split[0] * 60, 10)) + parseInt(split[1])).toString();
         
         if (Object.keys(schedule[field]).includes(timeIndex)) {
-          // If the timeIndex already exists, check that it belongs to a different program
-          // This handles if you add a time to an existing day of a program,
-          // because it will try to validate the already existing time
-          if (id != schedule[field][timeIndex])
+          if (action === "edit")
+            // If the timeIndex already exists, check that it belongs to a different program
+            // This handles if you add a time to an existing day of a program,
+            // because it will try to validate the already existing time
+            if (id != schedule[field][timeIndex])
+              return displayInputValidation("edit", false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
+            else return displayInputValidation("edit", true, field);
+          else
             return displayInputValidation("edit", false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
         }
       };

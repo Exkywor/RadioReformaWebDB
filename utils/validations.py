@@ -2,7 +2,7 @@ from utils.misc import isEmpty, isAlphanumeric
 
 # Schedule validation
 # schedule = {"monday": "05:10, 15:00"}
-def validateSchedule(schedule, indexedSchedule, id):
+def validateSchedule(schedule, indexedSchedule, id, action ="edit"):
   for day in schedule:
     # Skip the day if it's empty or contains only whitespaces
     if isEmpty(schedule[day]):
@@ -11,7 +11,6 @@ def validateSchedule(schedule, indexedSchedule, id):
     ogTime = schedule[day].strip() # Remove any trailing whitespaces
     times = ogTime.split(", ")
 
-    
     validCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ",", " "]
     for c in range(len(ogTime)):
       if ogTime[c] not in validCharacters: # Check if the time contains invalid characters
@@ -45,10 +44,13 @@ def validateSchedule(schedule, indexedSchedule, id):
       # Check that the time doesn't exist already for other programs, in other words, that it's unique
       timeIndex = (int(split[0]) * 60) + int(split[1])
       if timeIndex in indexedSchedule[day].keys():
-        # If the timeIndex already exists, check that it belongs to a different program
-        # This handles if you add a time to an existing day of a program,
-        # because it will try to validate the already existing time
-        if id != indexedSchedule[day][timeIndex]:
+        if action == "edit":
+          # If the timeIndex already exists, check that it belongs to a different program
+          # This handles if you add a time to an existing day of a program,
+          # because it will try to validate the already existing time
+          if id != indexedSchedule[day][timeIndex]:
+            return {"res": False, "message": f"La hora {time} para el {day.upper()} ya está asignada para el programa con ID {indexedSchedule[day][timeIndex]}"}
+        else:
           return {"res": False, "message": f"La hora {time} para el {day.upper()} ya está asignada para el programa con ID {indexedSchedule[day][timeIndex]}"}
 
   return {"res": True, "message": "El horario es válido"}
@@ -82,8 +84,7 @@ def validateInfo(info, id, programs, action ="edit"):
       return {"res": False, "message": f"Debes asignar un identificador del programa para el stream de audio"}
     streamIDs = [programs[program]["streamID"] for program in programs]
     if info["streamID"].strip() in streamIDs:
-      if programs[id]["streamID"] != info["streamID"].strip(): # In case it's a none-modification for the same program
-        return {"res": False, "message": f"El streamID {info['streamID']} ya está asignado a otro programa"}
+      return {"res": False, "message": f"El streamID {info['streamID']} ya está asignado a otro programa"}
   
 
   # Check that the program has a name, and that it is unique
@@ -94,7 +95,10 @@ def validateInfo(info, id, programs, action ="edit"):
       return {"res": False, "message": f"El nombre no puede contener solo caracteres especiales"}
     programNames = [programs[program]["name"] for program in programs]
     if info["name"].strip() in programNames:
-      if programs[id]["name"] != info["name"].strip(): # In case it's a none-modification for the same program
+      if action == "edit":
+        if programs[id]["name"] != info["name"].strip(): # In case it's a non-modification for the same program
+          return {"res": False, "message": f"El nombre '{info['name']}' ya está asignado a otro programa"}
+      else:
         return {"res": False, "message": f"El nombre '{info['name']}' ya está asignado a otro programa"}
   
   # Check the author
