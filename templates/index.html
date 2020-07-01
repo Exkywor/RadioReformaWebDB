@@ -48,7 +48,7 @@
   
           // We create the row with the non-iterable information of the program
           document.querySelector("tbody").innerHTML +=
-            "<tr onclick='editProgram(" + programs[program].programID + ")'>" + 
+            "<tr id=program" + programs[program].programID + " onclick='editProgram(" + programs[program].programID + ")'>" + 
               "<th scope='row'>" + programs[program].programID + "</th>" +
               "<td>" + programs[program].streamID + "</td>" +
               "<td>" + programs[program].name + "</td>" +
@@ -81,6 +81,11 @@
           
           document.getElementById(`presenters${program}`).innerHTML =
             "<ul style='padding: 0'>" + presenters + "</ul>"
+          
+          // Change programs's class color if its schedule is empty
+          let values = Object.values(programs[program].schedule)
+          if (values.every(day => day == null))
+            document.getElementById("program"+programs[program].programID).classList.add("table-danger")
           
           // We add days on their corresponding columns
           for (const day of Object.keys(programs[program].schedule)) {
@@ -127,6 +132,10 @@
     // Display or hide the forms
     function toggleForm(form) {      
       if (form === "edit") {
+        // Resets the variables that store any changes so we don't send previous changes by mistake
+        changes = {id: null, info: {}, schedule: {}}
+        $("#editingForm").trigger("reset")
+
         if (add) {
           // Hide the add form and reset it
           $("#addContainer").prop("hidden", true);
@@ -151,6 +160,10 @@
           };
         };
       } else if (form === "add") {
+        // Resets the variables that store any changes so we don't send previous changes by mistake
+        changes = {id: null, info: {}, schedule: {}}
+        $("#addForm").trigger("reset")
+
         if (editing) {
           // Hide the editing form and reset it
           $("#editingContainer").prop("hidden", true);
