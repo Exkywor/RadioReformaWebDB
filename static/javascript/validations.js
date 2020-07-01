@@ -137,16 +137,15 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         let timeIndex = ((parseInt(split[0] * 60, 10)) + parseInt(split[1])).toString();
         
         if (Object.keys(schedule[field]).includes(timeIndex)) {
-          if (action === "edit")
+          if (action === "edit") {
             // If the timeIndex already exists, check that it belongs to a different program
             // This handles if you add a time to an existing day of a program,
             // because it will try to validate the already existing time
-            if (id != schedule[field][timeIndex])
+            if (id != schedule[field][timeIndex]) 
               return displayInputValidation("edit", false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
-            else return displayInputValidation("edit", true, field);
-          else
-            return displayInputValidation(action, false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
-        }
+          }
+          else return displayInputValidation(action, false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
+        };
       };
       return displayInputValidation(action, true, field);
     default:

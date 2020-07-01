@@ -116,65 +116,65 @@
 <script>
   // Handle any changes
   $('#addName').on("input", function() {
-    changes.info.name = $('#addName').val()
-    validate("add", "Name", $('#addName').val(), programs)
+    changes.info.name = $(this).val()
+    validate("add", "Name", $(this).val(), programs)
   });
   $('#addStreamID').on("input", function() {
-    changes.info.streamID = $('#addStreamID').val()
-    validate("add", "StreamID", $('#addStreamID').val(), programs)
+    changes.info.streamID = $(this).val()
+    validate("add", "StreamID", $(this).val(), programs)
   });
   $('#addLength').on("change", function() {
-    changes.info.length = $('#addLength').val()
-    validate("add", "Length", $('#addLength').val())
+    changes.info.length = $(this).val()
+    validate("add", "Length", $(this).val())
   });
   $('#addTopics').on("input", function() {
-    changes.info.topics = $('#addTopics').val()
-    validate("add", "Topics", $('#addTopics').val())
+    changes.info.topics = $(this).val()
+    validate("add", "Topics", $(this).val())
   });
   $('#addPresenters').on("input", function() {
-    changes.info.presenters = $('#addPresenters').val()
-    validate("add", "Presenters", $('#addPresenters').val())
+    changes.info.presenters = $(this).val()
+    validate("add", "Presenters", $(this).val())
   });
   $('#addAuthor').on("input", function() {
-    changes.info.author = $('#addAuthor').val()
-    validate("add", "Author", $('#addAuthor').val())
+    changes.info.author = $(this).val()
+    validate("add", "Author", $(this).val())
   });
   $('#addDescriptionShort').on("input", function() {
-    changes.info.descriptionShort = $('#addDescriptionShort').val()
-    $("#addDescriptionShortHelp").text(`${$('#addDescriptionShort').val().length}/250 caracteres`)
-    validate("add", "DescriptionShort", $('#addDescriptionShort').val())
+    changes.info.descriptionShort = $(this).val()
+    $("#addDescriptionShortHelp").text(`${$(this).val().length}/250 caracteres`)
+    validate("add", "DescriptionShort", $(this).val())
   });
   $('#addDescriptionLong').on("input", function() {
-    changes.info.descriptionLong = $('#addDescriptionLong').val()
-    validate("add", "DescriptionLong", $('#addDescriptionLong').val())
+    changes.info.descriptionLong = $(this).val()
+    validate("add", "DescriptionLong", $(this).val())
   });
   $('#addmonday').on("input", function() {
-    changes.schedule.monday = $('#addmonday').val()
-    validate("add", "monday", $('#addmonday').val(), null, schedule)
+    changes.schedule.monday = $(this).val()
+    validate("add", "monday", $(this).val(), null, schedule)
   });
   $('#addtuesday').on("input", function() {
-    changes.schedule.tuesday = $('#addtuesday').val()
-    validate("add", "tuesday", $('#addtuesday').val(), null, schedule)
+    changes.schedule.tuesday = $(this).val()
+    validate("add", "tuesday", $(this).val(), null, schedule)
   });
   $('#addwednesday').on("input", function() {
-    changes.schedule.wednesday = $('#addwednesday').val()
-    validate("add", "wednesday", $('#addwednesday').val(), null, schedule)
+    changes.schedule.wednesday = $(this).val()
+    validate("add", "wednesday", $(this).val(), null, schedule)
   });
   $('#addthursday').on("input", function() {
-    changes.schedule.thursday = $('#addthursday').val()
-    validate("add", "thursday", $('#addthursday').val(), null, schedule)
+    changes.schedule.thursday = $(this).val()
+    validate("add", "thursday", $(this).val(), null, schedule)
   });
   $('#addfriday').on("input", function() {
-    changes.schedule.friday = $('#addfriday').val()
-    validate("add", "friday", $('#addfriday').val(), null, schedule)
+    changes.schedule.friday = $(this).val()
+    validate("add", "friday", $(this).val(), null, schedule)
   });
   $('#addsaturday').on("input", function() {
-    changes.schedule.saturday = $('#addsaturday').val()
-    validate("add", "saturday", $('#addsaturday').val(), null, schedule)
+    changes.schedule.saturday = $(this).val()
+    validate("add", "saturday", $(this).val(), null, schedule)
   });
   $('#addsunday').on("input", function() {
-    changes.schedule.sunday = $('#addsunday').val()
-    validate("add", "sunday", $('#addsunday').val(), null, schedule)
+    changes.schedule.sunday = $(this).val()
+    validate("add", "sunday", $(this).val(), null, schedule)
   });
 
   // Handles submitting of changed information
@@ -217,9 +217,9 @@
   // Handles form reset
   $("#addForm").on("reset", function(event) {
     changes = {id: null, info: {}, schedule: {}};
-    $("#addForm").find("*").attr("value", "")
-    $("#addForm").find("*").removeClass("is-valid")
-    $("#addForm").find("*").removeClass("is-invalid")
+    $(this).find("*").attr("value", "")
+    $(this).find("*").removeClass("is-valid")
+    $(this).find("*").removeClass("is-invalid")
     invalidateAddForm()    
   });
 </script>

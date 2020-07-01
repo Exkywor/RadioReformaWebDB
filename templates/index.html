@@ -3,10 +3,19 @@
 {% block main %}
   <!-- Toolbar -->
   <header>
-    <div class="text-center" role="alert">
-      <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('edit')">Editar</button>
-      <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('add')">Nuevo</button>
-      <button class='btn btn-outline-dark btn-sm' onclick=showChanges()>Changes</button>
+    <div class="btn-toolbar" role="toolbar" aria-label="Modify programs toolbar">
+      <!-- Filter columns -->
+      <div class="btn-group mr-2" role="group" aria-label="Filter buttons">
+        <button class='btn btn-outline-dark btn-sm'>Nombre</button>
+        <button class='btn btn-outline-dark btn-sm'>Duración</button>
+        <button class='btn btn-outline-dark btn-sm'>Changes</button>
+      </div>
+      <!-- Modify programs -->
+      <div class="btn-group mr-2" role="group" aria-label="Modify group">
+        <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('edit')">Editar</button>
+        <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('add')">Nuevo</button>
+        <button class='btn btn-outline-dark btn-sm' onclick=showChanges()>Changes</button>
+      </div>
     </div>
   </header>
 
