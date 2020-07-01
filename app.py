@@ -112,17 +112,20 @@ def changeTimezone():
 
 
 # DB OPERATIONS ENDPOINTS
-@app.route("/editProgram", methods=["POST"])
+@app.route("/modifyProgram", methods=["POST"])
 def editProgram():
   if request.method == "POST":
-    # Converts the serialized string back into a dictionary
-    data = json.loads(request.form.get("data"))
+    action = request.form.get("action")
+    
+    if action == "edit":
+      # Converts the serialized string back into a dictionary
+      data = json.loads(request.form.get("data"))
 
-    editRes = editDB(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+      editRes = editDB(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
 
-    getData(True)
+      getData(True)
 
-    return jsonify(editRes)
+      return jsonify(editRes)
 
 
 if __name__ == "__main__":

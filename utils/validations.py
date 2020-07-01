@@ -109,8 +109,11 @@ def validateInfo(info, id, programs, action ="edit"):
     streamIDs = [programs[program]["streamID"] for program in programs]
     if info["streamID"].strip() in streamIDs:
       return {"res": False, "message": f"El streamID {info['streamID']} ya está asignado a otro programa"}
+    if any(info["streamID"].strip() in ID for ID in streamIDs):
+      return {"res": False, "message": f"El identificador {info['streamID']} es parte de otro identificador existente"}
+    if any(ID in info["streamID"].strip() for ID in streamIDs):
+      return {"res": False, "message": f"Un identificador existente es parte de {info['streamID']}"}
   
-
   # Check that the program has a name, and that it is unique
   if "name" in info:
     if isEmpty(info["name"]):

@@ -225,7 +225,7 @@
     // Converts the changes into a serialized string so we can send them and properly
     let serialized = JSON.stringify(changes)
     // Sends the changes to the server
-    $.post("/editProgram", {data: serialized}, function(data) {
+    $.post("/modifyProgram", {data: serialized, action: "edit"}, function(data) {
       if (data !== "Éxito") {
         $("#messages").html(
           '<div class="alert alert-danger" >' +

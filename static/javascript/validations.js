@@ -75,11 +75,16 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
       else
         return displayInputValidation(action, true, "DescriptionLong");
     case "StreamID":
-      let streamIDs = Object.keys(programs).map(ID => programs[program].streamID) // Retrieve all the streamIDs
+      let streamIDs = Object.keys(programs).map(ID => programs[ID].streamID) // Retrieve all the streamIDs
+      
       if (isEmpty(value)) // Check if the descriptionLong is empty
         return displayInputValidation(action, false, "StreamID", "Debes asignar un identificador del programa para el stream de audio");
       else if (streamIDs.includes(value.trim())) // Check if the streamID already exists
-        return displayInputValidation(action, false, "StreamID", `El streamID ${value} ya está asignado a otro programa`);
+        return displayInputValidation(action, false, "StreamID", `El identificador ${value} ya está asignado a otro programa`);
+      else if (streamIDs.some(ID => ID.includes(value))) // Check if the streamID exists as part of another one
+        return displayInputValidation(action, false, "StreamID", `El identificador ${value} es parte de otro identificador existente`);
+      else if (streamIDs.some(ID => value.includes(ID))) // Check if a streamID is part of 
+        return displayInputValidation(action, false, "StreamID", `Un identificador existente es parte de ${value}`);
       else
         return displayInputValidation(action, true, "StreamID");
     // Schedule cases

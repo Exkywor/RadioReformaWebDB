@@ -14,6 +14,13 @@
           <input type="text" class="form-control px-2" id="addName" placeholder="Nombre del Programa" value="">
           <div id="addNameFeedback"></div>
         </div>
+        <!-- streamID -->
+        <div class="form-group">
+          <label for="addStreamID">Identificador del programa</label>
+          <input type="text" class="form-control px-2" id="addStreamID" placeholder="Identificador del Programa" value="">
+          <small id="addStreamIDhHelp" class="form-text text-muted">Patrón para identificar al programa en el stream de audio.</small>
+          <div id="addStreamIDFeedback"></div>
+        </div>
         <!-- length & topics -->
         <div class="form-row">
           <div class="form-group col">
@@ -112,6 +119,10 @@
     changes.info.name = $('#addName').val()
     validate("add", "Name", $('#addName').val(), programs)
   });
+  $('#addStreamID').on("input", function() {
+    changes.info.streamID = $('#addStreamID').val()
+    validate("add", "StreamID", $('#addStreamID').val(), programs)
+  });
   $('#addLength').on("change", function() {
     changes.info.length = $('#addLength').val()
     validate("add", "Length", $('#addLength').val())
@@ -199,5 +210,8 @@
     $("#addForm").find("*").attr("value", "")
     $("#addForm").find("*").removeClass("is-valid")
     $("#addForm").find("*").removeClass("is-invalid")
+
+    // Sets all fields to invalid
+    let fields = ["Name", "StreamID", "Length", "Topics", "Author", "Presenters", "DescriptionShort", "DescriptionLong"]
   })
 </script>
