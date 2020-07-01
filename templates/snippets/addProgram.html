@@ -6,7 +6,7 @@
   </div>
   <!-- Add program form -->
   <form action="" id="addForm" class="py-3 px-2 form-cont">
-    <fieldset id="addFieldset" disabled>
+    <fieldset id="addFieldset">
       <div class="border-bottom">
         <!-- name -->
         <div class="form-group">
@@ -107,18 +107,6 @@
 </div>
 
 <script>
-  function addProgram(id) {
-    // Proceed if adding is enabled
-    if (add) {
-      // Resets the variables that store any changes so we don't send previous changes by mistake
-      changes = {id: null, info: {}, schedule: {}}
-      $("#addForm").trigger("reset")
-
-      // Enable form adding
-      document.getElementById("addFieldset").removeAttribute("disabled")
-    };
-  };
-
   // Handle any changes
   $('#addName').on("input", function() {
     changes.info.name = $('#addName').val()
@@ -184,31 +172,30 @@
     // Converts the changes into a serialized string so we can send them and properly
     let serialized = JSON.stringify(changes)
     // Sends the changes to the server
-    $.post("/addProgram", {data: serialized}, function(data) {
-      if (data !== "Éxito") {
-        $("#messages").html(
-          '<div class="alert alert-danger" >' +
-            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-            '<span>' + data + '</span>' +
-          '</div>'
-        );
-      } else {
-        $("#messages").html(
-          '<div class="alert alert-success" >' +
-            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-            '<span>' + data + '</span>' +
-          '</div>'
-        );
-        // On success, reload the page after 2 seconds
-        setTimeout(function() { location.reload() }, 1500)
-      };
-    });
+    // $.post("/addProgram", {data: serialized}, function(data) {
+    //   if (data !== "Éxito") {
+    //     $("#messages").html(
+    //       '<div class="alert alert-danger" >' +
+    //         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+    //         '<span>' + data + '</span>' +
+    //       '</div>'
+    //     );
+    //   } else {
+    //     $("#messages").html(
+    //       '<div class="alert alert-success" >' +
+    //         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+    //         '<span>' + data + '</span>' +
+    //       '</div>'
+    //     );
+    //     // On success, reload the page after 2 seconds
+    //     setTimeout(function() { location.reload() }, 1500)
+    //   };
+    // });
   });
 
   // Handles form reset
   $("#addForm").on("reset", function(event) {
     changes = {id: null, info: {}, schedule: {}};
-    $("#addFieldset").prop("disabled", true)
     $("#addForm").find("*").attr("value", "")
     $("#addForm").find("*").removeClass("is-valid")
     $("#addForm").find("*").removeClass("is-invalid")

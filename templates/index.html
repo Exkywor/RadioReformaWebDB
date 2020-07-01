@@ -4,8 +4,8 @@
   <!-- Toolbar -->
   <header>
     <div class="text-center" role="alert">
-      <button class='btn btn-outline-dark btn-sm' onclick=toggleEditing()>Editar</button>
-      <button class='btn btn-outline-dark btn-sm' onclick=toggleAdding()>Nuevo</button>
+      <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('edit')">Editar</button>
+      <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('add')">Nuevo</button>
       <button class='btn btn-outline-dark btn-sm' onclick=showChanges()>Changes</button>
     </div>
   </header>
@@ -16,6 +16,8 @@
       {% include 'snippets/programsDisplay.html' %}
       <!-- Edit program container -->
       {% include 'snippets/editProgram.html' %}
+      <!-- Add program container -->
+      {% include 'snippets/addProgram.html' %}
     </div>
   </div>
 
@@ -122,37 +124,57 @@
       };
     };
 
-    // PROGRAM EDITING
-    // Hide or display the editing form
-    function toggleEditing() {
-      if (!editing) {
-        // Make space for the form
-        document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8")
-        // Show the editing form
-        document.getElementById("editingContainer").removeAttribute("hidden")
-        editing = true
-      } else {
-        // Make the table occupy the whole container
-        document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12")
-        // Hide the editing form
-        document.getElementById("editingContainer").setAttribute("hidden", "true")
-        editing = false
-      };
-    };
-
-    function toggleAdding() {
-      if (!add) {
-        // Make space for the form
-        document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8")
-        // Show the editing form
-        document.getElementById("editingContainer").removeAttribute("hidden")
-        add = true
-      } else {
-        // Make the table occupy the whole container
-        document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12")
-        // Hide the editing form
-        document.getElementById("editingContainer").setAttribute("hidden", "true")
-        add = false
+    // Display or hide the forms
+    function toggleForm(form) {      
+      if (form === "edit") {
+        if (add) {
+          // Hide the add form and reset it
+          $("#addContainer").prop("hidden", true);
+          $("#addForm").trigger("reset");
+          add = false;
+          // Show the editing form
+          $("#editingContainer").removeAttr("hidden");
+          editing = true
+        } else {
+          if (!editing) {
+            // Make space for the form
+            document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
+            // Show the editing form
+            document.getElementById("editingContainer").removeAttribute("hidden");
+            editing = true
+          } else {
+            // Make the table occupy the whole container
+            document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
+            // Hide the editing form
+            document.getElementById("editingContainer").setAttribute("hidden", "true");
+            editing = false;
+          };
+        };
+      } else if (form === "add") {
+        if (editing) {
+          // Hide the editing form and reset it
+          $("#editingContainer").prop("hidden", true);
+          $("#editingForm").trigger("reset");
+          editing = false;
+          // Show the editing form
+          $("#addContainer").removeAttr("hidden");
+          add = true
+        } else {
+          if (!add) {
+            // Make space for the form
+            document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
+            // Show the add form
+            document.getElementById("addContainer").removeAttribute("hidden");
+            add = true
+            $("#addForm").trigger("reset");
+          } else {
+            // Make the table occupy the whole container
+            document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
+            // Hide the add form
+            document.getElementById("addContainer").setAttribute("hidden", "true");
+            add = false;
+          };
+        };
       };
     };
 
