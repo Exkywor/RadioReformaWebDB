@@ -4,7 +4,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 
 from utils.prepareDB import prepareDB
-from utils.editDB import editDB
+from utils.modifyDB import editProgram, addProgram
 
 # Configure app
 app = Flask(__name__)
@@ -111,21 +111,20 @@ def changeTimezone():
     return jsonify(timezone=session["timezone"])
 
 
-# DB OPERATIONS ENDPOINTS
+# DB OPERATIONS ENDPOINT
 @app.route("/modifyProgram", methods=["POST"])
-def editProgram():
+def modifyProgram():
   if request.method == "POST":
     action = request.form.get("action")
-    
+    data = json.loads(request.form.get("data")) # Converts the serialized js object back into a dictionary
+    res = ""
     if action == "edit":
-      # Converts the serialized string back into a dictionary
-      data = json.loads(request.form.get("data"))
-
-      editRes = editDB(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
-
-      getData(True)
-
-      return jsonify(editRes)
+      res = editProgram(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+    elif action == "add":
+      res = addProgram(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+    
+    getData(True)
+    return jsonify(res)
 
 
 if __name__ == "__main__":

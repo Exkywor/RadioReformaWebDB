@@ -96,7 +96,7 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
     case "tuesday":
     case "monday":
       if (isEmpty(value)) // Is it empty?
-        return displayInputValidation("edit", true, field);
+        return displayInputValidation(action, true, field);
 
       let ogTime = value.trim();
       let times = ogTime.split(", ");

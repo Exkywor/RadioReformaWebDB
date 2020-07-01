@@ -2,7 +2,7 @@ from utils.misc import isEmpty, isAlphanumeric
 
 # Schedule validation
 # schedule = {"monday": "05:10, 15:00"}
-def validateSchedule(schedule, indexedSchedule, id, action ="edit"):
+def validateSchedule(schedule, indexedSchedule, id ="", action ="edit"):
   # if action == "add":
   #   if len(schedule) == 0: # Check that the program has at least one airing
   #     return {"res": False, "message": f"El programa debe estar al aire al menos una vez"}
@@ -81,7 +81,7 @@ def validateSchedule(schedule, indexedSchedule, id, action ="edit"):
 
 
 # Info validation
-def validateInfo(info, id, programs, action ="edit"):
+def validateInfo(info, programs, id ="", action ="edit"):
   if not bool(programs): # Check that a programs argument has been passed
     return print("ERROR: No programs passed to validateInfo()")
 

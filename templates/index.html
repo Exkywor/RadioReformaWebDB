@@ -163,6 +163,7 @@
         // Resets the variables that store any changes so we don't send previous changes by mistake
         changes = {id: null, info: {}, schedule: {}}
         $("#addForm").trigger("reset")
+        invalidateAddForm()
 
         if (editing) {
           // Hide the editing form and reset it
