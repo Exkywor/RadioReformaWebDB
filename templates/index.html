@@ -149,13 +149,13 @@
             // Make space for the form
             document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
             // Show the editing form
-            document.getElementById("editingContainer").removeAttribute("hidden");
+            $("#editingContainer").removeAttr("hidden");
             editing = true
           } else {
             // Make the table occupy the whole container
             document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
             // Hide the editing form
-            document.getElementById("editingContainer").setAttribute("hidden", "true");
+            $("#editingContainer").prop("hidden", true);
             editing = false;
           };
         };
@@ -178,14 +178,14 @@
             // Make space for the form
             document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
             // Show the add form
-            document.getElementById("addContainer").removeAttribute("hidden");
+            $("#addContainer").removeAttr("hidden");
             add = true
             $("#addForm").trigger("reset");
           } else {
             // Make the table occupy the whole container
             document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
             // Hide the add form
-            document.getElementById("addContainer").setAttribute("hidden", "true");
+            $("#addContainer").prop("hidden", true);
             add = false;
           };
         };

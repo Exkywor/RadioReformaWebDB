@@ -45,13 +45,13 @@
         <!-- descriptions -->
         <div class="form-group">
           <label for="editDescriptionShort">Sinópsis</label>
-          <input type="text" class="form-control px-2" id="editDescriptionShort" placeholder="Sinópsis del programa" value="">
+          <textarea rows="3" class="form-control px-2" id="editDescriptionShort" placeholder="Sinópsis del programa" value=""></textarea>
           <small id="editDescriptionShortHelp" class="form-text text-muted">0/250 caracteres</small>
           <div id="editDescriptionShortFeedback"></div>
         </div>
         <div class="form-group">
           <label for="editDescriptionLong">Descripción</label>
-          <input type="text" class="form-control px-2" id="editDescriptionLong" placeholder="Descripción del programa" value="">
+          <textarea rows="3" class="form-control px-2" id="editDescriptionLong" placeholder="Descripción del programa" value=""></textarea>
           <div id="editDescriptionLongFeedback"></div>
         </div>
       </div>
@@ -135,24 +135,24 @@
       };
 
       // Enable form editing
-      document.getElementById("editingFieldset").removeAttribute("disabled")
+      $("#editingFieldset").removeAttr("disabled")
       // Fill the different fields with the current program's values
-      document.getElementById("editName").setAttribute("value", programs[id].name)
-      document.getElementById("editLength").setAttribute("value", programs[id].length)
-      document.getElementById("editTopics").setAttribute("value", programs[id].topics)
-      document.getElementById("editPresenters").setAttribute("value", programs[id].presenters)
-      document.getElementById("editAuthor").setAttribute("value", programs[id].author)
-      document.getElementById("editDescriptionShort").setAttribute("value", programs[id].descriptionShort)
-      document.getElementById("editDescriptionShortHelp").innerText = `${$('#editDescriptionShort').val().length}/250 caracteres`
-      document.getElementById("editDescriptionLong").setAttribute("value", programs[id].descriptionLong)
+      $("#editName").val(programs[id].name)
+      $("#editLength").val(programs[id].length)
+      $("#editTopics").val(programs[id].topics)
+      $("#editPresenters").val(programs[id].presenters)
+      $("#editAuthor").val(programs[id].author)
+      $("#editDescriptionShort").text(programs[id].descriptionShort)
+      $("#editDescriptionShortHelp").text(`${$('#editDescriptionShort').val().length}/250 caracteres`)
+      $("#editDescriptionLong").text(programs[id].descriptionLong)
 
       // Make sure to leave the days that are blank, blank
       let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
       for (let day of days) {
         if (programs[id].schedule[day] == undefined)
-          document.getElementById(`edit${day}`).setAttribute("value", "")
+          $(`#edit${day}`).val("")
         else
-          document.getElementById(`edit${day}`).setAttribute("value", schedule[day])
+          $(`#edit${day}`).val(schedule[day])
       };
 
       // Store the id in case we make a change

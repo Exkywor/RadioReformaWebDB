@@ -52,13 +52,13 @@
         <!-- descriptions -->
         <div class="form-group">
           <label for="addDescriptionShort">Sinópsis</label>
-          <input type="text" class="form-control px-2" id="addDescriptionShort" placeholder="Sinópsis del programa" value="">
+          <textarea rows="3" class="form-control px-2" id="addDescriptionShort" placeholder="Sinópsis del programa" value=""></textarea>
           <small id="addDescriptionShortHelp" class="form-text text-muted">0/250 caracteres</small>
           <div id="addDescriptionShortFeedback"></div>
         </div>
         <div class="form-group">
           <label for="addDescriptionLong">Descripción</label>
-          <input type="text" class="form-control px-2" id="addDescriptionLong" placeholder="Descripción del programa" value="">
+          <textarea rows="3" class="form-control px-2" id="addDescriptionLong" placeholder="Descripción del programa" value=""></textarea>
           <div id="addDescriptionLongFeedback"></div>
         </div>
       </div>
@@ -210,7 +210,7 @@
     for (const field of fields) {
       $(`#add${field}`).addClass("is-invalid")
       $(`#add${field}Feedback`).addClass("invalid-feedback")
-      $(`#add${field}Feedback`).text("Debes llenar este campo")
+      $(`#add${field}Feedback`).text("Campo requerido")
     };
   };
 
