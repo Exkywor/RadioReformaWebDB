@@ -26,7 +26,7 @@
   </head>
 
   <body>
-    <!-- Navabar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light">
       <a class="navbar-brand" href="/">
         <img src= {{ url_for("static", filename = "assets/radioReformaLogo.png") }} height="50">
@@ -57,9 +57,7 @@
     
     <main>
       <!-- Result messages -->
-      <div id="messages">
-        
-      </div>
+      <div id="messages"></div>
 
       {% block main%}{% endblock %}
     </main>
