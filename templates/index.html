@@ -7,9 +7,17 @@
       <!-- Filter columns -->
       <div class="btn-group mr-auto align-items-center" role="group" aria-label="Filter buttons">
         <span class="mr-3">Ver</span>
-        <button class='btn btn-outline-dark btn-sm'>Nombre</button>
-        <button class='btn btn-outline-dark btn-sm'>Duración</button>
-        <button class='btn btn-outline-dark btn-sm'>Changes</button>
+        <form class="form" id="toggleColumns">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="colName" checked="checked">
+            <label class="form-check-label" for="toggleName">Nombre</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="colLength" checked="checked">
+            <label class="form-check-label" for="toggleLength">Duración</label>
+          </div>
+        </form>
+        
       </div>
       <!-- Modify programs -->
       <div class="btn-group align-items-center" role="group" aria-label="Modify group">
@@ -65,26 +73,26 @@
           // We create the row with the non-iterable information of the program
           document.querySelector("tbody").innerHTML +=
             "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
-              "<th scope='row'>" + programs[program].programID + "</th>" +
-              "<td>" + programs[program].streamID + "</td>" +
-              "<td>" + programs[program].name + "</td>" +
-              "<td>" + programs[program].length + "</td>" +
-              "<td>" + programs[program].topics + "</td>" +
-              "<td id=presenters" + program + "></td>" +
-              "<td>" + producer + "</td>" +
-              "<td id=synopsis" + program + ">" +
+              "<th class='colProgramID' scope='row'>" + programs[program].programID + "</th>" +
+              "<td class='colStreamID'>" + programs[program].streamID + "</td>" +
+              "<td class='colName'>" + programs[program].name + "</td>" +
+              "<td class='colLength'>" + programs[program].length + "</td>" +
+              "<td class='colTopics'>" + programs[program].topics + "</td>" +
+              "<td class='colPresenters' id=presenters" + program + "></td>" +
+              "<td class='colAuthor'>" + producer + "</td>" +
+              "<td class='colDescriptionShort' id=synopsis" + program + ">" +
                 `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
               "</td>" +
-              "<td id=description" + program + ">" +
+              "<td class='colDescriptionLong' id=description" + program + ">" +
                 `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
               "</td>" +
-              "<td id=monday" + program + "></td>" +
-              "<td id=tuesday" + program + "></td>" +
-              "<td id=wednesday" + program + "></td>" +
-              "<td id=thursday" + program + "></td>" +
-              "<td id=friday" + program + "></td>" +
-              "<td id=saturday" + program + "></td>" +
-              "<td id=sunday" + program + "></td>"
+              "<td class='colMonday' id=monday" + program + "></td>" +
+              "<td class='colTuesday' id=tuesday" + program + "></td>" +
+              "<td class='colWednesday' id=wednesday" + program + "></td>" +
+              "<td class='colThursday' id=thursday" + program + "></td>" +
+              "<td class='colFriday' id=friday" + program + "></td>" +
+              "<td class='colSaturday' id=saturday" + program + "></td>" +
+              "<td class='colSunday' id=sunday" + program + "></td>"
             + "</tr>"
   
           // We are gonna add the elements that are iterable or dependant on certain conditions
@@ -206,5 +214,11 @@
       if (forms["editing"]) editProgram(id);
       else if (forms["delete"]) deleteProgram(id);
     }
+
+    // Hides or shows columns
+    $("#toggleColumns").on('change', 'input[type=checkbox]', function() {
+      let column = $(this).attr('id');
+      $(`.${column}`).toggle();
+    })
   </script>
 {% endblock %}
