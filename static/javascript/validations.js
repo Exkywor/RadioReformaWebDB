@@ -1,7 +1,7 @@
 function validate(action, field, value, programs = {}, schedule = {}, id ="") {
   switch(field) {
     case "Name":
-      let programNames = Object.keys(programs).map(program => programs[program].name) // Retrieve all the program names
+      let programNames = Object.keys(programs).map(program => programs[program].name); // Retrieve all the program names
       if (isEmpty(value)) // Check if the name is empty
         return displayInputValidation(action, false, "Name", "Debes añadir un nombre para el programa");
       else if (!isAlphaNumeric(value)) // Check if it's not alphanumeric
@@ -24,15 +24,15 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         return displayInputValidation(action, false, "Topics", "Debes añadir al menos un tema para el programa");
       else if (!isAlphaNumeric(value)) // Check if it's not alphanumeric
         return displayInputValidation(action, false, "Topics", `Los temas no pueden contener solo caracteres especiales`);
-      let topics = value.trim()
+      let topics = value.trim();
       for (let i = 0; i < topics.length; i++) {
         if (topics[i] === ",") { // The program finds a ,
           if (i === topics.length-1) // Is it the last character?
             return displayInputValidation(action, false, "Topics", "Quita las comas al final de los temas");
           else if (topics[i+1] !== " ") // Is it followed by a space?
             return displayInputValidation(action, false, "Topics", "Separa los temas con una coma seguida de un espacio");
-        };
-      };
+        }
+      }
       return displayInputValidation(action, true, "Topics");
     case "Presenters":
       let presenters = value.trim()
@@ -45,8 +45,8 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
               return displayInputValidation(action, false, "Presenters", "Quita las comas al final de los presentadores");
             else if (presenters[i+1] !== " ") // Is it followed by a space?
               return displayInputValidation(action, false, "Presenters", "Separa los presentadores con una coma seguida de un espacio");
-          };
-        };
+          }
+        }
         return displayInputValidation(action, true, "Presenters");
       }
       else
@@ -75,7 +75,7 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
       else
         return displayInputValidation(action, true, "DescriptionLong");
     case "StreamID":
-      let streamIDs = Object.keys(programs).map(ID => programs[ID].streamID) // Retrieve all the streamIDs
+      let streamIDs = Object.keys(programs).map(ID => programs[ID].streamID); // Retrieve all the streamIDs
       
       if (isEmpty(value)) // Check if the descriptionLong is empty
         return displayInputValidation(action, false, "StreamID", "Debes asignar un identificador del programa para el stream de audio");
@@ -100,7 +100,7 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
 
       let ogTime = value.trim();
       let times = ogTime.split(", ");
-      let validCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ",", " "]
+      let validCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ",", " "];
       for (let i = 0; i < ogTime.length; i++) {
         if (!validCharacters.includes(ogTime[i])) // Check if the time contains invalid characters
           return displayInputValidation(action, false, field, `La hora para el ${field.toUpperCase()} contiene caracteres inválidos: ${ogTime[i]}`);
@@ -110,8 +110,8 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
             return displayInputValidation(action, false, field, `Quita las comas al final de las horas para el ${field.toUpperCase()}`);
           else if (ogTime[i+1] !== " ") // Is it followed by a space?
             return displayInputValidation(action, false, field, `Separa las horas para el ${field.toUpperCase()} con una coma seguida de un espacio`);
-        };
-      };
+        }
+      }
       
       // Check if a time was input
       if (times[0] === ",")
@@ -131,7 +131,7 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         for (const i in split) {
           if ((split[i].length > 2) || split[i].length === 0)
             return displayInputValidation(action, false, field, `La hora para el ${field.toUpperCase()} tiene un formato incorrecto. El formato debe ser: hh:mm, hh:mm`);
-        };
+        }
 
         // Check that the time doesn't exist already for other programs, in other words, that it's unique
         let timeIndex = ((parseInt(split[0] * 60, 10)) + parseInt(split[1])).toString();
@@ -145,37 +145,37 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
               return displayInputValidation("edit", false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
           }
           else return displayInputValidation(action, false, field, `La hora ${time} para el ${field.toUpperCase()} ya está asignada para el programa con ID ${schedule[field][timeIndex]}`);
-        };
-      };
+        }
+      }
       return displayInputValidation(action, true, field);
     default:
       return displayInputValidation(action, true, field);
-  };
-};
+  }
+}
 
 // Handles input's class management
 function displayInputValidation(action, valid, field, message = null) {
   // Changes the validation class of the input
   if (valid) {
     if ($(`#${action}${field}`).hasClass("is-invalid")) {
-      $(`#${action}${field}`).removeClass("is-invalid")
-      $(`#${action}${field}`).addClass("is-valid")
+      $(`#${action}${field}`).removeClass("is-invalid");
+      $(`#${action}${field}`).addClass("is-valid");
     }
-    else $(`#${action}${field}`).addClass("is-valid")
+    else $(`#${action}${field}`).addClass("is-valid");
   } else {
     if ($(`#${action}${field}`).hasClass("is-valid")) {
-      $(`#${action}${field}`).removeClass("is-valid")
-      $(`#${action}${field}`).addClass("is-invalid")
+      $(`#${action}${field}`).removeClass("is-valid");
+      $(`#${action}${field}`).addClass("is-invalid");
     }
-    else $(`#${action}${field}`).addClass("is-invalid")
-  };
+    else $(`#${action}${field}`).addClass("is-invalid");
+  }
   
   // Changes the validation class of the tooltip
-  $(`#${action}${field}Feedback`).attr("class", valid ? "valid-feedback" : "invalid-feedback")
+  $(`#${action}${field}Feedback`).attr("class", valid ? "valid-feedback" : "invalid-feedback");
 
-  if (valid) $(`#${action}${field}Feedback`).empty() // Clears the tooltip
-  else $(`#${action}${field}Feedback`).text(message) // Displays an invalid message
-};
+  if (valid) $(`#${action}${field}Feedback`).empty(); // Clears the tooltip
+  else $(`#${action}${field}Feedback`).text(message); // Displays an invalid message
+}
 
 // Check if a string is empty or only whitespaces
 function isEmpty(string) {
@@ -183,10 +183,10 @@ function isEmpty(string) {
     return true;
   else
     return false;
-};
+}
 
 // Based on https://lowrey.me/test-if-a-string-is-alphanumeric-in-javascript/
 const isAlphaNumeric = string => {
   // Return whether there are alphanumeric characters in the string
 	return string.search(/[a-z\d]/i) >= 0;
-};
+}

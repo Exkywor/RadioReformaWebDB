@@ -3,7 +3,7 @@
   <div class="border-bottom">
     <div class="row px-3 pb-2">
       <span class="mr-auto font-weight-bold">EDITAR PROGRAMA</span>
-      <button type="button" class="close" onclick="toggleForm('edit')">&times;</button>
+      <button type="button" class="close" onclick="toggleForm('editing')">&times;</button>
     </div>
     <p class="text-left">Has click en un programa para editar su información</p>
   </div>
@@ -115,118 +115,118 @@
     // Proceed if editing is enabled
     if (editing) {
       // Resets the variables that store any changes so we don't send previous changes by mistake
-      changes = {id: null, info: {}, schedule: {}}
-      $("#editingForm").trigger("reset")
+      changes = {id: null, info: {}, schedule: {}};
+      $("#editingForm").trigger("reset");
 
       // Makes the days in the schedule a ", " separated string. Otherwise you only get "," as separation
-      let schedule = {}
+      let schedule = {};
       for (let day of Object.keys(programs[id].schedule)) {
-        let stringified = ""
-        let length = programs[id].schedule[day].length
+        let stringified = "";
+        let length = programs[id].schedule[day].length;
 
         if (length === 0)
-          stringified = undefined
+          stringified = undefined;
         else if (length === 1)
-          stringified = programs[id].schedule[day][0]
+          stringified = programs[id].schedule[day][0];
         else
           stringified = programs[id].schedule[day].reduce((string, time, i) => {
             if (i === 0) return time
             else return string += `, ${time}`
-          }, "")
+          }, "");
         
-        schedule[day] = stringified
-      };
+        schedule[day] = stringified;
+      }
 
       // Enable form editing
-      $("#editingFieldset").removeAttr("disabled")
+      $("#editingFieldset").removeAttr("disabled");
       // Fill the different fields with the current program's values
-      $("#editName").val(programs[id].name)
-      $("#editLength").val(programs[id].length)
-      $("#editTopics").val(programs[id].topics)
-      $("#editPresenters").val(programs[id].presenters)
-      $("#editAuthor").val(programs[id].author)
-      $("#editDescriptionShort").text(programs[id].descriptionShort)
-      $("#editDescriptionShortHelp").text(`${$('#editDescriptionShort').val().length}/250 caracteres`)
-      $("#editDescriptionLong").text(programs[id].descriptionLong)
+      $("#editName").val(programs[id].name);
+      $("#editLength").val(programs[id].length);
+      $("#editTopics").val(programs[id].topics);
+      $("#editPresenters").val(programs[id].presenters);
+      $("#editAuthor").val(programs[id].author);
+      $("#editDescriptionShort").text(programs[id].descriptionShort);
+      $("#editDescriptionShortHelp").text(`${$('#editDescriptionShort').val().length}/250 caracteres`);
+      $("#editDescriptionLong").text(programs[id].descriptionLong);
 
       // Make sure to leave the days that are blank, blank
       let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
       for (let day of days) {
         if (programs[id].schedule[day] == undefined)
-          $(`#edit${day}`).val("")
+          $(`#edit${day}`).val("");
         else
-          $(`#edit${day}`).val(schedule[day])
-      };
+          $(`#edit${day}`).val(schedule[day]);
+      }
 
       // Store the id in case we make a change
       changes.id = id;
-    };
-  };
+    }
+  }
 
   // Handle any changes
   $('#editName').on("input", function() {
-    changes.info.name = $(this).val()
-    validate("edit", "Name", $(this).val(), programs, null, changes.id)
+    changes.info.name = $(this).val();
+    validate("edit", "Name", $(this).val(), programs, null, changes.id);
   });
   $('#editLength').on("change", function() {
-    changes.info.length = $(this).val()
-    validate("edit", "Length", $(this).val())
+    changes.info.length = $(this).val();
+    validate("edit", "Length", $(this).val());
   });
   $('#editTopics').on("input", function() {
-    changes.info.topics = $(this).val()
-    validate("edit", "Topics", $(this).val())
+    changes.info.topics = $(this).val();
+    validate("edit", "Topics", $(this).val());
   });
   $('#editPresenters').on("input", function() {
-    changes.info.presenters = $(this).val()
-    validate("edit", "Presenters", $(this).val())
+    changes.info.presenters = $(this).val();
+    validate("edit", "Presenters", $(this).val());
   });
   $('#editAuthor').on("input", function() {
-    changes.info.author = $(this).val()
-    validate("edit", "Author", $(this).val())
+    changes.info.author = $(this).val();
+    validate("edit", "Author", $(this).val());
   });
   $('#editDescriptionShort').on("input", function() {
-    changes.info.descriptionShort = $(this).val()
-    $("#editDescriptionShortHelp").text(`${$(this).val().length}/250 caracteres`)
-    validate("edit", "DescriptionShort", $(this).val())
+    changes.info.descriptionShort = $(this).val();
+    $("#editDescriptionShortHelp").text(`${$(this).val().length}/250 caracteres`);
+    validate("edit", "DescriptionShort", $(this).val());
   });
   $('#editDescriptionLong').on("input", function() {
-    changes.info.descriptionLong = $(this).val()
-    validate("edit", "DescriptionLong", $(this).val())
+    changes.info.descriptionLong = $(this).val();
+    validate("edit", "DescriptionLong", $(this).val());
   });
   $('#editmonday').on("input", function() {
-    changes.schedule.monday = $(this).val()
-    validate("edit", "monday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.monday = $(this).val();
+    validate("edit", "monday", $(this).val(), null, schedule, changes.id);
   });
   $('#edittuesday').on("input", function() {
-    changes.schedule.tuesday = $(this).val()
-    validate("edit", "tuesday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.tuesday = $(this).val();
+    validate("edit", "tuesday", $(this).val(), null, schedule, changes.id);
   });
   $('#editwednesday').on("input", function() {
-    changes.schedule.wednesday = $(this).val()
-    validate("edit", "wednesday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.wednesday = $(this).val();
+    validate("edit", "wednesday", $(this).val(), null, schedule, changes.id);
   });
   $('#editthursday').on("input", function() {
-    changes.schedule.thursday = $(this).val()
-    validate("edit", "thursday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.thursday = $(this).val();
+    validate("edit", "thursday", $(this).val(), null, schedule, changes.id);
   });
   $('#editfriday').on("input", function() {
-    changes.schedule.friday = $(this).val()
-    validate("edit", "friday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.friday = $(this).val();
+    validate("edit", "friday", $(this).val(), null, schedule, changes.id);
   });
   $('#editsaturday').on("input", function() {
-    changes.schedule.saturday = $(this).val()
-    validate("edit", "saturday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.saturday = $(this).val();
+    validate("edit", "saturday", $(this).val(), null, schedule, changes.id);
   });
   $('#editsunday').on("input", function() {
-    changes.schedule.sunday = $(this).val()
-    validate("edit", "sunday", $(this).val(), null, schedule, changes.id)
+    changes.schedule.sunday = $(this).val();
+    validate("edit", "sunday", $(this).val(), null, schedule, changes.id);
   });
 
   // Handles submitting of changed information
   $("#editingForm").submit(function(event) {
-    event.preventDefault()
+    event.preventDefault();
     // Converts the changes into a serialized string so we can send them and properly
-    let serialized = JSON.stringify(changes)
+    let serialized = JSON.stringify(changes);
     // Sends the changes to the server
     $.post("/modifyProgram", {data: serialized, action: "edit"}, function(data) {
       if (data !== "Éxito") {
@@ -244,17 +244,17 @@
           '</div>'
         );
         // On success, reload the page after 2 seconds
-        setTimeout(function() { location.reload() }, 1500)
-      };
+        setTimeout(function() { location.reload() }, 1500);
+      }
     });
   });
 
   // Handles form reset
   $("#editingForm").on("reset", function(event) {
     changes = {id: null, info: {}, schedule: {}};
-    $("#editingFieldset").prop("disabled", true)
-    $(this).find("*").attr("value", "")
-    $(this).find("*").removeClass("is-valid")
-    $(this).find("*").removeClass("is-invalid")
+    $("#editingFieldset").prop("disabled", true);
+    $(this).find("*").attr("value", "");
+    $(this).find("*").removeClass("is-valid");
+    $(this).find("*").removeClass("is-invalid");
   })
 </script>

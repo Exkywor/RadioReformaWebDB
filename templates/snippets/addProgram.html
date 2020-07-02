@@ -3,7 +3,7 @@
   <div class="border-bottom">
     <div class="row px-3 pb-2">
       <span class="mr-auto font-weight-bold">AÑADIR PROGRAMA</span>
-      <button type="button" class="close" onclick="toggleForm('add')">&times;</button>
+      <button type="button" class="close" onclick="newToggleForm('add')">&times;</button>
     </div>
     <p class="text-left">Añade un nuevo programa</p>
   </div>
@@ -119,72 +119,72 @@
 <script>
   // Handle any changes
   $('#addName').on("input", function() {
-    changes.info.name = $(this).val()
-    validate("add", "Name", $(this).val(), programs)
+    changes.info.name = $(this).val();
+    validate("add", "Name", $(this).val(), programs);
   });
   $('#addStreamID').on("input", function() {
-    changes.info.streamID = $(this).val()
-    validate("add", "StreamID", $(this).val(), programs)
+    changes.info.streamID = $(this).val();
+    validate("add", "StreamID", $(this).val(), programs);
   });
   $('#addLength').on("change", function() {
-    changes.info.length = $(this).val()
-    validate("add", "Length", $(this).val())
+    changes.info.length = $(this).val();
+    validate("add", "Length", $(this).val());
   });
   $('#addTopics').on("input", function() {
-    changes.info.topics = $(this).val()
-    validate("add", "Topics", $(this).val())
+    changes.info.topics = $(this).val();
+    validate("add", "Topics", $(this).val());
   });
   $('#addPresenters').on("input", function() {
-    changes.info.presenters = $(this).val()
-    validate("add", "Presenters", $(this).val())
+    changes.info.presenters = $(this).val();
+    validate("add", "Presenters", $(this).val());
   });
   $('#addAuthor').on("input", function() {
-    changes.info.author = $(this).val()
-    validate("add", "Author", $(this).val())
+    changes.info.author = $(this).val();
+    validate("add", "Author", $(this).val());
   });
   $('#addDescriptionShort').on("input", function() {
-    changes.info.descriptionShort = $(this).val()
-    $("#addDescriptionShortHelp").text(`${$(this).val().length}/250 caracteres`)
-    validate("add", "DescriptionShort", $(this).val())
+    changes.info.descriptionShort = $(this).val();
+    $("#addDescriptionShortHelp").text(`${$(this).val().length}/250 caracteres`);
+    validate("add", "DescriptionShort", $(this).val());
   });
   $('#addDescriptionLong').on("input", function() {
-    changes.info.descriptionLong = $(this).val()
-    validate("add", "DescriptionLong", $(this).val())
+    changes.info.descriptionLong = $(this).val();
+    validate("add", "DescriptionLong", $(this).val());
   });
   $('#addmonday').on("input", function() {
-    changes.schedule.monday = $(this).val()
-    validate("add", "monday", $(this).val(), null, schedule)
+    changes.schedule.monday = $(this).val();
+    validate("add", "monday", $(this).val(), null, schedule);
   });
   $('#addtuesday').on("input", function() {
-    changes.schedule.tuesday = $(this).val()
-    validate("add", "tuesday", $(this).val(), null, schedule)
+    changes.schedule.tuesday = $(this).val();
+    validate("add", "tuesday", $(this).val(), null, schedule);
   });
   $('#addwednesday').on("input", function() {
-    changes.schedule.wednesday = $(this).val()
-    validate("add", "wednesday", $(this).val(), null, schedule)
+    changes.schedule.wednesday = $(this).val();
+    validate("add", "wednesday", $(this).val(), null, schedule);
   });
   $('#addthursday').on("input", function() {
-    changes.schedule.thursday = $(this).val()
-    validate("add", "thursday", $(this).val(), null, schedule)
+    changes.schedule.thursday = $(this).val();
+    validate("add", "thursday", $(this).val(), null, schedule);
   });
   $('#addfriday').on("input", function() {
-    changes.schedule.friday = $(this).val()
-    validate("add", "friday", $(this).val(), null, schedule)
+    changes.schedule.friday = $(this).val();
+    validate("add", "friday", $(this).val(), null, schedule);
   });
   $('#addsaturday').on("input", function() {
-    changes.schedule.saturday = $(this).val()
-    validate("add", "saturday", $(this).val(), null, schedule)
+    changes.schedule.saturday = $(this).val();
+    validate("add", "saturday", $(this).val(), null, schedule);
   });
   $('#addsunday').on("input", function() {
-    changes.schedule.sunday = $(this).val()
-    validate("add", "sunday", $(this).val(), null, schedule)
+    changes.schedule.sunday = $(this).val();
+    validate("add", "sunday", $(this).val(), null, schedule);
   });
 
   // Handles submitting of changed information
   $("#addForm").submit(function(event) {
-    event.preventDefault()
+    event.preventDefault();
     // Converts the changes into a serialized string so we can send them and properly
-    let serialized = JSON.stringify(changes)
+    let serialized = JSON.stringify(changes);
     // Sends the changes to the server
     $.post("/modifyProgram", {data: serialized, action: "add"}, function(data) {
       if (data !== "Éxito") {
@@ -202,8 +202,8 @@
           '</div>'
         );
         // On success, reload the page after 2 seconds
-        setTimeout(function() { location.reload() }, 1500)
-      };
+        setTimeout(function() { location.reload() }, 1500);
+      }
     });
   });
 
@@ -211,18 +211,18 @@
   function invalidateAddForm() {
     let fields = ["Name", "StreamID", "Length", "Topics", "Author", "DescriptionShort", "DescriptionLong"];
     for (const field of fields) {
-      $(`#add${field}`).addClass("is-invalid")
-      $(`#add${field}Feedback`).addClass("invalid-feedback")
-      $(`#add${field}Feedback`).text("Campo requerido")
-    };
-  };
+      $(`#add${field}`).addClass("is-invalid");
+      $(`#add${field}Feedback`).addClass("invalid-feedback");
+      $(`#add${field}Feedback`).text("Campo requerido");
+    }
+  }
 
   // Handles form reset
   $("#addForm").on("reset", function(event) {
     changes = {id: null, info: {}, schedule: {}};
-    $(this).find("*").attr("value", "")
-    $(this).find("*").removeClass("is-valid")
-    $(this).find("*").removeClass("is-invalid")
-    invalidateAddForm()    
+    $(this).find("*").attr("value", "");
+    $(this).find("*").removeClass("is-valid");
+    $(this).find("*").removeClass("is-invalid");
+    invalidateAddForm();
   });
 </script>

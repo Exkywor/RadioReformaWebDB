@@ -14,8 +14,8 @@
       <!-- Modify programs -->
       <div class="btn-group align-items-center" role="group" aria-label="Modify group">
         <span class="mr-3">Programas</span>
-        <button class="btn btn-outline-dark btn-sm" id="btnEdit" onclick="toggleForm('edit')">Editar</button>
-        <button class="btn btn-outline-dark btn-sm" id="btnAdd" onclick="toggleForm('add')">Nuevo</button>
+        <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
+        <button class="btn btn-outline-dark btn-sm" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
         <button class="btn btn-outline-dark btn-sm" id="btnChange" onclick=showChanges()>Changes</button>
       </div>
     </div>
@@ -36,26 +36,30 @@
   <script>
     let programs;
     let schedule;
+    let forms = {
+      editing: false,
+      add: false
+    };
     let editing = false;
     let add = false;
 
     // We're gonna store any changed values here so we know what to send
     // We declare it here so we can use it before the main function that cares for it
-    let changes = {id: null, info: {}, schedule: {}}
+    let changes = {id: null, info: {}, schedule: {}};
   
     // TABLE CREATION
     // Get the programs and fill the table
     function getPrograms() {
       $.post("/programs", null, function(data) {
         programs = data.programs;
-        schedule = data.schedule.schedule
+        schedule = data.schedule.schedule;
         
         for (const program of Object.keys(programs)) {
           // Check if the producer a link or not
           let producer = "";
           if (programs[program].author.includes("www."))
-            producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`
-          else producer = programs[program].author;
+            producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`;
+          else producer = programs[program].author
   
           // We create the row with the non-iterable information of the program
           document.querySelector("tbody").innerHTML +=
@@ -88,13 +92,13 @@
           for (const presenter of programs[program].presenters) {
             if (presenter === "Desconocido") presenters = ""
             else presenters += "<li>" + presenter + "</li>"
-          };
+          }
           
           document.getElementById(`presenters${program}`).innerHTML =
             "<ul style='padding: 0'>" + presenters + "</ul>"
           
           // Change programs's class color if its schedule is empty
-          let values = Object.values(programs[program].schedule)
+          let values = Object.values(programs[program].schedule);
           if (values.every(day => day == null))
             document.getElementById("program"+programs[program].programID).classList.add("table-danger")
           
@@ -106,9 +110,9 @@
               "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
           }
         }
-      });
-    };
-    getPrograms()
+      })
+    }
+    getPrograms();
   
     // We use this function to show or hide the description of specific programs
     function toggleDescriptions(id) {
@@ -121,10 +125,10 @@
       } else if (id.includes("description")) {
         programID = id.replace("description", "");
         type = "description";
-      };
+      }
   
       // We get the text of the button to see whether to show or hide the information
-      let button = document.querySelector(`#${id} > button`).innerHTML
+      let button = document.querySelector(`#${id} > button`).innerHTML;
   
       // Depending on the button we show or hide
       if (button === "Ver") {
@@ -137,94 +141,60 @@
       } else if (button === "Ocultar") {
         document.getElementById(id).innerHTML =
         `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
-      };
-    };
+      }
+    }
 
     // Display or hide the forms
-    function toggleForm(form) {      
-      if (form === "edit") {
-        // Resets the variables that store any changes so we don't send previous changes by mistake
-        changes = {id: null, info: {}, schedule: {}}
-        $("#editingForm").trigger("reset")
+    function toggleForm(form) {
+      let others = Object.keys(forms).filter(el => el !== form);
 
-        if (add) {
-          // Hide the add form and reset it
-          $("#addContainer").prop("hidden", true);
-          $("#addForm").trigger("reset");
-          add = false;
-          // Show the editing form
-          $("#editingContainer").removeAttr("hidden");
-          editing = true
-          // Change the color of the button
-          $("#btnAdd").removeClass("btn-dark")
-          $("#btnAdd").addClass("btn-outline-dark")
-        } else {
-          if (!editing) {
-            // Make space for the form
-            document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
-            // Show the editing form
-            $("#editingContainer").removeAttr("hidden");
-            editing = true
-            // Change the color of the button
-            $("#btnEdit").addClass("btn-dark")
-            $("#btnEdit").removeClass("btn-outline-dark")
-          } else {
-            // Make the table occupy the whole container
-            document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
-            // Hide the editing form
-            $("#editingContainer").prop("hidden", true);
-            editing = false;
-            // Change the color of the button
-            $("#btnEdit").removeClass("btn-dark")
-            $("#btnEdit").addClass("btn-outline-dark")
-          };
-        };
-      } else if (form === "add") {
-        // Resets the variables that store any changes so we don't send previous changes by mistake
-        changes = {id: null, info: {}, schedule: {}}
-        $("#addForm").trigger("reset")
-        invalidateAddForm()
+      // Resets the variables that store any changes so we don't send previous changes by mistake
+      changes = {id: null, info: {}, schedule: {}};
+      $(`#${form}Form`).trigger("reset");
 
-        if (editing) {
-          // Hide the editing form and reset it
-          $("#editingContainer").prop("hidden", true);
-          $("#editingForm").trigger("reset");
-          editing = false;
-          // Show the editing form
-          $("#addContainer").removeAttr("hidden");
-          add = true
+      // Disable any other enabled form
+      for (const key of others) {
+        if (forms[key]) {
+          // Hide the form and reset it
+          $(`#${key}Container`).prop("hidden", true);
+          $(`#${key}Form`).trigger("reset");
+          forms[key] = false;
+
           // Change the color of the button
-          $("#btnEdit").removeClass("btn-dark")
-          $("#btnEdit").addClass("btn-outline-dark")
-        } else {
-          if (!add) {
-            // Make space for the form
-            document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
-            // Show the add form
-            $("#addContainer").removeAttr("hidden");
-            add = true
-            $("#addForm").trigger("reset");
-            // Change the color of the button
-            $("#btnAdd").addClass("btn-dark")
-            $("#btnAdd").removeClass("btn-outline-dark")
-          } else {
-            // Make the table occupy the whole container
-            document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
-            // Hide the add form
-            $("#addContainer").prop("hidden", true);
-            add = false;
-            // Change the color of the button
-            $("#btnAdd").removeClass("btn-dark")
-            $("#btnAdd").addClass("btn-outline-dark")
-          };
-        };
-      };
-    };
+          $(`#btn${key}`).removeClass("btn-dark");
+          $(`#btn${key}`).addClass("btn-outline-dark");
+        }
+      }
+
+      if (!forms[form]) {
+        // Make space for the form
+        document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
+
+        // Show the form
+        $(`#${form}Container`).removeAttr("hidden");
+        forms[form] = true;
+
+        // Change the color of the button
+        $(`#btn${form}`).addClass("btn-dark");
+        $(`#btn${form}`).removeClass("btn-outline-dark");
+      } else {
+        // Make the table occupy the whole container
+        document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
+
+        // Hide the form
+        $(`#${form}Container`).prop("hidden", true);
+        forms[form] = false;
+
+        // Change the color of the button
+        $(`#btn${form}`).removeClass("btn-dark");
+        $(`#btn${form}`).addClass("btn-outline-dark");
+      }
+    }
 
     // Call the appropiate function when selecting a program
     function selectProgram(id) {
-      if (editing) editProgram(id)
-    };
+      if (editing) editProgram(id);
+    }
 
     // Dev function to display what changes are stored
     function showChanges() { console.log(changes) }
