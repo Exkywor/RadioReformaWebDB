@@ -113,7 +113,7 @@
   // Fills the editing form with the selected program's information
   function editProgram(id) {
     // Proceed if editing is enabled
-    if (editing) {
+    if (forms["editing"]) {
       // Resets the variables that store any changes so we don't send previous changes by mistake
       changes = {id: null, info: {}, schedule: {}};
       $("#editingForm").trigger("reset");

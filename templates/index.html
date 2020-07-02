@@ -16,6 +16,7 @@
         <span class="mr-3">Programas</span>
         <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
         <button class="btn btn-outline-dark btn-sm" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
+        <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
         <button class="btn btn-outline-dark btn-sm" id="btnChange" onclick=showChanges()>Changes</button>
       </div>
     </div>
@@ -38,10 +39,9 @@
     let schedule;
     let forms = {
       editing: false,
-      add: false
+      add: false,
+      delete: false
     };
-    let editing = false;
-    let add = false;
 
     // We're gonna store any changed values here so we know what to send
     // We declare it here so we can use it before the main function that cares for it
@@ -193,7 +193,7 @@
 
     // Call the appropiate function when selecting a program
     function selectProgram(id) {
-      if (editing) editProgram(id);
+      if (forms["editing"]) editProgram(id);
     }
 
     // Dev function to display what changes are stored
