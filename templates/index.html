@@ -3,18 +3,20 @@
 {% block main %}
   <!-- Toolbar -->
   <header>
-    <div class="btn-toolbar" role="toolbar" aria-label="Modify programs toolbar">
+    <div class="btn-toolbar border-top mx-4 py-3" role="toolbar" aria-label="Modify programs toolbar">
       <!-- Filter columns -->
-      <div class="btn-group mr-2" role="group" aria-label="Filter buttons">
+      <div class="btn-group mr-auto align-items-center" role="group" aria-label="Filter buttons">
+        <span class="mr-3">Ver</span>
         <button class='btn btn-outline-dark btn-sm'>Nombre</button>
         <button class='btn btn-outline-dark btn-sm'>Duración</button>
         <button class='btn btn-outline-dark btn-sm'>Changes</button>
       </div>
       <!-- Modify programs -->
-      <div class="btn-group mr-2" role="group" aria-label="Modify group">
-        <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('edit')">Editar</button>
-        <button class='btn btn-outline-dark btn-sm' onclick="toggleForm('add')">Nuevo</button>
-        <button class='btn btn-outline-dark btn-sm' onclick=showChanges()>Changes</button>
+      <div class="btn-group align-items-center" role="group" aria-label="Modify group">
+        <span class="mr-3">Programas</span>
+        <button class="btn btn-outline-dark btn-sm" id="btnEdit" onclick="toggleForm('edit')">Editar</button>
+        <button class="btn btn-outline-dark btn-sm" id="btnAdd" onclick="toggleForm('add')">Nuevo</button>
+        <button class="btn btn-outline-dark btn-sm" id="btnChange" onclick=showChanges()>Changes</button>
       </div>
     </div>
   </header>
@@ -57,7 +59,7 @@
   
           // We create the row with the non-iterable information of the program
           document.querySelector("tbody").innerHTML +=
-            "<tr id=program" + programs[program].programID + " onclick='editProgram(" + programs[program].programID + ")'>" + 
+            "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
               "<th scope='row'>" + programs[program].programID + "</th>" +
               "<td>" + programs[program].streamID + "</td>" +
               "<td>" + programs[program].name + "</td>" +
@@ -153,6 +155,9 @@
           // Show the editing form
           $("#editingContainer").removeAttr("hidden");
           editing = true
+          // Change the color of the button
+          $("#btnAdd").removeClass("btn-dark")
+          $("#btnAdd").addClass("btn-outline-dark")
         } else {
           if (!editing) {
             // Make space for the form
@@ -160,12 +165,18 @@
             // Show the editing form
             $("#editingContainer").removeAttr("hidden");
             editing = true
+            // Change the color of the button
+            $("#btnEdit").addClass("btn-dark")
+            $("#btnEdit").removeClass("btn-outline-dark")
           } else {
             // Make the table occupy the whole container
             document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
             // Hide the editing form
             $("#editingContainer").prop("hidden", true);
             editing = false;
+            // Change the color of the button
+            $("#btnEdit").removeClass("btn-dark")
+            $("#btnEdit").addClass("btn-outline-dark")
           };
         };
       } else if (form === "add") {
@@ -182,6 +193,9 @@
           // Show the editing form
           $("#addContainer").removeAttr("hidden");
           add = true
+          // Change the color of the button
+          $("#btnEdit").removeClass("btn-dark")
+          $("#btnEdit").addClass("btn-outline-dark")
         } else {
           if (!add) {
             // Make space for the form
@@ -190,15 +204,26 @@
             $("#addContainer").removeAttr("hidden");
             add = true
             $("#addForm").trigger("reset");
+            // Change the color of the button
+            $("#btnAdd").addClass("btn-dark")
+            $("#btnAdd").removeClass("btn-outline-dark")
           } else {
             // Make the table occupy the whole container
             document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
             // Hide the add form
             $("#addContainer").prop("hidden", true);
             add = false;
+            // Change the color of the button
+            $("#btnAdd").removeClass("btn-dark")
+            $("#btnAdd").addClass("btn-outline-dark")
           };
         };
       };
+    };
+
+    // Call the appropiate function when selecting a program
+    function selectProgram(id) {
+      if (editing) editProgram(id)
     };
 
     // Dev function to display what changes are stored

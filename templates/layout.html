@@ -36,7 +36,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar">
-        <div class="navbar-nav">
+        <div class="navbar-nav mr-auto">
           <!-- Main Pages -->
           <a class="nav-item nav-link {{'active' if title == 'Programas'}}" href="/">
             Programas <span class="sr-only">(current)</span>
@@ -47,10 +47,9 @@
         </div>
 
         <!-- Timezone Picker -->
-        <li id="timezoneDropdown" class="dropdown ml-auto" style="list-style-type: none; padding: 0">
-          <a  class="nav-link dropdown-toggle" style="color: 'black'" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-          <div class="dropdown-menu dropdown-menu-right scrollable-dropdown" aria-labelledby="navbarDropdownMenuLink">
-          </div>
+        <li id="timezoneDropdown" class="dropdown py-3" style="list-style-type: none;">
+          <a  class="dropdown-toggle" style="color: 'black'" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+          <div class="dropdown-menu dropdown-menu-right scrollable-dropdown" aria-labelledby="navbarDropdownMenuLink"></div>
         </li>
       </div>
     </nav>

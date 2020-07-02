@@ -46,8 +46,11 @@ def editProgram(changes, db, offset, indexedSchedule, programs):
         if isEmpty(info[key]) or info[key] == ("Desconocido" or "desconocido"):
           infoToChange[key] = None
         else:
-          elements = info[key].strip().split(", ")
-          capitalized = [el.capitalize() for el in elements]
+          names = info[key].strip().split(", ")
+          capitalized = []
+          for name in names:
+            capWords = [word.capitalize() for word in name.split(" ")]
+            capitalized.append(" ".join(capWords))
           infoToChange[key] = ", ".join(capitalized)
       elif key == "topics":
         elements = info[key].strip().split(", ")
@@ -108,11 +111,14 @@ def addProgram(changes, db, offset, indexedSchedule, programs):
     if key == "length":
       infoToChange[key] = int(info[key])
     elif key == "presenters":
-      if isEmpty(info[key]) or info[key] == ("Desconocido" or "desconocido"):
+      if isEmpty(info[key]) or info[key].strip() == ("Desconocido" or "desconocido"):
         infoToChange[key] = None
       else:
-        elements = info[key].strip().split(", ")
-        capitalized = [el.capitalize() for el in elements]
+        names = info[key].strip().split(", ")
+        capitalized = []
+        for name in names:
+          capWords = [word.capitalize() for word in name.split(" ")]
+          capitalized.append(" ".join(capWords))
         infoToChange[key] = ", ".join(capitalized)
     elif key == "topics":
       elements = info[key].strip().split(", ")
