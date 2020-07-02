@@ -1,0 +1,95 @@
+<div class="col-sm-4 flex-column justify-content-between pb-2" id="deleteContainer" hidden>
+  <!-- Instructions -->
+  <div class="">
+    <div class="pb-2">
+      <span class="mr-auto font-weight-bold">ELIMINAR PROGRAMA</span>
+      <button type="button" class="close" onclick="toggleForm('delete')">&times;</button>
+    </div>
+    <p class="text-left">Has click en un programa</p>
+  </div>
+  
+  <!-- Delete program form -->
+  <form action="" id="deleteForm" class="form-cont">
+    <fieldset id="deleteFieldset" disabled>
+      <div class="px-2">
+        <!-- name -->
+        <div class="form-group">
+          <label for="deleteName">Nombre</label>
+          <input readonly type="text" class="form-control px-2" id="deleteName" placeholder="Nombre del Programa" value="">
+        </div>
+        <!-- programID -->
+        <div class="form-group">
+          <label for="deleteProgramID">ID</label>
+          <input readonly type="text" class="form-control px-2" id="deleteProgramID" placeholder="Identificador del Programa" value="">
+        </div>
+      </div>
+    </fieldset>
+  </form>
+  
+  <!-- Confirmation buttons -->
+  <div id="deleteConfirmation" class="px-2">
+    <span >¿Eliminar programa?</span>
+    <div class="d-flex mt-2 justify-content-between">
+      <button type="reset" form="deleteForm" class="btn btn-secondary" disabled>Cancelar</button>
+      <button type="submit" form="deleteForm" class="btn btn-primary" disabled>Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fills the delete form with the selected program's information
+  function deleteProgram(id) {
+    // Proceed if editing is enabled
+    if (forms["delete"]) {
+      // Resets the variables that store any changes so we don't send previous changes by mistake
+      changes = {id: null, info: {}, schedule: {}};
+      $("#deleteForm").trigger("reset");
+
+      // Enable form for submission
+      $("#deleteFieldset").removeAttr("disabled");
+      $("#deleteConfirmation > div").find("*").removeAttr("disabled");
+      // Fill the different fields with the current program's values
+      $("#deleteName").val(programs[id].name);
+      $("#deleteProgramID").val(programs[id].length);
+      $("#deleteConfirmation > span").html(`¿Eliminar <b><i>${programs[id].name}</i></b>?`);
+
+      // Store the id to know what to delete
+      changes.id = id;
+    }
+  }
+
+  // Handles submitting of changed information
+  $("#deleteForm").submit(function(event) {
+    event.preventDefault();
+    // Converts the changes into a serialized string so we can send them and properly
+    let serialized = JSON.stringify(changes);
+    // Sends the changes to the server
+    $.post("/modifyProgram", {data: serialized, action: "delete"}, function(data) {
+      if (data !== "Éxito") {
+        $("#messages").html(
+          '<div class="alert alert-danger" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+      } else {
+        $("#messages").html(
+          '<div class="alert alert-success" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+        // On success, reload the page after 1.5 seconds
+        setTimeout(function() { location.reload() }, 1500);
+      }
+    });
+  });
+
+  // Handles form reset
+  $("#deleteForm").on("reset", function(event) {
+    changes = {id: null, info: {}, schedule: {}};
+    $(this).find("*").attr("value", "");
+    $("#deleteConfirmation > div").find("*").prop("disabled", true);
+    $("#deleteConfirmation > span").html(`¿Eliminar programa?`);
+  });
+</script>

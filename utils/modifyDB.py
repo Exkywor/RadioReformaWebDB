@@ -59,8 +59,12 @@ def editProgram(changes, db, offset, indexedSchedule, programs):
       else:
         infoToChange[key] = info[key].strip()
 
+  # ----------------------------------------
   # EDIT THE DB
+  # ----------------------------------------
+
   cursor = db.cursor()
+
   # Update information
   if bool(infoToChange):
     for item in infoToChange:
@@ -72,6 +76,7 @@ def editProgram(changes, db, offset, indexedSchedule, programs):
     db.commit()
 
   return "Éxito"
+
 
 def addProgram(changes, db, offset, indexedSchedule, programs):
   info = changes["info"]
@@ -138,7 +143,10 @@ def addProgram(changes, db, offset, indexedSchedule, programs):
     if day not in scheduleToChange:
       scheduleToChange[day] = None
 
+  # ----------------------------------------
   # ADD TO THE DB
+  # ----------------------------------------
+
   cursor = db.cursor()
 
   # Update Programs
@@ -175,6 +183,15 @@ def addProgram(changes, db, offset, indexedSchedule, programs):
             '''
   cursor.execute(schedule, scheduleValues)
 
+  db.commit()
+
+  return "Éxito"
+
+
+def deleteProgram(changes, db):
+  cursor = db.cursor()
+  cursor.execute(f"DELETE FROM Programs WHERE programID={changes['id']}")
+  cursor.execute(f"DELETE FROM Airs WHERE programID={changes['id']}")
   db.commit()
 
   return "Éxito"

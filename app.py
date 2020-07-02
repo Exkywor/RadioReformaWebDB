@@ -4,7 +4,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 
 from utils.prepareDB import prepareDB
-from utils.modifyDB import editProgram, addProgram
+from utils.modifyDB import editProgram, addProgram, deleteProgram
 
 # Configure app
 app = Flask(__name__)
@@ -122,6 +122,8 @@ def modifyProgram():
       res = editProgram(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
     elif action == "add":
       res = addProgram(data, getDB(), session["timeoffset"], session["schedule"]["schedule"], session["programs"])
+    elif action == "delete":
+      res = deleteProgram(data, getDB())
     
     getData(True)
     return jsonify(res)

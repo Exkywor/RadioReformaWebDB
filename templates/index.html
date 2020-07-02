@@ -17,7 +17,6 @@
         <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
         <button class="btn btn-outline-dark btn-sm" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
         <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
-        <button class="btn btn-outline-dark btn-sm" id="btnChange" onclick=showChanges()>Changes</button>
       </div>
     </div>
   </header>
@@ -30,6 +29,8 @@
       {% include 'snippets/editProgram.html' %}
       <!-- Add program container -->
       {% include 'snippets/addProgram.html' %}
+      <!-- Delete program container -->
+      {% include 'snippets/deleteProgram.html' %}
     </div>
   </div>
 
@@ -161,8 +162,11 @@
           forms[key] = false;
 
           // Change the color of the button
-          $(`#btn${key}`).removeClass("btn-dark");
-          $(`#btn${key}`).addClass("btn-outline-dark");
+          $(`#btn${key}`).removeClass("btn-dark").addClass("btn-outline-dark");
+
+          if (key === "delete") {
+            $(`#${key}Container`).removeClass("d-flex").addClass("d-none");;
+          }
         }
       }
 
@@ -174,9 +178,12 @@
         $(`#${form}Container`).removeAttr("hidden");
         forms[form] = true;
 
+        if (form === "delete") {
+          $(`#${form}Container`).addClass("d-flex").removeClass("d-none");;
+        }
+
         // Change the color of the button
-        $(`#btn${form}`).addClass("btn-dark");
-        $(`#btn${form}`).removeClass("btn-outline-dark");
+        $(`#btn${form}`).addClass("btn-dark").removeClass("btn-outline-dark");
       } else {
         // Make the table occupy the whole container
         document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
@@ -185,19 +192,19 @@
         $(`#${form}Container`).prop("hidden", true);
         forms[form] = false;
 
+        if (form === "delete") {
+          $(`#${form}Container`).removeClass("d-flex").addClass("d-none");;
+        }
+
         // Change the color of the button
-        $(`#btn${form}`).removeClass("btn-dark");
-        $(`#btn${form}`).addClass("btn-outline-dark");
+        $(`#btn${form}`).removeClass("btn-dark").addClass("btn-outline-dark");
       }
     }
 
     // Call the appropiate function when selecting a program
     function selectProgram(id) {
       if (forms["editing"]) editProgram(id);
+      else if (forms["delete"]) deleteProgram(id);
     }
-
-    // Dev function to display what changes are stored
-    function showChanges() { console.log(changes) }
-    
   </script>
 {% endblock %}
