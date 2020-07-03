@@ -56,7 +56,8 @@
     let schedule, times, programs;
     let currentDisplay;
     let visibleColumns = {colSchMonday: true, colSchTuesday: true, colSchWednesday: true, colSchThursday: true,
-                           colSchFriday: true, colSchSaturday: true, colSchSunday: true, colSchDur: true}
+                           colSchFriday: true, colSchSaturday: true, colSchSunday: true, colSchDur: true};
+    let displayID = true;
 
     function getSchedule() {
       $.post("/schedule", null, function(data) {
@@ -94,14 +95,36 @@
       // We iterate through the schedule and fill the days with the right information
       for (const day of Object.keys(schedule)) {
         for (const time of Object.keys(schedule[day])) {
-          $(`#${day}${time}`).html(programs[schedule[day][time]][toDisplay]);
+          $(`#${day}${time}`).html(
+            ((toDisplay !== "name") && displayID)
+              ? `${programs[schedule[day][time]][toDisplay]} <i>(${schedule[day][time]})</i>`
+              : programs[schedule[day][time]][toDisplay]
+          );
           $(`#${day}${time}len`).html(programs[schedule[day][time]].length);
         }
       }
     }
 
-    function changeDisplay(toDisplay) {
+    function changeDisplay(toDisplay, override = false) {
       let translations = {name: "Nombre", author: "Productor", topics: "Temas"};
+
+      // Show the ID toggling option
+      if (toDisplay !== "name") {
+        if ($("#displaySchID").length === 0) {
+          $("#toggleScheduleColumns > div").append(
+            '<div id="displaySchID" class="form-check ml-3">' +
+              '<input class="form-check-input" type="checkbox" id="colSchID">' +
+              '<label class="form-check-label" for="colSchID">IDs</label>' +
+            '</div>'
+          );
+
+          if (displayID) $("#colSchID").prop("checked", true); // Check or uncheck the IDs depending on the users preference
+        }
+      } else {
+        if ($("#displaySchID").length !== 0) $("#displaySchID").remove(); // Remove the ID toggle
+      }
+
+
 
       if (toDisplay !== currentDisplay) {
         $("tbody").empty();
@@ -119,6 +142,11 @@
         $(`#display${toDisplay}`).addClass("active");
 
         currentDisplay = toDisplay; // Record the new information to display
+        hideHidden();
+      }
+      // We use the override to rebuild for IDs even if it's for the same display (topics to topics)
+      else if (override) {
+        buildScheduleTable(toDisplay);
         hideHidden();
       }
     }

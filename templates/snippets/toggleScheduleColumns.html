@@ -61,6 +61,9 @@
 
       displayDur = !displayDur; // We record whether we want duration to be shown or not
       visibleColumns["colSchDur"] = !visibleColumns["colSchDur"];
+    } else if (column === "colSchID") { // We can show or hide the IDs
+      displayID = !displayID;
+      changeDisplay(currentDisplay, true);
     } else {
       // Hide/Show the day + duration columns as normal
       if (displayDur) {
