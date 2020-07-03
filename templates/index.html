@@ -7,23 +7,13 @@
       <!-- Filter columns -->
       <div class="btn-group mr-auto align-items-center" role="group" aria-label="Filter buttons">
         <span class="mr-3">Ver</span>
-        <form class="form" id="toggleColumns">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="colName" checked="checked">
-            <label class="form-check-label" for="toggleName">Nombre</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="colLength" checked="checked">
-            <label class="form-check-label" for="toggleLength">Duración</label>
-          </div>
-        </form>
-        
+        {% include 'snippets/toggleProgramsColumns.html' %}
       </div>
       <!-- Modify programs -->
       <div class="btn-group align-items-center" role="group" aria-label="Modify group">
         <span class="mr-3">Programas</span>
         <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
-        <button class="btn btn-outline-dark btn-sm" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
+        <button class="btn btn-outline-dark btn-sm mx-2" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
         <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
       </div>
     </div>
@@ -214,11 +204,5 @@
       if (forms["editing"]) editProgram(id);
       else if (forms["delete"]) deleteProgram(id);
     }
-
-    // Hides or shows columns
-    $("#toggleColumns").on('change', 'input[type=checkbox]', function() {
-      let column = $(this).attr('id');
-      $(`.${column}`).toggle();
-    })
   </script>
 {% endblock %}

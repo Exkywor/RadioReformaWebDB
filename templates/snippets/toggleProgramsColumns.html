@@ -1,0 +1,79 @@
+<form class="form" id="toggleProgramsColumns">
+  <div class="form-row">
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colProgramID" checked="checked">
+      <label class="form-check-label" for="colProgramID">ID</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colStreamID" checked="checked">
+      <label class="form-check-label" for="colStreamID">Abb</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colName" checked="checked">
+      <label class="form-check-label" for="colName">Nom</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colLength" checked="checked">
+      <label class="form-check-label" for="colLength">Dur</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colTopics" checked="checked">
+      <label class="form-check-label" for="colTopics">Tem</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colPresenters" checked="checked">
+      <label class="form-check-label" for="colPresenters">Pres</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colAuthor" checked="checked">
+      <label class="form-check-label" for="colAuthor">Prod</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colDescriptionShort" checked="checked">
+      <label class="form-check-label" for="colDescriptionShort">Sinop</label>
+    </div>
+    <div class="form-check form-group-col">
+      <input class="form-check-input" type="checkbox" id="colDescriptionLong" checked="checked">
+      <label class="form-check-label" for="colDescriptionLong">Desc</label>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colMonday" checked="checked">
+      <label class="form-check-label" for="colMonday">Lun</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colTuesday" checked="checked">
+      <label class="form-check-label" for="colTuesday">Mar</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colWednesday" checked="checked">
+      <label class="form-check-label" for="colWednesday">Mie</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colThursday" checked="checked">
+      <label class="form-check-label" for="colThursday">Jue</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colFriday" checked="checked">
+      <label class="form-check-label" for="colFriday">Vie</label>
+    </div>
+    <div class="form-check mr-2 form-group-col">
+      <input class="form-check-input" type="checkbox" id="colSaturday" checked="checked">
+      <label class="form-check-label" for="colSaturday">Sab</label>
+    </div>
+    <div class="form-check form-group-col">
+      <input class="form-check-input" type="checkbox" id="colSunday" checked="checked">
+      <label class="form-check-label" for="colSunday">Dom</label>
+    </div>
+  </div>
+</form>
+
+<script>
+  // Hides or shows columns
+  $("#toggleProgramsColumns").on('change', 'input[type=checkbox]', function() {
+    let column = $(this).attr('id');
+    $(`.${column}`).toggle();
+  })
+</script>

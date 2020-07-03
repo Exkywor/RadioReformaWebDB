@@ -1,0 +1,62 @@
+<form class="form" id="toggleScheduleColumns">
+  <div class="form-row">      
+    <div class="form-check mr-2">
+      <input class="form-check-input" type="checkbox" id="colSchMonday" checked="checked">
+      <label class="form-check-label" for="colSchMonday">Lun</label>
+    </div>
+    <div class="form-check mr-2">
+      <input class="form-check-input" type="checkbox" id="colSchTuesday" checked="checked">
+      <label class="form-check-label" for="colSchTuesday">Mar</label>
+    </div>
+    <div class="form-check mr-2">
+      <input class="form-check-input" type="checkbox" id="colSchWednesday" checked="checked">
+      <label class="form-check-label" for="colSchWednesday">Mie</label>
+    </div>
+    <div class="form-check mr-2">
+      <input class="form-check-input" type="checkbox" id="colSchThursday" checked="checked">
+      <label class="form-check-label" for="colSchThursday">Jue</label>
+    </div>
+    <div class="form-check mr-2">
+      <input class="form-check-input" type="checkbox" id="colSchFriday" checked="checked">
+      <label class="form-check-label" for="colSchFriday">Vie</label>
+    </div>
+    <div class="form-check mr-2">
+      <input class="form-check-input" type="checkbox" id="colSchSaturday" checked="checked">
+      <label class="form-check-label" for="colSchSaturday">Sab</label>
+    </div>
+    <div class="form-check pr-3 border-right">
+      <input class="form-check-input" type="checkbox" id="colSchSunday" checked="checked">
+      <label class="form-check-label" for="colSchSunday">Dom</label>
+    </div>
+    <div class="form-check ml-3">
+      <input class="form-check-input" type="checkbox" id="colSchDur" checked="checked">
+      <label class="form-check-label" for="colSchDur">Dur</label>
+    </div>
+  </div>
+</form>
+
+<script>
+  // Hides or shows columns
+  $("#toggleScheduleColumns").on('change', 'input[type=checkbox]', function() {
+    let column = $(this).attr('id');
+    
+    // Columns with a day class ("colSchDay") involve the day and its duration. When toggling that, the duration gets hidden too.
+    // When colSchDur if we don't check if the day column is hidden, it makes a mess because it will untoggle the dur column for that day.
+    
+    // We check if we're trying to toggle the duration
+    if (column === "colSchDur") {
+      // All possible day columns
+      let days = ["colSchMonday", "colSchTuesday", "colSchWednesday", "colSchThursday", "colSchFriday", "colSchSaturday", "colSchSunday"];
+      
+      // We iterarte over each day to check if it's already hidden to avoid displaying it's duration column
+      for (const day of days) {
+        // If the day is not hidden we proceed, otherwise, we do nothing
+        if ($(`.${day}`).css("display") != "none") {
+          $(`.${day}.${column}`).toggle();
+        }
+      }
+    } else {
+      $(`.${column}`).toggle();
+    }
+  })
+</script>
