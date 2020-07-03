@@ -65,7 +65,7 @@
         else producer = programs[program].author
 
         // We create the row with the non-iterable information of the program
-        document.querySelector("tbody").innerHTML +=
+        $("tbody").append(
           "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
             "<th class='colProgramID' scope='row'>" + programs[program].programID + "</th>" +
             "<td class='colStreamID'>" + programs[program].streamID + "</td>" +
@@ -88,29 +88,32 @@
             "<td class='colSaturday' id=saturday" + program + "></td>" +
             "<td class='colSunday' id=sunday" + program + "></td>"
           + "</tr>"
+        );
 
         // We are gonna add the elements that are iterable or dependant on certain conditions
         // We add the presenters iterating over the list of them
         let presenters = "";
         for (const presenter of programs[program].presenters) {
-          if (presenter === "Desconocido") presenters = ""
-          else presenters += "<li>" + presenter + "</li>"
+          if (presenter === "Desconocido") presenters = "";
+          else presenters += "<li>" + presenter + "</li>";
         }
         
-        document.getElementById(`presenters${program}`).innerHTML =
+        $(`#presenters${program}`).html(
           "<ul style='padding: 0'>" + presenters + "</ul>"
-        
+        );
+
         // Change programs's class color if its schedule is empty
         let values = Object.values(programs[program].schedule);
         if (values.every(day => day == null))
-          document.getElementById("program"+programs[program].programID).classList.add("table-danger")
+          $("#program"+programs[program].programID).addClass("table-danger");
         
         // We add days on their corresponding columns
         for (const day of Object.keys(programs[program].schedule)) {
           let times = "";
-          for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>"
-          document.getElementById(`${day}${program}`).innerHTML =
+          for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>";
+          $(`#${day}${program}`).html(
             "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
+          );
         }
       }
     }
@@ -130,19 +133,21 @@
       }
   
       // We get the text of the button to see whether to show or hide the information
-      let button = document.querySelector(`#${id} > button`).innerHTML;
+      let button = $(`#${id} > button`).html();
   
       // Depending on the button we show or hide
       if (button === "Ver") {
-        document.getElementById(id).innerHTML =
+        $(`#${id}`).html(
           type === "synopsis"
             ? "<p>" + programs[programID].descriptionShort + "</p>" +
               `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
             : "<p>" + programs[programID].descriptionLong + "</p>" +
               `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+        );
       } else if (button === "Ocultar") {
-        document.getElementById(id).innerHTML =
-        `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
+        $(`#${id}`).html(
+          `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
+        );
       }
     }
 

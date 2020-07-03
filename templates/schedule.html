@@ -52,7 +52,7 @@
     function buildScheduleTable() {
       // We precreate the HTML for each row with the id which we're gonna use to access the right one and fill
       for (const time of Object.keys(times)) {    
-        document.querySelector("tbody").innerHTML +=
+        $("tbody").append(
           "<tr>" +
             "<th scope='row'>" + times[time].readable + "</th>" +
             "<td class='colSchMonday' id=monday"+times[time].index+"></td>" +
@@ -70,13 +70,14 @@
             "<td class='colSchSunday' id=sunday"+times[time].index+"></td>" +
             "<td class='colSchSunday colSchDur' id=sunday"+times[time].index+"len></td>" +
           "</tr>"
+        );
       }
 
       // We iterate through the schedule and fill the days with the right information
       for (const day of Object.keys(schedule)) {
         for (const time of Object.keys(schedule[day])) {
-          document.getElementById(`${day}${time}`).innerHTML = programsInfo[schedule[day][time]].name;
-          document.getElementById(`${day}${time}len`).innerHTML = programsInfo[schedule[day][time]].length;
+          $(`#${day}${time}`).html(programsInfo[schedule[day][time]].name);
+          $(`#${day}${time}len`).html(programsInfo[schedule[day][time]].length);
         }
       }
     }
