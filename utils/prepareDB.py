@@ -68,7 +68,6 @@ def createSchedule(schedule, programs):
           timesList.append(timeIndex)
 
         tempSchedule[day][timeIndex] = program
-        programsInfo[program] = {"name": programs[program]["name"], "length": programs[program]["length"]}
 
   # We sort the days and times in the tempSchedule so they are in order
   days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] # Used to get the days in order
@@ -83,7 +82,7 @@ def createSchedule(schedule, programs):
   timesList.sort()
   times = [{"index": index, "readable": makeReadable(index)} for index in timesList]
 
-  return {"schedule": sortedSchedule, "times": times, "programsInfo": programsInfo}
+  return {"schedule": sortedSchedule, "times": times}
 
 
 # Works with the database elements and returns what will be used by the site

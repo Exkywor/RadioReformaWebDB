@@ -19,10 +19,11 @@
             <button id="directionDescending" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="changeDirection('descending')">&#9660;</button>
             <button id="sortingDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
             <div class="dropdown-menu" aria-labelledby="sortingDropdown">
-              <button class="btn-secondary dropdown-item active" type="button">ID</button>
-              <button class="btn-outline-dark dropdown-item" type="button">Nombre</button>
-              <button class="btn-outline-dark dropdown-item" type="button">Duración</button>
-              <button class="btn-outline-dark dropdown-item" type="button">Productor</button>
+              <button id="sortID" class="btn-secondary dropdown-item active" type="button" onclick="changeSorting('ID')">ID</button>
+              <button id="sortlength" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('length')">Duración</button>
+              <button id="sortname" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('name')">Nombre</button>
+              <button id="sortauthor" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('author')">Productor</button>
+              <button id="sorttopics" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('topics')">Temas</button>
             </div>
           </div>
         </div>
@@ -62,12 +63,18 @@
   <script>
     let programs, schedule;
     let sortedIDs = [];
-    let currentSorting = "ID";
+    let currentSorting;
     let currentDirection = "ascending";
     let forms = {
       editing: false,
       add: false,
       delete: false
+    };
+
+    let visibleColumns = { colProgramID: true, colStreamID: true, colName: true, colLength: true, colTopics: true,
+                           colPresenters: true, colAuthor: true, colDescriptionShort:  true, colDescriptionLong:  true,
+                           colMonday:  true, colTuesday:  true, colWednesday:  true, colThursday:  true, colFriday:  true,
+                           colSaturday:  true, colSunday:  true
     };
 
     // We're gonna store any changed values here so we know what to send
@@ -82,9 +89,10 @@
         schedule = data.schedule.schedule;
 
         changeSorting("ID");
-        buildTable();
       })
     }
+    getPrograms();
+
     // Builds the table based on the programs
     function buildTable() {
       for (const program of sortedIDs) {
@@ -147,7 +155,6 @@
         }
       }
     }
-    getPrograms();
   
     // We use this function to show or hide the description of specific programs
     function toggleDescriptions(id) {
@@ -250,49 +257,6 @@
     function selectProgram(id) {
       if (forms["editing"]) editProgram(id);
       else if (forms["delete"]) deleteProgram(id);
-    }
-
-    // Change the sorting of the programs
-    function changeSorting(method) {
-      // Only change if the sorting method is different from the previous one
-      if (method !== currentSorting) {
-        switch(method) {
-          case "ID":
-            sortedIDs = Object.keys(programs);
-            break;
-          default:
-            sortedIDs = Object.keys(programs);
-        }
-
-        // Reverse the order if the selected direction is descending
-        if (currentDirection === "descending") sortedIDs.reverse();
-
-        // Rebuild the table
-        $("tbody").empty();
-        buildTable();
-      }
-    }
-
-    // Make the programs ascending or descending
-    function changeDirection(method) {
-      // Only change if the direction is different from the previous one
-      if (method !== currentDirection) {
-        sortedIDs = sortedIDs.reverse(); // Reverse the array
-        currentDirection = method; // Store the new direction
-
-        // Rebuild the table
-        $("tbody").empty();
-        buildTable();
-
-        // Change the buttons classes
-        if (method === "ascending") {
-          document.getElementById("directionDescending").classList.replace("btn-dark", "btn-outline-dark");
-          document.getElementById("directionAscending").classList.replace("btn-outline-dark", "btn-dark");
-        } else {
-          document.getElementById("directionAscending").classList.replace("btn-dark", "btn-outline-dark");
-          document.getElementById("directionDescending").classList.replace("btn-outline-dark", "btn-dark");
-        }
-      }
     }
   </script>
 {% endblock %}

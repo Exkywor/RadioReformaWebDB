@@ -75,5 +75,6 @@
   $("#toggleProgramsColumns").on('change', 'input[type=checkbox]', function() {
     let column = $(this).attr('id');
     $(`.${column}`).toggle();
-  })
+    visibleColumns[column] = !visibleColumns[column]; // Save the display state of the column
+  });
 </script>

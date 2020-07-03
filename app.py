@@ -86,7 +86,7 @@ def getPrograms():
 def getSchedule():
   if "loaded" in session:
     if request.method == "POST":
-      return jsonify(session["schedule"])
+      return jsonify(programs=session["programs"], schedule=session["schedule"])
 
     return render_template("schedule.html", title="Horarios")
   else:

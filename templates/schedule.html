@@ -40,16 +40,17 @@
   </div>
 
   <script>
-    let schedule, times, programsInfo;
+    let schedule, times, programs;
 
     function getSchedule() {
       $.post("/schedule", null, function(data) {
-        ({ schedule, times, programsInfo } = data) ;
-        buildScheduleTable()
+        ({ schedule, times} = data.schedule);
+        programs = data.programs;
+        buildScheduleTable("name")
       });
     }
 
-    function buildScheduleTable() {
+    function buildScheduleTable(toDisplay) {
       // We precreate the HTML for each row with the id which we're gonna use to access the right one and fill
       for (const time of Object.keys(times)) {    
         $("tbody").append(
@@ -76,8 +77,8 @@
       // We iterate through the schedule and fill the days with the right information
       for (const day of Object.keys(schedule)) {
         for (const time of Object.keys(schedule[day])) {
-          $(`#${day}${time}`).html(programsInfo[schedule[day][time]].name);
-          $(`#${day}${time}len`).html(programsInfo[schedule[day][time]].length);
+          $(`#${day}${time}`).html(programs[schedule[day][time]][toDisplay]);
+          $(`#${day}${time}len`).html(programs[schedule[day][time]].length);
         }
       }
     }
