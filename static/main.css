@@ -11,10 +11,6 @@
   position: sticky;
   top: 0;
 }
-.schedule-cont {
-  max-height: 85vh;
-  overflow: auto;
-}
 .form-cont {
   max-height: 70vh;
   overflow: auto;

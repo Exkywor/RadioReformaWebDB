@@ -84,4 +84,7 @@
       location.reload()
     });
   };
+
+  // Remove the border of a button after it's been pressed
+  $('.btn, .close').mouseup(function() { this.blur() })
 </script>

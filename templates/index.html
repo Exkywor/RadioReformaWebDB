@@ -3,19 +3,45 @@
 {% block main %}
   <!-- Toolbar -->
   <header>
-    <div class="btn-toolbar border-top mx-4 py-3" role="toolbar" aria-label="Modify programs toolbar">
-      <!-- Filter columns -->
-      <div class="btn-group mr-auto align-items-center" role="group" aria-label="Filter buttons">
-        <span class="mr-3">Ver</span>
-        {% include 'snippets/toggleProgramsColumns.html' %}
+    <div class="btn-toolbar border-top mx-2 py-3 row" role="toolbar" aria-label="Modify programs toolbar">
+      <div class="d-flex justify-content-between align-items-start col-sm-11">
+        <!-- Filter columns -->
+        <div class="btn-group-vertical ml-2 my-1 toolbar-programs" role="group" aria-label="Filter buttons">
+          <span class="ml-n1 mb-1 font-weight-bold">VER</span>
+          {% include 'snippets/toggleProgramsColumns.html' %}
+        </div>
+
+        <!-- Sorting order -->
+        <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Button group with nested dropdown">
+          <span class="mb-1 font-weight-bold">ORDENAR</span>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-secondary">&#9660;</button>
+            <button type="button" class="btn btn-secondary mx-2">&#9650;</button>
+            <button id="sortingDropdown" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
+            <div class="dropdown-menu" aria-labelledby="sortingDropdown">
+              <a class="dropdown-item">ID</a>
+              <a class="dropdown-item">Nombre</a>
+              <a class="dropdown-item">Duración</a>
+              <a class="dropdown-item">Productor</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modify programs -->
+        <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Modify group">
+          <span class="mb-1 font-weight-bold">PROGRAMAS</span>
+          <div class="btn-group" role="group">
+            <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
+            <button class="btn btn-outline-dark btn-sm mx-2" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
+            <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
+          </div>
+        </div>
       </div>
-      <!-- Modify programs -->
-      <div class="btn-group align-items-center" role="group" aria-label="Modify group">
-        <span class="mr-3">Programas</span>
-        <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
-        <button class="btn btn-outline-dark btn-sm mx-2" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
-        <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
-      </div>
+      
+      <!-- Toggle toolbar -->
+      <button type="button" class="close col-sm d-flex justify-content-end pr-1 align-items-center" id="btnToolbar" onclick="toggleToolbar()">
+        <span style="font-size:smaller;">&#9650;</span>
+      </button>
     </div>
   </header>
 
@@ -149,6 +175,15 @@
           `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
         );
       }
+    }
+
+    // Display or hide the toolbar
+    function toggleToolbar() {
+      $(".toolbar-programs").toggle();
+      
+      let button = $("#btnToolbar > span").text();
+      if (button === "\u25B2") $("#btnToolbar  > span").text("\u25BC");
+      else if (button === "\u25BC") $("#btnToolbar > span").text("\u25B2");
     }
 
     // Display or hide the forms
