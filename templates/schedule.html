@@ -40,47 +40,46 @@
   </div>
 
   <script>
+    let schedule, times, programsInfo;
+
     function getSchedule() {
       $.post("/schedule", null, function(data) {
-        let { schedule, times, programsInfo } = data;
-
-        // We precreate the HTML for each row with the id which we're gonna use to access the right one and fill
-        for (const time of Object.keys(times)) {    
-          document.querySelector("tbody").innerHTML +=
-            "<tr>" +
-              "<th scope='row'>" + times[time].readable + "</th>" +
-              "<td class='colSchMonday' id=monday"+times[time].index+"></td>" +
-              "<td class='colSchMonday colSchDur' id=monday"+times[time].index+"len></td>" +
-              "<td class='colSchTuesday' id=tuesday"+times[time].index+"></td>" +
-              "<td class='colSchTuesday colSchDur' id=tuesday"+times[time].index+"len></td>" +
-              "<td class='colSchWednesday' id=wednesday"+times[time].index+"></td>" +
-              "<td class='colSchWednesday colSchDur' id=wednesday"+times[time].index+"len></td>" +
-              "<td class='colSchThursday' id=thursday"+times[time].index+"></td>" +
-              "<td class='colSchThursday colSchDur' id=thursday"+times[time].index+"len></td>" +
-              "<td class='colSchFriday' id=friday"+times[time].index+"></td>" +
-              "<td class='colSchFriday colSchDur' id=friday"+times[time].index+"len></td>" +
-              "<td class='colSchSaturday' id=saturday"+times[time].index+"></td>" +
-              "<td class='colSchSaturday colSchDur' id=saturday"+times[time].index+"len></td>" +
-              "<td class='colSchSunday' id=sunday"+times[time].index+"></td>" +
-              "<td class='colSchSunday colSchDur' id=sunday"+times[time].index+"len></td>" +
-            "</tr>"
-        }
-        
-        // We iterate through the schedule and fill the days with the right information
-        for (const day of Object.keys(schedule)) {
-          for (const time of Object.keys(schedule[day])) {
-            document.getElementById(`${day}${time}`).innerHTML = programsInfo[schedule[day][time]].name;
-            document.getElementById(`${day}${time}len`).innerHTML = programsInfo[schedule[day][time]].length;
-          }
-        }
+        ({ schedule, times, programsInfo } = data) ;
+        buildScheduleTable()
       });
     }
-    getSchedule();
 
-    // onTimeZoneChange
-    //  Call the timezone change route
-    //  Pass the new timezone
-    //  On return, call the getSchedule function again, this one will take care of updating stuff
-    
+    function buildScheduleTable() {
+      // We precreate the HTML for each row with the id which we're gonna use to access the right one and fill
+      for (const time of Object.keys(times)) {    
+        document.querySelector("tbody").innerHTML +=
+          "<tr>" +
+            "<th scope='row'>" + times[time].readable + "</th>" +
+            "<td class='colSchMonday' id=monday"+times[time].index+"></td>" +
+            "<td class='colSchMonday colSchDur' id=monday"+times[time].index+"len></td>" +
+            "<td class='colSchTuesday' id=tuesday"+times[time].index+"></td>" +
+            "<td class='colSchTuesday colSchDur' id=tuesday"+times[time].index+"len></td>" +
+            "<td class='colSchWednesday' id=wednesday"+times[time].index+"></td>" +
+            "<td class='colSchWednesday colSchDur' id=wednesday"+times[time].index+"len></td>" +
+            "<td class='colSchThursday' id=thursday"+times[time].index+"></td>" +
+            "<td class='colSchThursday colSchDur' id=thursday"+times[time].index+"len></td>" +
+            "<td class='colSchFriday' id=friday"+times[time].index+"></td>" +
+            "<td class='colSchFriday colSchDur' id=friday"+times[time].index+"len></td>" +
+            "<td class='colSchSaturday' id=saturday"+times[time].index+"></td>" +
+            "<td class='colSchSaturday colSchDur' id=saturday"+times[time].index+"len></td>" +
+            "<td class='colSchSunday' id=sunday"+times[time].index+"></td>" +
+            "<td class='colSchSunday colSchDur' id=sunday"+times[time].index+"len></td>" +
+          "</tr>"
+      }
+
+      // We iterate through the schedule and fill the days with the right information
+      for (const day of Object.keys(schedule)) {
+        for (const time of Object.keys(schedule[day])) {
+          document.getElementById(`${day}${time}`).innerHTML = programsInfo[schedule[day][time]].name;
+          document.getElementById(`${day}${time}len`).innerHTML = programsInfo[schedule[day][time]].length;
+        }
+      }
+    }
+    getSchedule();
   </script>
 {% endblock %}

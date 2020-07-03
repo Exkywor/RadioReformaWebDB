@@ -34,8 +34,7 @@
 
 
   <script>
-    let programs;
-    let schedule;
+    let programs, schedule;
     let forms = {
       editing: false,
       add: false,
@@ -52,64 +51,68 @@
       $.post("/programs", null, function(data) {
         programs = data.programs;
         schedule = data.schedule.schedule;
-        
-        for (const program of Object.keys(programs)) {
-          // Check if the producer a link or not
-          let producer = "";
-          if (programs[program].author.includes("www."))
-            producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`;
-          else producer = programs[program].author
-  
-          // We create the row with the non-iterable information of the program
-          document.querySelector("tbody").innerHTML +=
-            "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
-              "<th class='colProgramID' scope='row'>" + programs[program].programID + "</th>" +
-              "<td class='colStreamID'>" + programs[program].streamID + "</td>" +
-              "<td class='colName'>" + programs[program].name + "</td>" +
-              "<td class='colLength'>" + programs[program].length + "</td>" +
-              "<td class='colTopics'>" + programs[program].topics + "</td>" +
-              "<td class='colPresenters' id=presenters" + program + "></td>" +
-              "<td class='colAuthor'>" + producer + "</td>" +
-              "<td class='colDescriptionShort' id=synopsis" + program + ">" +
-                `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
-              "</td>" +
-              "<td class='colDescriptionLong' id=description" + program + ">" +
-                `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
-              "</td>" +
-              "<td class='colMonday' id=monday" + program + "></td>" +
-              "<td class='colTuesday' id=tuesday" + program + "></td>" +
-              "<td class='colWednesday' id=wednesday" + program + "></td>" +
-              "<td class='colThursday' id=thursday" + program + "></td>" +
-              "<td class='colFriday' id=friday" + program + "></td>" +
-              "<td class='colSaturday' id=saturday" + program + "></td>" +
-              "<td class='colSunday' id=sunday" + program + "></td>"
-            + "</tr>"
-  
-          // We are gonna add the elements that are iterable or dependant on certain conditions
-          // We add the presenters iterating over the list of them
-          let presenters = "";
-          for (const presenter of programs[program].presenters) {
-            if (presenter === "Desconocido") presenters = ""
-            else presenters += "<li>" + presenter + "</li>"
-          }
-          
-          document.getElementById(`presenters${program}`).innerHTML =
-            "<ul style='padding: 0'>" + presenters + "</ul>"
-          
-          // Change programs's class color if its schedule is empty
-          let values = Object.values(programs[program].schedule);
-          if (values.every(day => day == null))
-            document.getElementById("program"+programs[program].programID).classList.add("table-danger")
-          
-          // We add days on their corresponding columns
-          for (const day of Object.keys(programs[program].schedule)) {
-            let times = "";
-            for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>"
-            document.getElementById(`${day}${program}`).innerHTML =
-              "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
-          }
-        }
+
+        buildTable();
       })
+    }
+    // Builds the table based on the programs
+    function buildTable() {
+      for (const program of Object.keys(programs)) {
+        // Check if the producer a link or not
+        let producer = "";
+        if (programs[program].author.includes("www."))
+          producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`;
+        else producer = programs[program].author
+
+        // We create the row with the non-iterable information of the program
+        document.querySelector("tbody").innerHTML +=
+          "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
+            "<th class='colProgramID' scope='row'>" + programs[program].programID + "</th>" +
+            "<td class='colStreamID'>" + programs[program].streamID + "</td>" +
+            "<td class='colName'>" + programs[program].name + "</td>" +
+            "<td class='colLength'>" + programs[program].length + "</td>" +
+            "<td class='colTopics'>" + programs[program].topics + "</td>" +
+            "<td class='colPresenters' id=presenters" + program + "></td>" +
+            "<td class='colAuthor'>" + producer + "</td>" +
+            "<td class='colDescriptionShort' id=synopsis" + program + ">" +
+              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
+            "</td>" +
+            "<td class='colDescriptionLong' id=description" + program + ">" +
+              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
+            "</td>" +
+            "<td class='colMonday' id=monday" + program + "></td>" +
+            "<td class='colTuesday' id=tuesday" + program + "></td>" +
+            "<td class='colWednesday' id=wednesday" + program + "></td>" +
+            "<td class='colThursday' id=thursday" + program + "></td>" +
+            "<td class='colFriday' id=friday" + program + "></td>" +
+            "<td class='colSaturday' id=saturday" + program + "></td>" +
+            "<td class='colSunday' id=sunday" + program + "></td>"
+          + "</tr>"
+
+        // We are gonna add the elements that are iterable or dependant on certain conditions
+        // We add the presenters iterating over the list of them
+        let presenters = "";
+        for (const presenter of programs[program].presenters) {
+          if (presenter === "Desconocido") presenters = ""
+          else presenters += "<li>" + presenter + "</li>"
+        }
+        
+        document.getElementById(`presenters${program}`).innerHTML =
+          "<ul style='padding: 0'>" + presenters + "</ul>"
+        
+        // Change programs's class color if its schedule is empty
+        let values = Object.values(programs[program].schedule);
+        if (values.every(day => day == null))
+          document.getElementById("program"+programs[program].programID).classList.add("table-danger")
+        
+        // We add days on their corresponding columns
+        for (const day of Object.keys(programs[program].schedule)) {
+          let times = "";
+          for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>"
+          document.getElementById(`${day}${program}`).innerHTML =
+            "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
+        }
+      }
     }
     getPrograms();
   
