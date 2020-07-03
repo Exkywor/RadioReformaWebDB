@@ -15,14 +15,14 @@
         <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Button group with nested dropdown">
           <span class="mb-1 font-weight-bold">ORDENAR</span>
           <div class="btn-group" role="group">
-            <button type="button" class="btn btn-secondary">&#9660;</button>
-            <button type="button" class="btn btn-secondary mx-2">&#9650;</button>
-            <button id="sortingDropdown" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
+            <button id="directionAscending" type="button" class="btn btn-dark btn-sm" onclick="changeDirection('ascending')">&#9650;</button>
+            <button id="directionDescending" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="changeDirection('descending')">&#9660;</button>
+            <button id="sortingDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
             <div class="dropdown-menu" aria-labelledby="sortingDropdown">
-              <a class="dropdown-item">ID</a>
-              <a class="dropdown-item">Nombre</a>
-              <a class="dropdown-item">Duración</a>
-              <a class="dropdown-item">Productor</a>
+              <button class="btn-secondary dropdown-item active" type="button">ID</button>
+              <button class="btn-outline-dark dropdown-item" type="button">Nombre</button>
+              <button class="btn-outline-dark dropdown-item" type="button">Duración</button>
+              <button class="btn-outline-dark dropdown-item" type="button">Productor</button>
             </div>
           </div>
         </div>
@@ -61,6 +61,9 @@
 
   <script>
     let programs, schedule;
+    let sortedIDs = [];
+    let currentSorting = "ID";
+    let currentDirection = "ascending";
     let forms = {
       editing: false,
       add: false,
@@ -78,12 +81,13 @@
         programs = data.programs;
         schedule = data.schedule.schedule;
 
+        changeSorting("ID");
         buildTable();
       })
     }
     // Builds the table based on the programs
     function buildTable() {
-      for (const program of Object.keys(programs)) {
+      for (const program of sortedIDs) {
         // Check if the producer a link or not
         let producer = "";
         if (programs[program].author.includes("www."))
@@ -246,6 +250,49 @@
     function selectProgram(id) {
       if (forms["editing"]) editProgram(id);
       else if (forms["delete"]) deleteProgram(id);
+    }
+
+    // Change the sorting of the programs
+    function changeSorting(method) {
+      // Only change if the sorting method is different from the previous one
+      if (method !== currentSorting) {
+        switch(method) {
+          case "ID":
+            sortedIDs = Object.keys(programs);
+            break;
+          default:
+            sortedIDs = Object.keys(programs);
+        }
+
+        // Reverse the order if the selected direction is descending
+        if (currentDirection === "descending") sortedIDs.reverse();
+
+        // Rebuild the table
+        $("tbody").empty();
+        buildTable();
+      }
+    }
+
+    // Make the programs ascending or descending
+    function changeDirection(method) {
+      // Only change if the direction is different from the previous one
+      if (method !== currentDirection) {
+        sortedIDs = sortedIDs.reverse(); // Reverse the array
+        currentDirection = method; // Store the new direction
+
+        // Rebuild the table
+        $("tbody").empty();
+        buildTable();
+
+        // Change the buttons classes
+        if (method === "ascending") {
+          document.getElementById("directionDescending").classList.replace("btn-dark", "btn-outline-dark");
+          document.getElementById("directionAscending").classList.replace("btn-outline-dark", "btn-dark");
+        } else {
+          document.getElementById("directionAscending").classList.replace("btn-dark", "btn-outline-dark");
+          document.getElementById("directionDescending").classList.replace("btn-outline-dark", "btn-dark");
+        }
+      }
     }
   </script>
 {% endblock %}
