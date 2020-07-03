@@ -60,11 +60,18 @@
       }
 
       displayDur = !displayDur; // We record whether we want duration to be shown or not
+      visibleColumns["colSchDur"] = !visibleColumns["colSchDur"];
     } else {
       // Hide/Show the day + duration columns as normal
-      if (displayDur) $(`.${column}`).toggle();
+      if (displayDur) {
+        $(`.${column}`).toggle();
+        visibleColumns[column] = !visibleColumns[column];
+      }
       // If the dur is not to be shown, only toggle the day column
-      else $(`.${column}[class='${column}']`).toggle();
+      else {
+        $(`.${column}[class='${column}']`).toggle();
+        visibleColumns[column] = !visibleColumns[column];
+      }
     }
   })
 </script>

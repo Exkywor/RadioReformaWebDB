@@ -55,6 +55,8 @@
   <script>
     let schedule, times, programs;
     let currentDisplay;
+    let visibleColumns = {colSchMonday: true, colSchTuesday: true, colSchWednesday: true, colSchThursday: true,
+                           colSchFriday: true, colSchSaturday: true, colSchSunday: true, colSchDur: true}
 
     function getSchedule() {
       $.post("/schedule", null, function(data) {
@@ -117,7 +119,18 @@
         $(`#display${toDisplay}`).addClass("active");
 
         currentDisplay = toDisplay; // Record the new information to display
+        hideHidden();
       }
+    }
+
+    function hideHidden() {
+      // Hide the columns that should be hidden
+      for (const column of Object.keys(visibleColumns)) {
+        if (!visibleColumns[column]) $(`.${column}`).hide();
+      }
+
+      // Hide the duration columns if necessary
+      if (!visibleColumns["colSchDur"]) $(`.colSchDur`).hide();
     }
   </script>
 {% endblock %}
