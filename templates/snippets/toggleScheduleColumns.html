@@ -36,27 +36,35 @@
 </form>
 
 <script>
+  let displayDur = true;
+
   // Hides or shows columns
   $("#toggleScheduleColumns").on('change', 'input[type=checkbox]', function() {
     let column = $(this).attr('id');
     
     // Columns with a day class ("colSchDay") involve the day and its duration. When toggling that, the duration gets hidden too.
-    // When colSchDur if we don't check if the day column is hidden, it makes a mess because it will untoggle the dur column for that day.
+    // When colSchDur if we don't check if the day column is hidden (meaning the dur for that day is hidden too),
+    // it makes a mess because it will show the dur column for that day, when it should do nothing with that one.
     
     // We check if we're trying to toggle the duration
     if (column === "colSchDur") {
       // All possible day columns
       let days = ["colSchMonday", "colSchTuesday", "colSchWednesday", "colSchThursday", "colSchFriday", "colSchSaturday", "colSchSunday"];
       
-      // We iterarte over each day to check if it's already hidden to avoid displaying it's duration column
+      // We iterate over each day to check if it's already hidden to avoid displaying it's duration column
       for (const day of days) {
         // If the day is not hidden we proceed, otherwise, we do nothing
         if ($(`.${day}`).css("display") != "none") {
           $(`.${day}.${column}`).toggle();
         }
       }
+
+      displayDur = !displayDur; // We record whether we want duration to be shown or not
     } else {
-      $(`.${column}`).toggle();
+      // Hide/Show the day + duration columns as normal
+      if (displayDur) $(`.${column}`).toggle();
+      // If the dur is not to be shown, only toggle the day column
+      else $(`.${column}[class='${column}']`).toggle();
     }
   })
 </script>
