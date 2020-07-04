@@ -1,13 +1,28 @@
 {% extends "layout.html" %}
 
 {% block main %}
+  <!-- Delete confirmation modal -->
+  <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content align-items-center">
+        <div class="modal-header">
+          <h6 class="modal-title" id="deleteConfirmationLabel">¿Estás seguro que quieres eliminar este programa?</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-primary" id="deleteConfirmationYes">Si</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toolbar -->
   <header>
-    <div class="btn-toolbar border-top mx-2 py-3 row" role="toolbar" aria-label="Modify programs toolbar">
+    <div class="btn-toolbar border-top px-3 py-3 row" role="toolbar" aria-label="Modify programs toolbar">
       <div class="d-flex justify-content-between align-items-start col-sm-11">
         <!-- Filter columns -->
         <div class="btn-group-vertical ml-2 my-1 toolbar-programs" role="group" aria-label="Filter buttons">
-          <span class="ml-n1 mb-1 font-weight-bold">VER</span>
+          <span class="ml-n2 mb-1 font-weight-bold">VER</span>
           {% include 'snippets/toggleProgramsColumns.html' %}
         </div>
 
@@ -40,14 +55,14 @@
       </div>
       
       <!-- Toggle toolbar -->
-      <button type="button" class="close col-sm d-flex justify-content-end pr-1 align-items-center" id="btnToolbar" onclick="toggleToolbar()">
+      <button type="button" class="close col-sm d-flex justify-content-end pr-2 align-items-center" id="btnToolbar" onclick="toggleToolbar()">
         <span style="font-size:smaller;">&#9650;</span>
       </button>
     </div>
   </header>
 
   <div>
-    <div class="row mx-2 justify-content-center">
+    <div class="row px-3 justify-content-center">
       <!-- Programs table -->
       {% include 'snippets/programsDisplay.html' %}
       <!-- Edit program container -->

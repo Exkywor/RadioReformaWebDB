@@ -61,33 +61,36 @@
   // Handles submitting of changed information
   $("#deleteForm").submit(function(event) {
     event.preventDefault();
+    // Asks the user for confirmation
+    $('#deleteConfirmation').modal({show: true, focus: true})
+  });
 
-    // Confirm the deletion
-    let confirmed = confirm("¿Estás seguro que quieres eliminar este programa?");
-    if (confirmed) {
-      // Converts the changes into a serialized string so we can send them and properly
-      let serialized = JSON.stringify(changes);
-      // Sends the changes to the server
-      $.post("/modifyProgram", {data: serialized, action: "delete"}, function(data) {
-        if (data !== "Éxito") {
-          $("#messages").html(
-            '<div class="alert alert-danger" >' +
-              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-              '<span>' + data + '</span>' +
-            '</div>'
-          );
-        } else {
-          $("#messages").html(
-            '<div class="alert alert-success" >' +
-              '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-              '<span>' + data + '</span>' +
-            '</div>'
-          );
-          // On success, reload the page after 1.5 seconds
-          setTimeout(function() { location.reload() }, 1500);
-        }
-      });
-    }
+  // Once the user confirms, submite the delete request
+  $('#deleteConfirmationYes').on('click', function (e) {
+    $("#deleteConfirmation").modal("hide");
+    
+    // Converts the changes into a serialized string so we can send them and properly
+    let serialized = JSON.stringify(changes);
+    // Sends the changes to the server
+    $.post("/modifyProgram", {data: serialized, action: "delete"}, function(data) {
+      if (data !== "Éxito") {
+        $("#messages").html(
+          '<div class="alert alert-danger" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+      } else {
+        $("#messages").html(
+          '<div class="alert alert-success" >' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<span>' + data + '</span>' +
+          '</div>'
+        );
+        // On success, reload the page after 1.5 seconds
+        setTimeout(function() { location.reload() }, 1500);
+      }
+    });
   });
 
   // Handles form reset

@@ -138,7 +138,7 @@ def getNotifications():
   else:
     return redirect(url_for("index"))
 
-  return render_template("notifications.html")
+  return render_template("notifications.html", title="Notificaciones")
 
 if __name__ == "__main__":
   app.run(debug=True)

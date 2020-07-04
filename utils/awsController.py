@@ -22,4 +22,4 @@ def getDynamoItems():
   users = {user: users[user] for user in sorted(users)}
   programs = {program: programs[program] for program in sorted(programs, key=int)}
 
-  return {"users": users, "programs": programs, "count": items["Count"]}
+  return {"tokens": users, "IDs": programs, "count": items["Count"]}
