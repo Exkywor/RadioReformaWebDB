@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block main %}
+  <div>Hi</div>
+
+  <script>
+    $.post("/notifications", null, function(data) {
+      console.log(data);
+    });
+  </script>
+{% endblock %}

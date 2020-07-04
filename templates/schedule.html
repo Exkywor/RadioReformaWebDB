@@ -146,6 +146,7 @@
       }
       // We use the override to rebuild for IDs even if it's for the same display (topics to topics)
       else if (override) {
+        $("tbody").empty();
         buildScheduleTable(toDisplay);
         hideHidden();
       }

@@ -3,6 +3,7 @@ from flask import Flask, g, jsonify, render_template, request, redirect, session
 from flask_session import Session
 from tempfile import mkdtemp
 
+from utils.awsController import getDynamoItems
 from utils.prepareDB import prepareDB
 from utils.modifyDB import editProgram, addProgram, deleteProgram
 
@@ -15,7 +16,6 @@ app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-
 
 # Open the db and save it in the g namespace
 def getDB():
@@ -128,6 +128,17 @@ def modifyProgram():
     getData(True)
     return jsonify(res)
 
+
+# NOTIFICATIONS ENPOINT
+@app.route("/notifications", methods=["POST", "GET"])
+def getNotifications():
+  if "loaded" in session:
+    if request.method == "POST":
+      return jsonify(notifications=getDynamoItems(), programs=session["programs"])
+  else:
+    return redirect(url_for("index"))
+
+  return render_template("notifications.html")
 
 if __name__ == "__main__":
   app.run(debug=True)

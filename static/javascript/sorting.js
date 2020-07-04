@@ -15,7 +15,7 @@ function sortBy(a, b, by) {
 function changeSorting(method) {
   // Only change if the sorting method is different from the previous one
   if (method !== currentSorting) {
-    let translations = {ID: "ID", name: "Nombre", lenth: "Duración", author: "Productor", topics: "Temas"};
+    let translations = {ID: "ID", name: "Nombre", length: "Duración", author: "Productor", topics: "Temas"};
 
     if (method === "ID") sortedIDs = Object.keys(programs);
     else sortedIDs = sortedIDs.sort((a, b) => sortBy(a, b, method));
