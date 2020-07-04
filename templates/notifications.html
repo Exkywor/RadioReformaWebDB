@@ -1,15 +1,35 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <div class="row justify-content-center border-top px-3 pt-4">
-    <div id="notificationsProgramsContainer" class="col-sm-6">
-      <h5 class="bg-dark px-3 py-2 text-white">Programas</h5>
-      <div class="card-columns"></div>
+  <div class="row justify-content-center border-top mx-1 pt-4">
+    <!-- Programs (IDs) table -->
+    <div class="col-sm-6">
+      <table id="programsTable" class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Programa</th>
+            <th scope="col">Tokens</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-
-    <div id="notificationsUsersContainer" class="col-sm-6">
-      <h5 class="bg-dark px-3 py-2 text-white">Tokens</h5>
-      <div class="card-columns"></div>
+  
+    <!-- Tokens (users) table -->
+    <div class="col-sm-6">
+      <table id="tokensTable" class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Token</th>
+            <th scope="col">Programas</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -19,103 +39,60 @@
     function getNotifications() {
       $.post("/notifications", null, function(data) {
         ({programs, notifications} = data);
-
-        console.log(notifications);
-        
         buildPrograms();
         buildTokens();
       });
     }
     getNotifications()
 
-    // Builds the programs cards
+    // Builds the programs table
     function buildPrograms() {
+      let target = "ID";
       for (const ID of Object.keys(notifications.IDs)) {
-        let htmlTokens = "";
+        let tokens = notifications.IDs[ID].reduce((tot, token) => tot += `${token}<br/>`, "")
 
-        for (const token of notifications.IDs[ID]) {
-          htmlTokens += `<p>${token}</p>`;
-        };
-
-        $("#notificationsProgramsContainer > div").append(
-          "<div class='card'>" +
-            "<div class='card-header'>" +
-              "<div class='justify-content-between'>" +
-                "<div>" +
-                  "<h5 class='card-text text-muted'><small>Programa</small></h5>" +
-                  "<h5 class='card-title'>" + programs[ID].name + "</h5>" +
-                "</div>" +
-                "<div>" +
-                  "<h5 class='card-text text-muted'><small>Tokens</small></h5>" +
-                  "<h5 class='card-title text-success'>" + notifications.IDs[ID].length + "</h5>" +
-                "</div>" +
-              "</div>" +
-              "<div class='d-flex justify-content-between align-items-center'>" +
-                "<span class='card-text text-muted'>Lista</span>" +
-                "<button id='program"+ID+"Toggle' class='btn card-text text-muted' onclick=toggleTokens("+ID+")>" +
-                  "&#9660" +
-                "</button>" +
-              "</div>" +
-            "</div>" +
-            "<div id='program"+ID+"Tokens' class='card-body' style='display: None'>" +
-              htmlTokens +
-            "</div>" +
-          "</div>"
+        $("#programsTable > tbody").append(
+          "<tr>" +
+            "<td class='align-middle'>" + programs[ID].name + "</td>" +
+            "<td class='align-middle text-success'>" + notifications.IDs[ID].length + "</td>" +
+            "<td class='align-middle px-0'>" +
+              `<button id="ID${ID}Toggle" class="btn" onclick="toggleMore('${ID}', '${target}')">&#9660</button>` +
+            "</td>" +
+          "</tr>" +
+          "<tr id='ID"+ID+"Tokens' style='display: None'>" +
+            "<td class='align-middle' colspan='3'>" + tokens + "</td>" +
+          "</tr>"
         );
       }
     }
 
-    // Toggles the tokens list for the programas
-    function toggleTokens(ID) {
-      $(`#program${ID}Tokens`).toggle();
-      let toggle = $(`#program${ID}Toggle`).text();
-      if (toggle === "\u25B2") $(`#program${ID}Toggle`).text("\u25BC");
-      else if (toggle === "\u25BC") $(`#program${ID}Toggle`).text("\u25B2");
-    }
-
-    // Builds the tokens cards
+    // Builds the tokens table
     function buildTokens() {
+      let target = "token"
       for (const token of Object.keys(notifications.tokens)) {
-        let htmlPrograms = "";
+        let programNames = notifications.tokens[token].reduce((tot, id) => tot += `${programs[id].name}<br/>`, "")
 
-        for (const ID of notifications.tokens[token]) {
-          htmlPrograms += `<p>${programs[ID].name}</p>`;
-        };
-
-        $("#notificationsUsersContainer > div").append(
-          "<div class='card'>" +
-            "<div class='card-header'>" +
-              "<div class='justify-content-between'>" +
-                "<div>" +
-                  "<h5 class='card-text text-muted'><small>Token</small></h5>" +
-                  "<h5 class='card-title'>" + token + "</h5>" +
-                "</div>" +
-                "<div>" +
-                  "<h5 class='card-text text-muted'><small>Programas</small></h5>" +
-                  "<h5 class='card-title text-primary'>" + notifications.tokens[token].length + "</h5>" +
-                "</div>" +
-              "</div>" +
-              "<div class='d-flex justify-content-between align-items-center'>" +
-                "<span class='card-text text-muted'>Lista</span>" +
-                "<button id='token"+token+"Toggle' class='btn card-text text-muted' onclick=togglePrograms('"+token+"')>" +
-                  "&#9660" +
-                "</button>" +
-              "</div>" +
-            "</div>" +
-            "<div id='token"+token+"Tokens' class='card-body' style='display: None'>" +
-              htmlPrograms +
-            "</div>" +
-          "</div>"
+        $("#tokensTable > tbody").append(
+          "<tr>" +
+            "<td class='align-middle'>" + token + "</td>" +
+            "<td class='align-middle text-primary'>" + notifications.tokens[token].length + "</td>" +
+            "<td class='align-middle px-0'>" +
+              `<button id="token${token}Toggle" class="btn" onclick="toggleMore('${token}', '${target}')">&#9660</button>` +
+            "</td>" +
+          "</tr>" +
+          "<tr id='token"+token+"Tokens' style='display: None'>" +
+            "<td class='align-middle' colspan='3'>" + programNames + "</td>" +
+          "</tr>"
         );
       }
     }
 
-    // Toggle the programs list for the tokens
-    function togglePrograms(token) {
-      $(`#token${token}Tokens`).toggle();
-      let toggle = $(`#token${token}Toggle`).text();
-      if (toggle === "\u25B2") $(`#token${token}Toggle`).text("\u25BC");
-      else if (toggle === "\u25BC") $(`#token${token}Toggle`).text("\u25B2");
+    // Toggles the extra information for the element (programs or tokens)
+    function toggleMore(ID, target) {
+      $(`#${target}${ID}Tokens`).toggle();
+      let toggle = $(`#${target}${ID}Toggle`).text();
+      if (toggle === "\u25B2") $(`#${target}${ID}Toggle`).text("\u25BC");
+      else if (toggle === "\u25BC") $(`#${target}${ID}Toggle`).text("\u25B2");
     }
   </script>
 {% endblock %}
