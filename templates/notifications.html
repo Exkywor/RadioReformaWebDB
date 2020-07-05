@@ -1,9 +1,23 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <div class="row justify-content-center border-top mx-1 pt-4">
+  <div class="row justify-content-center border-top px-3 py-3">
     <!-- Programs (IDs) table -->
     <div class="col-sm-6">
+      <!-- Sorting order -->
+      <div class="btn-group align-items-center toolbar-programs my-1 pb-3 role="group" aria-label="Button group with nested dropdown">
+        <span class="mr-3 font-weight-bold">ORDENAR</span>
+        <div class="btn-group" role="group">
+          <button id="dirIDsAsc" type="button" class="btn btn-dark btn-sm" onclick="reverseSort('IDs')">&#9650;</button>
+          <button id="dirIDsDes" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="reverseSort('IDs')">&#9660;</button>
+          <button id="sortIDsDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nombre</button>
+          <div class="dropdown-menu" aria-labelledby="sortingDropdown">
+            <button id="sortIDsname" class="btn-secondary dropdown-item active" type="button" onclick="sortTable('IDs', 'name')">Nombre</button>
+            <button id="sortIDsammount" class="btn-outline-secondary dropdown-item" type="button" onclick="sortTable('IDs', 'ammount')">Cant. Tokens</button>
+          </div>
+        </div>
+      </div>
+
       <table id="programsTable" class="table table-hover">
         <thead class="thead-dark">
           <tr>
@@ -19,11 +33,25 @@
   
     <!-- Tokens (users) table -->
     <div class="col-sm-6">
+      <!-- Sorting order -->
+      <div class="btn-group align-items-center toolbar-tokens my-1 pb-3" role="group" aria-label="Button group with nested dropdown">
+        <span class="mr-3 font-weight-bold">ORDENAR</span>
+        <div class="btn-group" role="group">
+          <button id="dirtokensAsc" type="button" class="btn btn-dark btn-sm" onclick="reverseSort('tokens')">&#9650;</button>
+          <button id="dirtokensDes" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="reverseSort('tokens')">&#9660;</button>
+          <button id="sorttokensDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Token</button>
+          <div class="dropdown-menu" aria-labelledby="sortingDropdown">
+            <button id="sorttokensname" class="btn-secondary dropdown-item active" type="button" onclick="sortTable('tokens', 'name')">Token</button>
+            <button id="sorttokensammount" class="btn-outline-secondary dropdown-item" type="button" onclick="sortTable('tokens', 'ammount')">Cant. Programas</button>
+          </div>
+        </div>
+      </div>
+
       <table id="tokensTable" class="table table-hover">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Token</th>
-            <th scope="col">Programas</th>
+            <th class="justify-content-between" scope="col">Programas</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -35,10 +63,15 @@
 
   <script>
     let programs, notifications;
+    let sortedIDs, sortedTokens;
+    let ascending = true;
+    let currentSorting = "name";
 
     function getNotifications() {
       $.post("/notifications", null, function(data) {
         ({programs, notifications} = data);
+        sortedIDs = Object.keys(notifications.IDs);
+        sortedTokens = Object.keys(notifications.tokens);
         buildPrograms();
         buildTokens();
       });
@@ -47,8 +80,10 @@
 
     // Builds the programs table
     function buildPrograms() {
+      $("#programsTable > tbody").empty();
+      
       let target = "ID";
-      for (const ID of Object.keys(notifications.IDs)) {
+      for (const ID of sortedIDs) {
         let tokens = notifications.IDs[ID].reduce((tot, token) => tot += `${token}<br/>`, "")
 
         $("#programsTable > tbody").append(
@@ -68,8 +103,10 @@
 
     // Builds the tokens table
     function buildTokens() {
+      $("#tokensTable > tbody").empty();
+
       let target = "token"
-      for (const token of Object.keys(notifications.tokens)) {
+      for (const token of sortedTokens) {
         let programNames = notifications.tokens[token].reduce((tot, id) => tot += `${programs[id].name}<br/>`, "")
 
         $("#tokensTable > tbody").append(
@@ -93,6 +130,91 @@
       let toggle = $(`#${target}${ID}Toggle`).text();
       if (toggle === "\u25B2") $(`#${target}${ID}Toggle`).text("\u25BC");
       else if (toggle === "\u25BC") $(`#${target}${ID}Toggle`).text("\u25B2");
+    }
+
+    // Reverses the direction of the sorting
+    function reverseSort(table) {
+      if (table === "IDs") {
+        sortedIDs = sortedIDs.reverse();
+        buildPrograms();
+      }
+      else {
+        sortedTokens = sortedTokens.reverse();
+        buildTokens();
+      }
+      
+      ascending = !ascending;
+      
+      if (ascending) {
+        document.getElementById(`dir${table}Des`).classList.replace("btn-dark", "btn-outline-dark");
+        document.getElementById(`dir${table}Asc`).classList.replace("btn-outline-dark", "btn-dark");
+      } else {
+        document.getElementById(`dir${table}Asc`).classList.replace("btn-dark", "btn-outline-dark");
+        document.getElementById(`dir${table}Des`).classList.replace("btn-outline-dark", "btn-dark");
+      }
+    }
+
+    // Sorts the tables
+    function sortTable(table, method) {
+      let keys = Object.keys(notifications[table])      
+      let sortedKeys = keys.sort((a, b) => {
+        if (method === "name") return sortName(a, b, table);
+        else return sortAmmount(a, b, table)
+      });
+
+      if (table === "IDs") {
+        sortedIDs = ascending ? sortedKeys : sortedKeys.reverse();
+        buildPrograms();
+      }
+      else {
+        sortedTokens = ascending ? sortedKeys : sortedKeys.reverse();
+        buildTokens();
+      }
+
+      // Change the buttons classes
+      document.getElementById(`sort${table}${currentSorting}`).classList.replace("btn-secondary", "btn-outline-secondary");
+      document.getElementById(`sort${table}${method}`).classList.replace("btn-outline-secondary", "btn-secondary");
+      
+      $(`#sort${table}${currentSorting}`).removeClass("active");
+      $(`#sort${table}${method}`).addClass("active");
+
+      if (table === "IDs") {
+        if (method === "name") $(`#sort${table}Dropdown`).text("Nombre");
+        else $(`#sort${table}Dropdown`).text("Cant. Tokens");
+      } else {
+        if (method === "name") $(`#sort${table}Dropdown`).text("Token");
+        else $(`#sort${table}Dropdown`).text("Cant. Programas");
+      }
+      
+      currentSorting = method;
+    }
+    
+    // Functions to sort either by name or ammount of elements
+    function sortName(a, b, table) {
+      let c, d;
+
+      if (table === "IDs") {
+        c = programs[a].name;
+        d = programs[b].name;
+      } else {
+        c = a;
+        d = b;
+      }
+      
+      if (c < d) return -1;
+      if (c > d) return 1;
+      else return 0;
+    }
+
+    function sortAmmount(a, b, table) {
+      let c, d;
+
+      c = notifications[table][a].length;
+      d = notifications[table][b].length;
+      
+      if (c < d) return -1;
+      if (c > d) return 1;
+      else return sortName(a, b, table);
     }
   </script>
 {% endblock %}
