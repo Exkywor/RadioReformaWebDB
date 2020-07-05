@@ -1,68 +1,69 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <!-- Delete confirmation modal -->
-  <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content align-items-center">
-        <div class="modal-header">
-          <h6 class="modal-title" id="deleteConfirmationLabel">¿Estás seguro que quieres eliminar este programa?</h6>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-          <button type="button" class="btn btn-primary" id="deleteConfirmationYes">Si</button>
+<div class="row">
+  <div class="col">
+    <!-- Delete confirmation modal -->
+    <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content align-items-center">
+          <div class="modal-header">
+            <h6 class="modal-title" id="deleteConfirmationLabel">¿Estás seguro que quieres eliminar este programa?</h6>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary" id="deleteConfirmationYes">Si</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Toolbar -->
-  <header>
-    <div class="btn-toolbar border-top px-3 py-3 row" role="toolbar" aria-label="Modify programs toolbar">
-      <div class="d-flex justify-content-between align-items-start col-sm-11">
-        <!-- Filter columns -->
-        <div class="btn-group-vertical ml-2 my-1 toolbar-programs" role="group" aria-label="Filter buttons">
-          <span class="ml-n2 mb-1 font-weight-bold">VER</span>
-          {% include 'snippets/toggleProgramsColumns.html' %}
-        </div>
+    <!-- Toolbar -->
+    <header class="mx-n2">
+      <div class="btn-toolbar border-top py-3" role="toolbar" aria-label="Modify programs toolbar">
+        <div class="d-flex justify-content-between align-items-start col-sm-11">
+          <!-- Filter columns -->
+          <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Filter buttons">
+            <span class="ml-n2 mb-1 font-weight-bold">VER</span>
+            {% include 'snippets/toggleProgramsColumns.html' %}
+          </div>
 
-        <!-- Sorting order -->
-        <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Button group with nested dropdown">
-          <span class="mb-1 font-weight-bold">ORDENAR</span>
-          <div class="btn-group" role="group">
-            <button id="directionAscending" type="button" class="btn btn-dark btn-sm" onclick="changeDirection('ascending')">&#9650;</button>
-            <button id="directionDescending" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="changeDirection('descending')">&#9660;</button>
-            <button id="sortingDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
-            <div class="dropdown-menu" aria-labelledby="sortingDropdown">
-              <button id="sortID" class="btn-secondary dropdown-item active" type="button" onclick="changeSorting('ID')">ID</button>
-              <button id="sortlength" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('length')">Duración</button>
-              <button id="sortname" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('name')">Nombre</button>
-              <button id="sortauthor" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('author')">Productor</button>
-              <button id="sorttopics" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('topics')">Temas</button>
+          <!-- Sorting order -->
+          <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Button group with nested dropdown">
+            <span class="mb-1 font-weight-bold">ORDENAR</span>
+            <div class="btn-group" role="group">
+              <button id="directionAscending" type="button" class="btn btn-dark btn-sm" onclick="changeDirection('ascending')">&#9650;</button>
+              <button id="directionDescending" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="changeDirection('descending')">&#9660;</button>
+              <button id="sortingDropdown" style="min-width: 100px;" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
+              <div class="dropdown-menu aria-labelledby="sortingDropdown">
+                <button id="sortID" class="btn-secondary dropdown-item active" type="button" onclick="changeSorting('ID')">ID</button>
+                <button id="sortlength" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('length')">Duración</button>
+                <button id="sortname" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('name')">Nombre</button>
+                <button id="sortauthor" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('author')">Productor</button>
+                <button id="sorttopics" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('topics')">Temas</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modify programs -->
+          <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Modify group">
+            <span class="mb-1 font-weight-bold">PROGRAMAS</span>
+            <div class="btn-group" role="group">
+              <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
+              <button class="btn btn-outline-dark btn-sm mx-2" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
+              <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
             </div>
           </div>
         </div>
-
-        <!-- Modify programs -->
-        <div class="btn-group-vertical my-1 toolbar-programs" role="group" aria-label="Modify group">
-          <span class="mb-1 font-weight-bold">PROGRAMAS</span>
-          <div class="btn-group" role="group">
-            <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>
-            <button class="btn btn-outline-dark btn-sm mx-2" id="btnadd" onclick="toggleForm('add')">Nuevo</button>
-            <button class="btn btn-outline-dark btn-sm" id="btndelete" onclick="toggleForm('delete')">Eliminar</button>
-          </div>
-        </div>
+        
+        <!-- Toggle toolbar -->
+        <button type="button" class="close col-sm d-flex justify-content-end pr-2 align-items-center" id="btnToolbar" onclick="toggleToolbar()">
+          <span style="font-size:smaller;">&#9650;</span>
+        </button>
       </div>
-      
-      <!-- Toggle toolbar -->
-      <button type="button" class="close col-sm d-flex justify-content-end pr-2 align-items-center" id="btnToolbar" onclick="toggleToolbar()">
-        <span style="font-size:smaller;">&#9650;</span>
-      </button>
-    </div>
-  </header>
+    </header>
 
-  <div>
-    <div class="row px-3 justify-content-center">
+    <div class="row">
       <!-- Programs table -->
       {% include 'snippets/programsDisplay.html' %}
       <!-- Edit program container -->
@@ -73,205 +74,205 @@
       {% include 'snippets/deleteProgram.html' %}
     </div>
   </div>
+</div>
 
+<script>
+  let programs, schedule;
+  let sortedIDs = [];
+  let currentSorting;
+  let currentDirection = "ascending";
+  let forms = {
+    editing: false,
+    add: false,
+    delete: false
+  };
 
-  <script>
-    let programs, schedule;
-    let sortedIDs = [];
-    let currentSorting;
-    let currentDirection = "ascending";
-    let forms = {
-      editing: false,
-      add: false,
-      delete: false
-    };
+  let visibleColumns = { colProgramID: true, colStreamID: true, colName: true, colLength: true, colTopics: true,
+                          colPresenters: true, colAuthor: true, colDescriptionShort:  true, colDescriptionLong:  true,
+                          colMonday:  true, colTuesday:  true, colWednesday:  true, colThursday:  true, colFriday:  true,
+                          colSaturday:  true, colSunday:  true
+  };
 
-    let visibleColumns = { colProgramID: true, colStreamID: true, colName: true, colLength: true, colTopics: true,
-                           colPresenters: true, colAuthor: true, colDescriptionShort:  true, colDescriptionLong:  true,
-                           colMonday:  true, colTuesday:  true, colWednesday:  true, colThursday:  true, colFriday:  true,
-                           colSaturday:  true, colSunday:  true
-    };
+  // We're gonna store any changed values here so we know what to send
+  // We declare it here so we can use it before the main function that cares for it
+  let changes = {id: null, info: {}, schedule: {}};
 
-    // We're gonna store any changed values here so we know what to send
-    // We declare it here so we can use it before the main function that cares for it
-    let changes = {id: null, info: {}, schedule: {}};
-  
-    // TABLE CREATION
-    // Get the programs and fill the table
-    function getPrograms() {
-      $.post("/programs", null, function(data) {
-        programs = data.programs;
-        schedule = data.schedule.schedule;
+  // TABLE CREATION
+  // Get the programs and fill the table
+  function getPrograms() {
+    $.post("/programs", null, function(data) {
+      programs = data.programs;
+      schedule = data.schedule.schedule;
 
-        changeSorting("ID");
-      })
-    }
-    getPrograms();
+      changeSorting("ID");
+    })
+  }
+  getPrograms();
 
-    // Builds the table based on the programs
-    function buildTable() {
-      for (const program of sortedIDs) {
-        // Check if the producer a link or not
-        let producer = "";
-        if (programs[program].author.includes("www."))
-          producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`;
-        else producer = programs[program].author
+  // Builds the table based on the programs
+  function buildTable() {
+    for (const program of sortedIDs) {
+      // Check if the producer a link or not
+      let producer = "";
+      if (programs[program].author.includes("www."))
+        producer = `<a href="http://${programs[program].author}" target="_blank">${programs[program].author}</a>`;
+      else producer = programs[program].author
 
-        // We create the row with the non-iterable information of the program
-        $("tbody").append(
-          "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
-            "<th class='colProgramID' scope='row'>" + programs[program].programID + "</th>" +
-            "<td class='colStreamID'>" + programs[program].streamID + "</td>" +
-            "<td class='colName'>" + programs[program].name + "</td>" +
-            "<td class='colLength'>" + programs[program].length + "</td>" +
-            "<td class='colTopics'>" + programs[program].topics + "</td>" +
-            "<td class='colPresenters' id=presenters" + program + "></td>" +
-            "<td class='colAuthor'>" + producer + "</td>" +
-            "<td class='colDescriptionShort' id=synopsis" + program + ">" +
-              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
-            "</td>" +
-            "<td class='colDescriptionLong' id=description" + program + ">" +
-              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
-            "</td>" +
-            "<td class='colMonday' id=monday" + program + "></td>" +
-            "<td class='colTuesday' id=tuesday" + program + "></td>" +
-            "<td class='colWednesday' id=wednesday" + program + "></td>" +
-            "<td class='colThursday' id=thursday" + program + "></td>" +
-            "<td class='colFriday' id=friday" + program + "></td>" +
-            "<td class='colSaturday' id=saturday" + program + "></td>" +
-            "<td class='colSunday' id=sunday" + program + "></td>"
-          + "</tr>"
-        );
+      // We create the row with the non-iterable information of the program
+      $("tbody").append(
+        "<tr id=program" + programs[program].programID + " onclick='selectProgram(" + programs[program].programID + ")'>" + 
+          "<th class='colProgramID' scope='row'>" + programs[program].programID + "</th>" +
+          "<td class='colStreamID'>" + programs[program].streamID + "</td>" +
+          "<td class='colName'>" + programs[program].name + "</td>" +
+          "<td class='colLength'>" + programs[program].length + "</td>" +
+          "<td class='colTopics'>" + programs[program].topics + "</td>" +
+          "<td class='colPresenters' id=presenters" + program + "></td>" +
+          "<td class='colAuthor'>" + producer + "</td>" +
+          "<td class='colDescriptionShort' id=synopsis" + program + ">" +
+            `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('synopsis${program}')>Ver</button>` +
+          "</td>" +
+          "<td class='colDescriptionLong' id=description" + program + ">" +
+            `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('description${program}')>Ver</button>` +
+          "</td>" +
+          "<td class='colMonday' id=monday" + program + "></td>" +
+          "<td class='colTuesday' id=tuesday" + program + "></td>" +
+          "<td class='colWednesday' id=wednesday" + program + "></td>" +
+          "<td class='colThursday' id=thursday" + program + "></td>" +
+          "<td class='colFriday' id=friday" + program + "></td>" +
+          "<td class='colSaturday' id=saturday" + program + "></td>" +
+          "<td class='colSunday' id=sunday" + program + "></td>"
+        + "</tr>"
+      );
 
-        // We are gonna add the elements that are iterable or dependant on certain conditions
-        // We add the presenters iterating over the list of them
-        let presenters = "";
-        for (const presenter of programs[program].presenters) {
-          if (presenter === "Desconocido") presenters = "";
-          else presenters += "<li>" + presenter + "</li>";
-        }
-        
-        $(`#presenters${program}`).html(
-          "<ul style='padding: 0'>" + presenters + "</ul>"
-        );
-
-        // Change programs's class color if its schedule is empty
-        let values = Object.values(programs[program].schedule);
-        if (values.every(day => day == null))
-          $("#program"+programs[program].programID).addClass("table-danger");
-        
-        // We add days on their corresponding columns
-        for (const day of Object.keys(programs[program].schedule)) {
-          let times = "";
-          for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>";
-          $(`#${day}${program}`).html(
-            "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
-          );
-        }
+      // We are gonna add the elements that are iterable or dependant on certain conditions
+      // We add the presenters iterating over the list of them
+      let presenters = "";
+      for (const presenter of programs[program].presenters) {
+        if (presenter === "Desconocido") presenters = "";
+        else presenters += "<li>" + presenter + "</li>";
       }
-    }
-  
-    // We use this function to show or hide the description of specific programs
-    function toggleDescriptions(id) {
-      // Extract the programID and the type (synopsis or description)
-      let programID;
-      let type;
-      if (id.includes("synopsis")) {
-        programID = id.replace("synopsis", "");
-        type = "synopsis";
-      } else if (id.includes("description")) {
-        programID = id.replace("description", "");
-        type = "description";
-      }
-  
-      // We get the text of the button to see whether to show or hide the information
-      let button = $(`#${id} > button`).html();
-  
-      // Depending on the button we show or hide
-      if (button === "Ver") {
-        $(`#${id}`).html(
-          type === "synopsis"
-            ? "<p>" + programs[programID].descriptionShort + "</p>" +
-              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
-            : "<p>" + programs[programID].descriptionLong + "</p>" +
-              `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
-        );
-      } else if (button === "Ocultar") {
-        $(`#${id}`).html(
-          `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
-        );
-      }
-    }
-
-    // Display or hide the toolbar
-    function toggleToolbar() {
-      $(".toolbar-programs").toggle();
       
-      let button = $("#btnToolbar > span").text();
-      if (button === "\u25B2") $("#btnToolbar  > span").text("\u25BC");
-      else if (button === "\u25BC") $("#btnToolbar > span").text("\u25B2");
-    }
+      $(`#presenters${program}`).html(
+        "<ul style='padding: 0'>" + presenters + "</ul>"
+      );
 
-    // Display or hide the forms
-    function toggleForm(form) {
-      let others = Object.keys(forms).filter(el => el !== form);
-
-      // Resets the variables that store any changes so we don't send previous changes by mistake
-      changes = {id: null, info: {}, schedule: {}};
-      $(`#${form}Form`).trigger("reset");
-
-      // Disable any other enabled form
-      for (const key of others) {
-        if (forms[key]) {
-          // Hide the form and reset it
-          $(`#${key}Container`).prop("hidden", true);
-          $(`#${key}Form`).trigger("reset");
-          forms[key] = false;
-
-          // Change the color of the button
-          $(`#btn${key}`).removeClass("btn-dark").addClass("btn-outline-dark");
-
-          if (key === "delete") {
-            $(`#${key}Container`).removeClass("d-flex").addClass("d-none");;
-          }
-        }
-      }
-
-      if (!forms[form]) {
-        // Make space for the form
-        document.getElementById("tableContainer").classList.replace("col-sm-12", "col-sm-8");
-
-        // Show the form
-        $(`#${form}Container`).removeAttr("hidden");
-        forms[form] = true;
-
-        if (form === "delete") {
-          $(`#${form}Container`).addClass("d-flex").removeClass("d-none");;
-        }
-
-        // Change the color of the button
-        $(`#btn${form}`).addClass("btn-dark").removeClass("btn-outline-dark");
-      } else {
-        // Make the table occupy the whole container
-        document.getElementById("tableContainer").classList.replace("col-sm-8", "col-sm-12");
-
-        // Hide the form
-        $(`#${form}Container`).prop("hidden", true);
-        forms[form] = false;
-
-        if (form === "delete") {
-          $(`#${form}Container`).removeClass("d-flex").addClass("d-none");;
-        }
-
-        // Change the color of the button
-        $(`#btn${form}`).removeClass("btn-dark").addClass("btn-outline-dark");
+      // Change programs's class color if its schedule is empty
+      let values = Object.values(programs[program].schedule);
+      if (values.every(day => day == null))
+        $("#program"+programs[program].programID).addClass("table-danger");
+      
+      // We add days on their corresponding columns
+      for (const day of Object.keys(programs[program].schedule)) {
+        let times = "";
+        for (const time of programs[program].schedule[day]) times += "<li>" + time + "</li>";
+        $(`#${day}${program}`).html(
+          "<ul style='list-style-type: none; padding: 0'>" + times + "</ul>"
+        );
       }
     }
+  }
 
-    // Call the appropiate function when selecting a program
-    function selectProgram(id) {
-      if (forms["editing"]) editProgram(id);
-      else if (forms["delete"]) deleteProgram(id);
+  // We use this function to show or hide the description of specific programs
+  function toggleDescriptions(id) {
+    // Extract the programID and the type (synopsis or description)
+    let programID;
+    let type;
+    if (id.includes("synopsis")) {
+      programID = id.replace("synopsis", "");
+      type = "synopsis";
+    } else if (id.includes("description")) {
+      programID = id.replace("description", "");
+      type = "description";
     }
-  </script>
+
+    // We get the text of the button to see whether to show or hide the information
+    let button = $(`#${id} > button`).html();
+
+    // Depending on the button we show or hide
+    if (button === "Ver") {
+      $(`#${id}`).html(
+        type === "synopsis"
+          ? "<p>" + programs[programID].descriptionShort + "</p>" +
+            `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+          : "<p>" + programs[programID].descriptionLong + "</p>" +
+            `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ocultar</button>`
+      );
+    } else if (button === "Ocultar") {
+      $(`#${id}`).html(
+        `<button class='btn btn-outline-dark btn-sm' onclick=toggleDescriptions('${type}${programID}')>Ver</button>`
+      );
+    }
+  }
+
+  // Display or hide the toolbar
+  function toggleToolbar() {
+    $(".toolbar-programs").toggle();
+    
+    let button = $("#btnToolbar > span").text();
+    if (button === "\u25B2") $("#btnToolbar  > span").text("\u25BC");
+    else if (button === "\u25BC") $("#btnToolbar > span").text("\u25B2");
+  }
+
+  // Display or hide the forms
+  function toggleForm(form) {
+    let others = Object.keys(forms).filter(el => el !== form);
+
+    // Resets the variables that store any changes so we don't send previous changes by mistake
+    changes = {id: null, info: {}, schedule: {}};
+    $(`#${form}Form`).trigger("reset");
+
+    // Disable any other enabled form
+    for (const key of others) {
+      if (forms[key]) {
+        // Hide the form and reset it
+        $(`#${key}Container`).prop("hidden", true);
+        $(`#${key}Form`).trigger("reset");
+        forms[key] = false;
+
+        // Change the color of the button
+        $(`#btn${key}`).removeClass("btn-dark").addClass("btn-outline-dark");
+
+        if (key === "delete") {
+          $(`#${key}Container`).removeClass("d-flex").addClass("d-none");;
+        }
+      }
+    }
+
+    if (!forms[form]) {
+      // Make space for the form
+      document.getElementById("tableContainer").classList.replace("col", "col-sm-8");
+
+      // Show the form
+      $(`#${form}Container`).removeAttr("hidden");
+      forms[form] = true;
+
+      if (form === "delete") {
+        $(`#${form}Container`).addClass("d-flex").removeClass("d-none");;
+      }
+
+      // Change the color of the button
+      $(`#btn${form}`).addClass("btn-dark").removeClass("btn-outline-dark");
+    } else {
+      // Make the table occupy the whole container
+      document.getElementById("tableContainer").classList.replace("col-sm-8", "col");
+
+      // Hide the form
+      $(`#${form}Container`).prop("hidden", true);
+      forms[form] = false;
+
+      if (form === "delete") {
+        $(`#${form}Container`).removeClass("d-flex").addClass("d-none");;
+      }
+
+      // Change the color of the button
+      $(`#btn${form}`).removeClass("btn-dark").addClass("btn-outline-dark");
+    }
+  }
+
+  // Call the appropiate function when selecting a program
+  function selectProgram(id) {
+    if (forms["editing"]) editProgram(id);
+    else if (forms["delete"]) deleteProgram(id);
+  }
+</script>
 {% endblock %}

@@ -99,9 +99,9 @@ def validateInfo(info, programs, id ="", action ="edit"):
     if "topics" not in info:
       return {"res": False, "message": f"Debes añadir los temas del programa"}
     if "descriptionShort" not in info:
-      return {"res": False, "message": f"Debes añadir una descripción corta (sinopsis) del programa"}
+      return {"res": False, "message": f"Debes añadir un resumen del programa"}
     if "descriptionLong" not in info:
-      return {"res": False, "message": f"Debes añadir una descripción larga del programa"}
+      return {"res": False, "message": f"Debes añadir una descripción del programa"}
     
     # Validate the streamID
     if isEmpty(info["streamID"]):
@@ -171,18 +171,18 @@ def validateInfo(info, programs, id ="", action ="edit"):
   # Check the descriptionShort
   if "descriptionShort" in info:
     if isEmpty(info["descriptionShort"]):
-      return {"res": False, "message": f"Debes añadir una descripción corta (sinopsis) del programa"}
+      return {"res": False, "message": f"Debes añadir un resumen del programa"}
     if not isAlphanumeric(info["descriptionShort"]):
-      return {"res": False, "message": f"La descripción corta (sinopsis) no puede contener solo caracteres especiales"}
+      return {"res": False, "message": f"El resumen no puede contener solo caracteres especiales"}
     
     # Validate descriptionShort character count
     if len(info["descriptionShort"]) > 250:
-      return {"res": False, "message": f"La descripción corta (sinopsis) contiene más de 250 caracteres"}
+      return {"res": False, "message": f"El resumen contiene más de 250 caracteres"}
   
   # Check the descriptionLong
   if "descriptionLong" in info:
     if isEmpty(info["descriptionLong"]):
-      return {"res": False, "message": f"Debes añadir una descripción larga del programa"}
+      return {"res": False, "message": f"Debes añadir una descripción del programa"}
     if not isAlphanumeric(info["descriptionLong"]):
       return {"res": False, "message": f"La descripción no puede contener solo caracteres especiales"}
   

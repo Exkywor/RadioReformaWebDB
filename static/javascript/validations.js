@@ -60,11 +60,11 @@ function validate(action, field, value, programs = {}, schedule = {}, id ="") {
         return displayInputValidation(action, true, "Author");
     case "DescriptionShort":
       if (isEmpty(value)) // Check if the descriptionShort is empty
-        return displayInputValidation(action, false, "DescriptionShort", "Debes añadir una descripción corta (sinopsis) del programa");
+        return displayInputValidation(action, false, "DescriptionShort", "Debes añadir un resumen del programa");
       else if (!isAlphaNumeric(value)) // Check if it's not alphanumeric
-        return displayInputValidation(action, false, "DescriptionShort", `La descripción corta (sinopsis) no puede contener solo caracteres especiales`);
+        return displayInputValidation(action, false, "DescriptionShort", `El resumen no puede contener solo caracteres especiales`);
       else if (value.length > 250)
-        return displayInputValidation(action, false, "DescriptionShort", "La descripción corta (sinopsis) contiene más de 250 caracteres");
+        return displayInputValidation(action, false, "DescriptionShort", "El resumen contiene más de 250 caracteres");
       else
         return displayInputValidation(action, true, "DescriptionShort");
     case "DescriptionLong":
