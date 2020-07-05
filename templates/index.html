@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col">
     <!-- Delete confirmation modal -->
-    <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteConfirmation" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content align-items-center">
           <div class="modal-header">
@@ -20,22 +20,22 @@
 
     <!-- Toolbar -->
     <header>
-      <div class="btn-toolbar border-top py-3 flex-wrap justify-content-between" role="toolbar" aria-label="Modify programs toolbar">
+      <div class="btn-toolbar border-top py-3 flex-wrap justify-content-between">
         <!-- Filter columns -->
-        <div class="btn-group my-1 toolbar-programs-view align-items-center" role="group" aria-label="Filter buttons">
+        <div class="btn-group my-1 toolbar-programs-view align-items-center">
           <span class="mr-3 font-weight-bold">VER</span>
           {% include 'snippets/toggleProgramsColumns.html' %}
           <button class="btn ml-2" onclick=toggleDaysRow()>&#9660;</button>
         </div>
 
         <!-- Sorting order -->
-        <div class="btn-group my-1 align-items-center" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group my-1 align-items-center">
           <span class="mr-3 font-weight-bold">ORDENAR</span>
           <div class="btn-group" role="group">
             <button id="directionAscending" type="button" class="btn btn-dark btn-sm" onclick="changeDirection('ascending')">&#9650;</button>
             <button id="directionDescending" type="button" class="btn btn-outline-dark btn-sm mx-2" onclick="changeDirection('descending')">&#9660;</button>
-            <button id="sortingDropdown" style="min-width: 100px;" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ID</button>
-            <div class="dropdown-menu aria-labelledby="sortingDropdown">
+            <button id="sortingDropdown" style="min-width: 100px;" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown">ID</button>
+            <div class="dropdown-menu">
               <button id="sortID" class="btn-secondary dropdown-item active" type="button" onclick="changeSorting('ID')">ID</button>
               <button id="sortlength" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('length')">Duración</button>
               <button id="sortname" class="btn-outline-secondary dropdown-item" type="button" onclick="changeSorting('name')">Nombre</button>
@@ -46,7 +46,7 @@
         </div>
 
         <!-- Modify programs -->
-        <div class="btn-group my-1 align-items-center mr-n2" role="group" aria-label="Modify group">
+        <div class="btn-group my-1 align-items-center mr-n2">
           <span class="mr-3 font-weight-bold">PROGRAMAS</span>
           <div class="btn-group" role="group">
             <button class="btn btn-outline-dark btn-sm" id="btnediting" onclick="toggleForm('editing')">Editar</button>

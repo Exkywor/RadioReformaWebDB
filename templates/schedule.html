@@ -5,19 +5,19 @@
   <div class="col">
     <!-- Toolbar -->
     <header>
-      <div class="btn-toolbar border-top py-3" role="toolbar" aria-label="Modify schedule toolbar">
+      <div class="btn-toolbar border-top py-3">
         <!-- Filter columns -->
-        <div class="btn-group my-2 mr-auto align-items-center" role="group" aria-label="Filter buttons">
+        <div class="btn-group my-2 mr-auto align-items-center">
           <span class="mr-3 font-weight-bold">VER</span>
           {% include 'snippets/toggleScheduleColumns.html' %}
         </div>
         
         <!-- Information to display -->
-        <div class="btn-group my-2 align-items-center" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group my-2 align-items-center">
           <span class="mr-3 font-weight-bold">MOSTRAR</span>
           <div class="btn-group" role="group">
-            <button id="displayDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nombre</button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="displayDropdown">
+            <button id="displayDropdown" type="button" class="btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown">Nombre</button>
+            <div class="dropdown-menu dropdown-menu-right">
               <button id="displayname" class="btn-secondary dropdown-item active" type="button" onclick="changeDisplay('name')">Nombre</button>
               <button id="displayauthor" class="btn-outline-secondary dropdown-item" type="button" onclick="changeDisplay('author')">Productor</button>
               <button id="displaytopics" class="btn-outline-secondary dropdown-item" type="button" onclick="changeDisplay('topics')">Temas</button>
