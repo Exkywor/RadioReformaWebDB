@@ -1,32 +1,6 @@
 from utils.misc import isEmpty, isAlphanumeric
 
-# Schedule validation
-# schedule = {"monday": "05:10, 15:00"}
-def validateSchedule(schedule, indexedSchedule, id ="", action ="edit"):
-  # if action == "add":
-  #   if len(schedule) == 0: # Check that the program has at least one airing
-  #     return {"res": False, "message": f"El programa debe estar al aire al menos una vez"}
-
-  # if action == "edit":
-  #   # We'll check that we are not erasing all the airings for the day
-  #   if len(schedule) > 0: # Only check if the schedule is not empty
-  #     # Store the days that the program airs
-  #     daysForProgram = [day for day in indexedSchedule for indexID in indexedSchedule[day] if indexedSchedule[day][indexID] == id]
-  #     # Sort the daysToProgram and the schedule
-  #     daysForProgram.sort()
-  #     scheduleDays = list(schedule.keys())
-  #     scheduleDays.sort()
-
-  #     # We'll abort if:
-  #     # a) Both lists are the same and all the changes are to empty the schedule.
-  #     # b) Incoming schedule has more days but all of them are to empty the schedule
-  #     if daysForProgram == scheduleDays:
-  #       if all(len(value) == 0 for value in schedule.values()):
-  #         return {"res": False, "message": f"El programa debe estar al aire al menos una vez"}
-  #     elif len(scheduleDays) > len(daysForProgram):
-  #       if all(len(value) == 0 for value in schedule.values()):
-  #         return {"res": False, "message": f"El programa debe estar al aire al menos una vez"}
-      
+def validateSchedule(schedule, indexedSchedule, id ="", action ="edit"):      
   for day in schedule:
     # Skip the day if it's empty or contains only whitespaces
     if isEmpty(schedule[day]):

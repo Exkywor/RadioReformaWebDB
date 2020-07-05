@@ -21,16 +21,19 @@ Session(app)
 def getDB():
   db = getattr(g, "_database", None)
   if db is None:
-    db = g._database = sqlite3.connect("programs.db", check_same_thread=False)
+    try:
+      db = g._database = sqlite3.connect("programs.db", check_same_thread=False)
+    except Exception as e:
+        print(e)
   db.row_factory = sqlite3.Row # We'll use this to convert the tuples into rows
   
   return db
 
 @app.teardown_appcontext
 def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
+  db = getattr(g, '_database', None)
+  if db is not None:
+      db.close()
 
 
 # Sets the programs and the schedule, which we'll use in the app
@@ -38,9 +41,16 @@ def getData(fullLoad =False):
   if fullLoad:
     cursor = getDB().cursor()
     # This would give us tuples, so we changed it to get Rows. We'll convert them into a dict later
-    cursor.execute("SELECT * from Programs")
+    try:
+      cursor.execute("SELECT * from Programs")
+    except Exception as e:
+        print(e)
     programsToDict = cursor.fetchall()
-    cursor.execute("SELECT * from Airs") # We could join programs and airs but it would make it harder to filter an iterate through empty days
+    
+    try:
+      cursor.execute("SELECT * from Airs") # We could join programs and airs but it would make it harder to filter an iterate through empty days
+    except Exception as e:
+        print(e)
     airingToDict = cursor.fetchall()
 
     # We extract the information from the Rows and convert them to dicts

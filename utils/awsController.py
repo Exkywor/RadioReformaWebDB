@@ -4,7 +4,11 @@ import boto3
 dynamo_client = boto3.client('dynamodb')
 
 def getDynamoItems():
-  items = dynamo_client.scan(TableName='notifications-dev')
+  items = None
+  try:
+    items = dynamo_client.scan(TableName='notifications-dev')
+  except Exception as e:
+    print(e)
 
   # Create empty lists of the users (tokens) and programs (IDs)
   users = {el["token"]["S"]: [] for el in items["Items"]}

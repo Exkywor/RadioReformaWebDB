@@ -68,11 +68,17 @@ def editProgram(changes, db, offset, indexedSchedule, programs):
   # Update information
   if bool(infoToChange):
     for item in infoToChange:
-      cursor.execute(f"UPDATE Programs SET {item}=? WHERE programID={id}", [infoToChange[item]])
+      try:
+        cursor.execute(f"UPDATE Programs SET {item}=? WHERE programID={id}", [infoToChange[item]])
+      except Exception as e:
+        print(e)
     db.commit()
   if bool(scheduleToChange):
     for item in scheduleToChange:
-      cursor.execute(f"UPDATE Airs SET {item}=? WHERE programID={id}", [scheduleToChange[item]])
+      try:
+        cursor.execute(f"UPDATE Airs SET {item}=? WHERE programID={id}", [scheduleToChange[item]])
+      except Exception as e:
+        print(e)
     db.commit()
 
   return "Éxito"
@@ -181,7 +187,10 @@ def addProgram(changes, db, offset, indexedSchedule, programs):
   schedule = ''' INSERT INTO Airs(programID, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
                 VALUES(?,?,?,?,?,?,?,?)
             '''
-  cursor.execute(schedule, scheduleValues)
+  try:
+    cursor.execute(schedule, scheduleValues)
+  except Exception as e:
+      print(e)
 
   db.commit()
 
@@ -190,8 +199,12 @@ def addProgram(changes, db, offset, indexedSchedule, programs):
 
 def deleteProgram(changes, db):
   cursor = db.cursor()
-  cursor.execute(f"DELETE FROM Programs WHERE programID={changes['id']}")
-  cursor.execute(f"DELETE FROM Airs WHERE programID={changes['id']}")
+  try:
+    cursor.execute(f"DELETE FROM Programs WHERE programID={changes['id']}")
+    cursor.execute(f"DELETE FROM Airs WHERE programID={changes['id']}")
+  except Exception as e:
+        print(e)
+        
   db.commit()
 
   return "Éxito"
