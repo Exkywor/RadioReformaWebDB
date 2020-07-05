@@ -67,8 +67,20 @@
       {% block main%}{% endblock %}
     </main>
 
-    <footer class="border-top mt-auto py-3">
-      <div class="text-center" style="font-size: 14px;">Aplicación web desarrollada por <b>Fernando E. Quant</b></div>
+    <footer class="border-top bg-dark mt-auto py-2">
+      <div class="row align-items-center mx-3 text-white">
+        <div >
+          <div><i>Sitio por <b>Fernando E. Quant</b></i></div>
+        </div>
+        <div class="mx-auto">
+          <a class="text-white" href="https://www.turadioreforma.com" target="_blank">Sitio Web Oficial</a>
+        </div>
+        <div >
+          <a class="p-0" href="https://play.google.com/store/apps/details?id=com.kabod.radioreforma" target="_blank">
+            <img src= {{ url_for("static", filename = "assets/google-play-badge.png") }} height="50">
+          </a>
+        </div>
+      </div>
     </footer>  
   </body>
 </html>
