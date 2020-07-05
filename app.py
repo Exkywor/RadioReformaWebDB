@@ -1,7 +1,8 @@
-import datetime, json, pytz, sqlite3
+import datetime, json, pytz, sqlite3, sys
 from flask import Flask, g, jsonify, render_template, request, redirect, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
+from urllib.request import pathname2url
 
 from utils.awsController import getDynamoItems
 from utils.prepareDB import prepareDB
@@ -22,9 +23,11 @@ def getDB():
   db = getattr(g, "_database", None)
   if db is None:
     try:
-      db = g._database = sqlite3.connect("programs.db", check_same_thread=False)
+      dburi = 'file:{}?mode=rw'.format(pathname2url(sys.argv[1])) # Opens the db in read and write (not create) mode only
+      db = g._database = sqlite3.connect(dburi, uri=True, check_same_thread=False)
     except Exception as e:
-        print(e)
+      print(e)
+      sys.exit()
   db.row_factory = sqlite3.Row # We'll use this to convert the tuples into rows
   
   return db
@@ -35,6 +38,23 @@ def close_connection(exception):
   if db is not None:
       db.close()
 
+# Parses the route to the database
+def parseDBRoute():
+  if len(sys.argv) < 2:
+    print("Debes introducir la ruta a la base de datos")
+    sys.exit()
+  elif len(sys.argv) > 2:
+    print("Debes introducir solo un argumento en la ruta de la base de datos")
+    sys.exit()
+  else:
+    # Tests the db path to check if it works
+    try:
+      testuri = 'file:{}?mode=rw'.format(pathname2url(sys.argv[1]))
+      sqlite3.connect(testuri, uri=True, check_same_thread=False)
+    except Exception as e:
+      print("No se pudo abrir la base de datos")
+      sys.exit()
+parseDBRoute()
 
 # Sets the programs and the schedule, which we'll use in the app
 def getData(fullLoad =False):
