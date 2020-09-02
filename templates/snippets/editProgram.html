@@ -226,6 +226,16 @@
   $("#editingForm").submit(function(event) {
     event.preventDefault();
     
+    // If the schedule has changes, add all the values in the form to the changes.
+    // We do this to rewrite the whole program's schedule. This prevents bugs when lack of context
+    // for overwriting, deleting, adding, or program changing days.
+    if (Object.keys(changes.schedule).length) {
+      let days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+      for (let day of days) {
+        if (changes.schedule[day] == undefined) changes.schedule[day] = $(`#edit${day}`).val();
+      }
+    }
+
     // Check that no input is invalid
     if ($('*').hasClass('is-invalid')) {
       alert("Uno o más campos son inválidos. Revisa la información antes de enviarla.");
