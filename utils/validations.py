@@ -40,16 +40,17 @@ def validateSchedule(schedule, indexedSchedule, id ="", action ="edit"):
           return {"res": False, "message": f"La hora para el {day.upper()} tiene un formato incorrecto. El formato debe ser: hh:mm, hh:mm"}
       
       # Check that the time doesn't exist already for other programs, in other words, that it's unique
-      timeIndex = (int(split[0]) * 60) + int(split[1])
-      if timeIndex in indexedSchedule[day].keys():
-        if action == "edit":
-          # If the timeIndex already exists, check that it belongs to a different program
-          # This handles if you add a time to an existing day of a program,
-          # because it will try to validate the already existing time
-          if id != indexedSchedule[day][timeIndex]:
+      if day in indexedSchedule:
+        timeIndex = (int(split[0]) * 60) + int(split[1])
+        if timeIndex in indexedSchedule[day].keys():
+          if action == "edit":
+            # If the timeIndex already exists, check that it belongs to a different program
+            # This handles if you add a time to an existing day of a program,
+            # because it will try to validate the already existing time
+            if id != indexedSchedule[day][timeIndex]:
+              return {"res": False, "message": f"La hora {time} para el {day.upper()} ya está asignada para el programa con ID {indexedSchedule[day][timeIndex]}"}
+          else:
             return {"res": False, "message": f"La hora {time} para el {day.upper()} ya está asignada para el programa con ID {indexedSchedule[day][timeIndex]}"}
-        else:
-          return {"res": False, "message": f"La hora {time} para el {day.upper()} ya está asignada para el programa con ID {indexedSchedule[day][timeIndex]}"}
 
   return {"res": True, "message": "El horario es válido"}
 
